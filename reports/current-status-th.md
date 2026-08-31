@@ -63,3 +63,7 @@
 ## Audit ล่าสุด
 
 เพิ่มสคริปต์ `scripts/audit_gate_features.py` เพื่อเช็คว่า feature ไหนอาจทำให้คะแนนสูงเกินจริง โดยเฉพาะ feature ที่รู้หลังยิง exploit หรือหลังเขียนผล validation แล้ว งานถัดไปควรวัด `strict_precheck` ที่ตัด feature กลุ่มนี้ออกก่อน
+
+## Light Backfill ล่าสุด
+
+นำผล `dec-precheck-light-backfill-2026-08-31` มา merge แล้วได้ dataset 40 targets / 68 features โดยมี target ที่ backfill จริง 15 ตัว ผลยังชี้ว่า `strict_precheck` และ `scanner_only` มี FP=20 เมื่อเลือก threshold แบบไม่ยอมให้ FN เกิด แปลว่า feature ใหม่ช่วยเรื่องความสะอาดของข้อมูล แต่ยังไม่พอให้โมเดลแยก `no_exploit` ได้ ต้องเพิ่ม targeted precondition probes ต่อ

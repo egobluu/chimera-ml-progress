@@ -1,0 +1,9 @@
+{
+  "base_targets": 40,
+  "targets_with_backfill": 15,
+  "targets_without_backfill": 25,
+  "base_features": 44,
+  "backfill_numeric_features": 27,
+  "merged_features": 68,
+  "output_csv": "reports\\light-backfill-merge-v02\\target-exploitability-with-light-backfill.csv"
+}

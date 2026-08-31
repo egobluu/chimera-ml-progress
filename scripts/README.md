@@ -16,6 +16,7 @@ script เหล่านี้อ้าง path แบบ Kali report output �
 | --- | --- |
 | `generate_gate_features.py` | สร้าง `gate-feature-evidence.jsonl` ให้ครบทุก validated target |
 | `build_dataset.py` | รวม JSONL/raw evidence เป็น `target-exploitability-dataset.csv` |
+| `merge_backfill_features.py` | รวม light backfill features เข้ากับ target-level dataset เดิม |
 | `train_gate_model.py` | train XGBoost binary classifier สำหรับ ML-only Exploitability Gate |
 | `train_gate_profiles.py` | train/evaluate หลาย feature profile เพื่อดูว่าโมเดลพึ่ง feature รั่วมากแค่ไหน |
 | `rank_target_two_stage.py` | ใช้ model ที่ train แล้ว inference target ใหม่แบบ exploit/no_exploit |
@@ -26,6 +27,7 @@ script เหล่านี้อ้าง path แบบ Kali report output �
 ```bash
 python3 generate_gate_features.py
 python3 build_dataset.py
+python3 merge_backfill_features.py --base-dataset target-exploitability-dataset.csv --backfill-jsonl merged-backfill-precheck-features.jsonl --out-csv target-exploitability-with-light-backfill.csv --summary-json merge-summary.json
 python3 train_gate_model.py
 python3 train_gate_profiles.py --dataset target-exploitability-dataset.csv --out-dir derived/profile-audit
 python3 rank_target_two_stage.py --evidence-dir raw-curated/tomcat_CVE-2020-1938 --json
