@@ -65,6 +65,7 @@ Feedback กลับเข้า Dataset
 - [scripts/README.md](scripts/README.md) - script ที่ใช้ build dataset, train model และ inference
 - [reports/current-status-th.md](reports/current-status-th.md) - สรุปสถานะล่าสุด
 - [reports/targeted-precondition-plan-v02/TARGETED-PRECONDITION-PROBE-PLAN-TH.md](reports/targeted-precondition-plan-v02/TARGETED-PRECONDITION-PROBE-PLAN-TH.md) - แผน probe เจาะจงที่เกลาใหม่สำหรับลด false positive
+- [reports/targeted-precondition-merge-v02/TARGETED-PRECONDITION-ML-RESULTS-TH.md](reports/targeted-precondition-merge-v02/TARGETED-PRECONDITION-ML-RESULTS-TH.md) - ผล ML หลังรวม targeted precondition และข้อผิดพลาดที่ยังเหลือ
 
 ## ระดับความพร้อม
 

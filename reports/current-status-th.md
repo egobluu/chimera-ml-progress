@@ -73,3 +73,7 @@
 เพิ่มแผน `reports/targeted-precondition-plan-v01/` จาก false positive ของ `strict_precheck` ได้ 60 probe tasks ครอบคลุม 20 false positive targets เป้าหมายคือเก็บ feature ที่ผูกกับ exploit condition จริง เช่น `method_put_rejected`, `ajp_port_closed`, `auth_required`, `endpoint_missing`, `version_patched` เพื่อให้โมเดลลด FP โดยไม่ต้องพึ่ง `negative_evidence_count`
 
 ปรับเพิ่มเป็น `reports/targeted-precondition-plan-v02/` เพื่อให้อ่านง่ายและทำงานจริงง่ายขึ้น โดยตัด probe กว้าง ๆ ที่ไม่จำเป็นออก เช่น `generic_*`, default path discovery ทั่วไป, target ที่ไม่มี lab ตรง และเน้นเฉพาะ precondition ที่ตอบว่า exploit family นั้นผ่านหรือไม่ผ่านจริง
+
+## Targeted Precondition Result
+
+รวมผล `dec-targeted-precondition-v02-2026-08-31` แล้วได้ dataset 40 targets / 78 features แต่ `strict_precheck` ยัง FP=20 ที่ threshold 0.10 สาเหตุหลักคือ targeted features ยัง sparse เกินไปและส่วนใหญ่มีเฉพาะ negative side งานถัดไปต้องเก็บ targeted precondition ฝั่ง positive เป็นคู่เทียบ เช่น `method_put_allowed` เทียบกับ `method_put_rejected`, `ajp_port_open` เทียบกับ `ajp_port_closed`, `velocity_enabled` เทียบกับ `velocity_disabled`
