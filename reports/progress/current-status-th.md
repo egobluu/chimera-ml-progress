@@ -195,3 +195,20 @@ clean pairs ที่เพิ่ม:
 | strict_precheck | 0.648 | 25 | 0 |
 
 สรุป: test เริ่มสมจริงขึ้นเพราะ full profile ไม่ได้ 1.000 แล้ว แต่ `strict_precheck` ยังไม่ผ่าน ต้องเพิ่ม clean positive สำหรับ Solr/ThinkPHP/CouchDB และปรับ profile ให้เน้น precondition มากขึ้น
+
+## Missing Positive Controls Result
+
+ผล `dec-missing-positive-controls-2026-09-01` เพิ่ม positive controls ที่ขาดได้ 3 targets:
+
+- `solr_velocity_positive`
+- `thinkphp_invokefunction_positive`
+- `couchdb_admin_party_positive`
+
+หลัง merge แล้ว dataset เป็น 52 targets / 92 features และเพิ่ม profile ใหม่ `precondition_only`
+
+| Profile | F1 | FP | FN |
+| --- | ---: | ---: | ---: |
+| strict_precheck | 0.675 | 25 | 0 |
+| precondition_only | 0.788 | 14 | 0 |
+
+สรุป: `precondition_only` ดีขึ้นชัดเจนและควรใช้เป็น candidate profile หลักรอบถัดไป แต่ยังไม่ถึงเกณฑ์หยุด เพราะ FP ยังมากกว่า 5

@@ -79,6 +79,49 @@ BASIC_SCANNER_FEATURES = {
     "sensitive_path_found",
 }
 
+PRECONDITION_FEATURES = {
+    "version_in_vulnerable_range",
+    "version_in_vulnerable_range_true",
+    "version_in_vulnerable_range_false",
+    "version_not_affected",
+    "version_patched",
+    "precondition_pass_count",
+    "precondition_fail_count",
+    "auth_required",
+    "no_auth_required",
+    "endpoint_reachable_count",
+    "endpoint_missing_count",
+    "method_put_allowed",
+    "method_put_rejected",
+    "jsp_upload_candidate",
+    "ajp_port_open",
+    "ajp_port_closed",
+    "anonymous_access",
+    "velocity_enabled",
+    "velocity_disabled",
+    "config_api_accessible",
+    "config_api_blocked",
+    "solr_core_found",
+    "invokefunction_reachable",
+    "invokefunction_not_found",
+    "rce_endpoint_candidate_found",
+    "admin_party_enabled",
+    "config_accessible",
+    "config_blocked",
+    "users_db_accessible",
+    "default_key_likely",
+    "default_key_unlikely",
+    "spring_not_detected",
+    "wrong_software_type",
+    "painless_sandbox_blocks",
+    "path_traversal_blocked",
+    "auth_blocks_exploit",
+    "endpoint_not_found",
+    "wrong_version",
+    "actuator_path_missing",
+    "precondition_probe_missing",
+}
+
 
 def load_dataset(path: Path) -> tuple[list[str], np.ndarray, dict[str, np.ndarray]]:
     rows = list(csv.DictReader(path.open(encoding="utf-8", newline="")))
@@ -101,6 +144,8 @@ def profile_features(profile: str, all_features: list[str]) -> list[str]:
         return [name for name in all_features if name != "negative_evidence_count"]
     if profile == "scanner_only":
         return [name for name in all_features if name in BASIC_SCANNER_FEATURES]
+    if profile == "precondition_only":
+        return [name for name in all_features if name in PRECONDITION_FEATURES]
     if profile == "no_metasploit":
         return [name for name in all_features if name not in METASPLOIT_FEATURES]
     if profile == "no_nuclei_confirm":
@@ -181,6 +226,7 @@ def main() -> None:
         "full_v02",
         "strict_precheck",
         "strict_no_negative_count",
+        "precondition_only",
         "scanner_only",
         "no_metasploit",
         "no_nuclei_confirm",

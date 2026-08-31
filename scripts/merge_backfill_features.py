@@ -46,8 +46,18 @@ def load_base(path: Path) -> tuple[list[dict[str, str]], list[str]]:
         return rows, list(reader.fieldnames or [])
 
 
+def iter_jsonl_lines(path: Path | None, directory: Path | None, pattern: str) -> list[str]:
+    lines: list[str] = []
+    if path is not None:
+        lines.extend(path.read_text(encoding="utf-8").splitlines())
+    if directory is not None:
+        for item in sorted(directory.rglob(pattern)):
+            lines.extend(item.read_text(encoding="utf-8").splitlines())
+    return lines
+
+
 def load_backfill(
-    path: Path,
+    lines: list[str],
     require_consistent: bool = False,
     allow_targets: set[str] | None = None,
 ) -> tuple[dict[str, dict[str, float]], list[str], int, int]:
@@ -56,28 +66,27 @@ def load_backfill(
     feature_names: set[str] = set()
     skipped_inconsistent = 0
     skipped_disallowed_target = 0
-    with path.open(encoding="utf-8") as handle:
-        for line in handle:
-            if not line.strip():
-                continue
-            item = json.loads(line)
-            target_id = item["target_id"]
-            expected_family = str(item.get("expected_family", ""))
-            labels_by_target.setdefault(target_id, 0 if expected_family == "no_exploit" else 1)
-            if allow_targets is not None and target_id not in allow_targets:
-                skipped_disallowed_target += 1
-                continue
-            if require_consistent and item.get("label_consistency") != "consistent":
-                skipped_inconsistent += 1
-                continue
-            feature = item.get("feature_name")
-            if not feature or should_skip_feature(feature):
-                continue
-            value = numeric_value(item.get("feature_value"))
-            if value is None:
-                continue
-            by_target.setdefault(target_id, {})[feature] = value
-            feature_names.add(feature)
+    for line in lines:
+        if not line.strip():
+            continue
+        item = json.loads(line)
+        target_id = item["target_id"]
+        expected_family = str(item.get("expected_family", ""))
+        labels_by_target.setdefault(target_id, 0 if expected_family == "no_exploit" else 1)
+        if allow_targets is not None and target_id not in allow_targets:
+            skipped_disallowed_target += 1
+            continue
+        if require_consistent and item.get("label_consistency") != "consistent":
+            skipped_inconsistent += 1
+            continue
+        feature = item.get("feature_name")
+        if not feature or should_skip_feature(feature):
+            continue
+        value = numeric_value(item.get("feature_value"))
+        if value is None:
+            continue
+        by_target.setdefault(target_id, {})[feature] = value
+        feature_names.add(feature)
     by_target["__labels__"] = {target: float(label) for target, label in labels_by_target.items()}
     return by_target, sorted(feature_names), skipped_inconsistent, skipped_disallowed_target
 
@@ -98,7 +107,9 @@ def add_missing_defaults(row: dict[str, str], feature_names: list[str], has_back
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-dataset", required=True, type=Path)
-    parser.add_argument("--backfill-jsonl", required=True, type=Path)
+    parser.add_argument("--backfill-jsonl", type=Path)
+    parser.add_argument("--backfill-dir", type=Path)
+    parser.add_argument("--backfill-glob", default="*.jsonl")
     parser.add_argument("--out-csv", required=True, type=Path)
     parser.add_argument("--summary-json", required=True, type=Path)
     parser.add_argument(
@@ -117,11 +128,14 @@ def main() -> None:
         help="Append allowed backfill targets that are not already present in the base dataset.",
     )
     args = parser.parse_args()
+    if args.backfill_jsonl is None and args.backfill_dir is None:
+        parser.error("one of --backfill-jsonl or --backfill-dir is required")
 
     rows, base_fields = load_base(args.base_dataset)
     allow_targets = {target.strip() for target in args.allow_targets.split(",") if target.strip()} or None
+    backfill_lines = iter_jsonl_lines(args.backfill_jsonl, args.backfill_dir, args.backfill_glob)
     backfill, backfill_fields, skipped_inconsistent, skipped_disallowed_target = load_backfill(
-        args.backfill_jsonl,
+        backfill_lines,
         require_consistent=args.require_consistent,
         allow_targets=allow_targets,
     )

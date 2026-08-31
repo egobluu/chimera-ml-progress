@@ -1,0 +1,22 @@
+{
+  "base_targets": 49,
+  "targets_with_backfill": 0,
+  "targets_without_backfill": 49,
+  "appended_new_targets": [
+    "couchdb_admin_party_positive",
+    "solr_velocity_positive",
+    "thinkphp_invokefunction_positive"
+  ],
+  "base_features": 90,
+  "backfill_numeric_features": 10,
+  "skipped_inconsistent_records": 0,
+  "skipped_disallowed_target_records": 0,
+  "require_consistent": true,
+  "allow_targets": [
+    "couchdb_admin_party_positive",
+    "solr_velocity_positive",
+    "thinkphp_invokefunction_positive"
+  ],
+  "merged_features": 92,
+  "output_csv": "reports\\evaluations\\missing-positive-controls-v01\\target-exploitability-missing-positive-controls.csv"
+}
