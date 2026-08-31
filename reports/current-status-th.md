@@ -67,3 +67,7 @@
 ## Light Backfill ล่าสุด
 
 นำผล `dec-precheck-light-backfill-2026-08-31` มา merge แล้วได้ dataset 40 targets / 68 features โดยมี target ที่ backfill จริง 15 ตัว ผลยังชี้ว่า `strict_precheck` และ `scanner_only` มี FP=20 เมื่อเลือก threshold แบบไม่ยอมให้ FN เกิด แปลว่า feature ใหม่ช่วยเรื่องความสะอาดของข้อมูล แต่ยังไม่พอให้โมเดลแยก `no_exploit` ได้ ต้องเพิ่ม targeted precondition probes ต่อ
+
+## Targeted Probe Plan
+
+เพิ่มแผน `reports/targeted-precondition-plan-v01/` จาก false positive ของ `strict_precheck` ได้ 60 probe tasks ครอบคลุม 20 false positive targets เป้าหมายคือเก็บ feature ที่ผูกกับ exploit condition จริง เช่น `method_put_rejected`, `ajp_port_closed`, `auth_required`, `endpoint_missing`, `version_patched` เพื่อให้โมเดลลด FP โดยไม่ต้องพึ่ง `negative_evidence_count`
