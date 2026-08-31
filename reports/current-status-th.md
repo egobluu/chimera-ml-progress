@@ -1,0 +1,62 @@
+# สถานะล่าสุดของงาน ML
+
+## สรุปสถานะ
+
+ตอนนี้งาน ML เดินมาถึง **ML-only Exploitability Gate v0.2**
+
+ถือว่าผ่านเป้าหมาย prototype ระดับต้น เพราะ:
+
+- ไม่พึ่ง Rule Gate เป็นตัวตัดสินหลัก
+- train/evaluate/infer ได้
+- มี model artifact
+- มี threshold tuning
+- มี feature schema
+- มี dataset target-level
+- มี evidence ครบ 40/40 validated targets
+
+## Dataset ล่าสุด
+
+| รายการ | จำนวน |
+| --- | ---: |
+| validated_positive | 20 |
+| validated_negative | 20 |
+| inconclusive | 15 |
+| train/evaluate targets | 40 |
+| gate features | 44 |
+
+## ผล v0.2
+
+| Metric | Result |
+| --- | ---: |
+| Accuracy | 1.000 |
+| Precision | 1.000 |
+| Recall | 1.000 |
+| F1 | 1.000 |
+| False Positive | 0 |
+| False Negative | 0 |
+
+## การตีความ
+
+ผลนี้แปลว่า v0.2 ทำงานดีมากบน dataset ปัจจุบัน แต่ยังไม่ควรสรุปว่าใช้งานจริงได้กับ target ใหม่ทั้งหมด เพราะ dataset ยังเล็กและ feature บางตัวอาจมีความใกล้กับ label
+
+คำพูดที่เหมาะสม:
+
+```text
+โมเดล ML-only Gate v0.2 สามารถทำงานได้คงที่บน controlled dataset และพร้อมเข้าสู่ขั้นตอน unseen target validation
+```
+
+ไม่ควรพูดว่า:
+
+```text
+โมเดลแม่น 100% แล้ว
+```
+
+## งานถัดไป
+
+1. ทำ leak audit ของ 44 features
+2. แยก feature เป็น `precheck`, `postcheck`, `forbidden`
+3. เพิ่ม unseen target 5-10 ตัว
+4. ให้ model infer ก่อนเฉลย
+5. ค่อยใช้ Metasploit/manual PoC ตรวจจริง
+6. วัดว่า false positive/false negative ยังต่ำไหม
+
