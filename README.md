@@ -61,6 +61,7 @@ Feedback กลับเข้า Dataset
 - [docs/04-feature-schema-th.md](docs/04-feature-schema-th.md) - feature ที่ใช้และเหตุผล
 - [docs/05-lessons-learned-th.md](docs/05-lessons-learned-th.md) - ปัญหาและสิ่งที่แก้
 - [docs/06-scanning-tools-th.md](docs/06-scanning-tools-th.md) - เครื่องมือที่ใช้ในงานจริงและงานเก็บ dataset
+- [docs/07-feature-catalog-th.md](docs/07-feature-catalog-th.md) - รายการ feature ทั้งหมดและ phase ที่ใช้ได้/ห้ามใช้
 - [scripts/README.md](scripts/README.md) - script ที่ใช้ build dataset, train model และ inference
 - [reports/current-status-th.md](reports/current-status-th.md) - สรุปสถานะล่าสุด
 

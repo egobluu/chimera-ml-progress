@@ -60,3 +60,6 @@
 5. ค่อยใช้ Metasploit/manual PoC ตรวจจริง
 6. วัดว่า false positive/false negative ยังต่ำไหม
 
+## Audit ล่าสุด
+
+เพิ่มสคริปต์ `scripts/audit_gate_features.py` เพื่อเช็คว่า feature ไหนอาจทำให้คะแนนสูงเกินจริง โดยเฉพาะ feature ที่รู้หลังยิง exploit หรือหลังเขียนผล validation แล้ว งานถัดไปควรวัด `strict_precheck` ที่ตัด feature กลุ่มนี้ออกก่อน
