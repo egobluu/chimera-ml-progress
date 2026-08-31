@@ -71,3 +71,5 @@
 ## Targeted Probe Plan
 
 เพิ่มแผน `reports/targeted-precondition-plan-v01/` จาก false positive ของ `strict_precheck` ได้ 60 probe tasks ครอบคลุม 20 false positive targets เป้าหมายคือเก็บ feature ที่ผูกกับ exploit condition จริง เช่น `method_put_rejected`, `ajp_port_closed`, `auth_required`, `endpoint_missing`, `version_patched` เพื่อให้โมเดลลด FP โดยไม่ต้องพึ่ง `negative_evidence_count`
+
+ปรับเพิ่มเป็น `reports/targeted-precondition-plan-v02/` เพื่อให้อ่านง่ายและทำงานจริงง่ายขึ้น โดยตัด probe กว้าง ๆ ที่ไม่จำเป็นออก เช่น `generic_*`, default path discovery ทั่วไป, target ที่ไม่มี lab ตรง และเน้นเฉพาะ precondition ที่ตอบว่า exploit family นั้นผ่านหรือไม่ผ่านจริง

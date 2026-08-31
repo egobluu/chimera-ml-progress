@@ -64,6 +64,7 @@ Feedback กลับเข้า Dataset
 - [docs/07-feature-catalog-th.md](docs/07-feature-catalog-th.md) - รายการ feature ทั้งหมดและ phase ที่ใช้ได้/ห้ามใช้
 - [scripts/README.md](scripts/README.md) - script ที่ใช้ build dataset, train model และ inference
 - [reports/current-status-th.md](reports/current-status-th.md) - สรุปสถานะล่าสุด
+- [reports/targeted-precondition-plan-v02/TARGETED-PRECONDITION-PROBE-PLAN-TH.md](reports/targeted-precondition-plan-v02/TARGETED-PRECONDITION-PROBE-PLAN-TH.md) - แผน probe เจาะจงที่เกลาใหม่สำหรับลด false positive
 
 ## ระดับความพร้อม
 
