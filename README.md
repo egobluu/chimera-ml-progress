@@ -66,6 +66,7 @@ Feedback กลับเข้า Dataset
 - [reports/current-status-th.md](reports/current-status-th.md) - สรุปสถานะล่าสุด
 - [reports/targeted-precondition-plan-v02/TARGETED-PRECONDITION-PROBE-PLAN-TH.md](reports/targeted-precondition-plan-v02/TARGETED-PRECONDITION-PROBE-PLAN-TH.md) - แผน probe เจาะจงที่เกลาใหม่สำหรับลด false positive
 - [reports/targeted-precondition-merge-v02/TARGETED-PRECONDITION-ML-RESULTS-TH.md](reports/targeted-precondition-merge-v02/TARGETED-PRECONDITION-ML-RESULTS-TH.md) - ผล ML หลังรวม targeted precondition และข้อผิดพลาดที่ยังเหลือ
+- [reports/targeted-pair-quality-audit-v01/TARGETED-PAIR-QUALITY-AUDIT-TH.md](reports/targeted-pair-quality-audit-v01/TARGETED-PAIR-QUALITY-AUDIT-TH.md) - ตรวจคุณภาพ targeted pair ก่อนนำเข้า train
 
 ## ระดับความพร้อม
 

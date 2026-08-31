@@ -77,3 +77,7 @@
 ## Targeted Precondition Result
 
 รวมผล `dec-targeted-precondition-v02-2026-08-31` แล้วได้ dataset 40 targets / 78 features แต่ `strict_precheck` ยัง FP=20 ที่ threshold 0.10 สาเหตุหลักคือ targeted features ยัง sparse เกินไปและส่วนใหญ่มีเฉพาะ negative side งานถัดไปต้องเก็บ targeted precondition ฝั่ง positive เป็นคู่เทียบ เช่น `method_put_allowed` เทียบกับ `method_put_rejected`, `ajp_port_open` เทียบกับ `ajp_port_closed`, `velocity_enabled` เทียบกับ `velocity_disabled`
+
+## Targeted Pair Quality Audit
+
+ผล `dec-targeted-precondition-pairs-2026-08-31` ยังไม่ควรนำเข้า train ตรง ๆ เพราะมี positive targets หลายตัวที่ได้ negative evidence เช่น `thinkphp_5-rce` ได้ `invokefunction_not_found`, `solr_CVE-2019-17558` ได้ `velocity_disabled`, `couchdb_CVE-2017-12635` ได้ `auth_required`, `shiro_CVE-2016-4437` ได้ `rememberme_not_seen` จึงต้อง quarantine แล้วแก้ lab/probe เฉพาะ family ก่อน
