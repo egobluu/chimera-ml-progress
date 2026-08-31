@@ -1,0 +1,18 @@
+{
+  "base_targets": 40,
+  "targets_with_backfill": 4,
+  "targets_without_backfill": 36,
+  "base_features": 79,
+  "backfill_numeric_features": 15,
+  "skipped_inconsistent_records": 11,
+  "skipped_disallowed_target_records": 45,
+  "require_consistent": true,
+  "allow_targets": [
+    "redis_auth_non_vulnerable",
+    "shiro_CVE-2016-4437",
+    "solr_CVE-2019-17558",
+    "tomcat_non_vulnerable"
+  ],
+  "merged_features": 86,
+  "output_csv": "reports\\evaluations\\strict-precheck-improve-v01\\target-exploitability-strict-precheck-improve.csv"
+}

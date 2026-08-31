@@ -41,15 +41,24 @@ def load_base(path: Path) -> tuple[list[dict[str, str]], list[str]]:
         return rows, list(reader.fieldnames or [])
 
 
-def load_backfill(path: Path, require_consistent: bool = False) -> tuple[dict[str, dict[str, float]], list[str], int]:
+def load_backfill(
+    path: Path,
+    require_consistent: bool = False,
+    allow_targets: set[str] | None = None,
+) -> tuple[dict[str, dict[str, float]], list[str], int, int]:
     by_target: dict[str, dict[str, float]] = {}
     feature_names: set[str] = set()
     skipped_inconsistent = 0
+    skipped_disallowed_target = 0
     with path.open(encoding="utf-8") as handle:
         for line in handle:
             if not line.strip():
                 continue
             item = json.loads(line)
+            target_id = item["target_id"]
+            if allow_targets is not None and target_id not in allow_targets:
+                skipped_disallowed_target += 1
+                continue
             if require_consistent and item.get("label_consistency") != "consistent":
                 skipped_inconsistent += 1
                 continue
@@ -59,10 +68,9 @@ def load_backfill(path: Path, require_consistent: bool = False) -> tuple[dict[st
             value = numeric_value(item.get("feature_value"))
             if value is None:
                 continue
-            target_id = item["target_id"]
             by_target.setdefault(target_id, {})[feature] = value
             feature_names.add(feature)
-    return by_target, sorted(feature_names), skipped_inconsistent
+    return by_target, sorted(feature_names), skipped_inconsistent, skipped_disallowed_target
 
 
 def add_missing_defaults(row: dict[str, str], feature_names: list[str], has_backfill: bool) -> None:
@@ -89,10 +97,20 @@ def main() -> None:
         action="store_true",
         help="Only merge feature records with label_consistency=consistent.",
     )
+    parser.add_argument(
+        "--allow-targets",
+        default="",
+        help="Comma-separated target_id allow-list. Use this when a run contains quarantined targets.",
+    )
     args = parser.parse_args()
 
     rows, base_fields = load_base(args.base_dataset)
-    backfill, backfill_fields, skipped_inconsistent = load_backfill(args.backfill_jsonl, require_consistent=args.require_consistent)
+    allow_targets = {target.strip() for target in args.allow_targets.split(",") if target.strip()} or None
+    backfill, backfill_fields, skipped_inconsistent, skipped_disallowed_target = load_backfill(
+        args.backfill_jsonl,
+        require_consistent=args.require_consistent,
+        allow_targets=allow_targets,
+    )
     merged_fields = base_fields + [name for name in backfill_fields if name not in base_fields]
 
     merged_rows: list[dict[str, str]] = []
@@ -122,7 +140,9 @@ def main() -> None:
         "base_features": len(base_fields) - 2,
         "backfill_numeric_features": len(backfill_fields),
         "skipped_inconsistent_records": skipped_inconsistent,
+        "skipped_disallowed_target_records": skipped_disallowed_target,
         "require_consistent": args.require_consistent,
+        "allow_targets": sorted(allow_targets) if allow_targets else [],
         "merged_features": len(merged_fields) - 2,
         "output_csv": str(args.out_csv),
     }

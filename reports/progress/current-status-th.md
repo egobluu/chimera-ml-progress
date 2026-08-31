@@ -2,7 +2,7 @@
 
 ## สรุปสถานะ
 
-ตอนนี้งาน ML เดินมาถึง **ML-only Exploitability Gate v0.2 + Targeted Pair Fix v01**
+ตอนนี้งาน ML เดินมาถึง **ML-only Exploitability Gate v0.2 + Strict Precheck Improve v01**
 
 ถือว่าผ่านเป้าหมาย prototype ระดับต้นในแง่ pipeline เพราะ:
 
@@ -109,3 +109,25 @@
 ผล `dec-targeted-pair-fix-2026-08-31` แก้ได้บางส่วน เช่น `solr_CVE-2019-17558`, `shiro_CVE-2016-4437`, และ `redis_non_vulnerable` แต่ยังมี target ที่ label/evidence inconsistent อยู่ เช่น `thinkphp_5-rce`, `couchdb_CVE-2017-12635`, `nginx_CVE-2017-7529`, `redis_auth_non_vulnerable`
 
 ใช้ได้เฉพาะ records ที่ consistent เท่านั้น รายละเอียดอยู่ที่ `reports/evaluations/targeted-pair-fix-v01/`
+
+## Strict Precheck Improve Result
+
+ผล `dec-strict-precheck-improve-2026-08-31` มี 11 targets แต่ใช้ train ได้อย่างปลอดภัย 4 targets:
+
+- `redis_auth_non_vulnerable`
+- `tomcat_non_vulnerable`
+- `solr_CVE-2019-17558`
+- `shiro_CVE-2016-4437`
+
+หลัง merge แล้วได้ 40 targets / 86 features แต่ผล `strict_precheck` ยังไม่ผ่าน:
+
+| Metric | Result |
+| --- | ---: |
+| Accuracy | 0.500 |
+| Precision | 0.500 |
+| Recall | 1.000 |
+| F1 | 0.667 |
+| False Positive | 20 |
+| False Negative | 0 |
+
+สรุป: ยังไม่ควรหยุดงาน ML core เพราะ profile ที่ใกล้ใช้งานจริงที่สุดยังแยก negative ไม่ได้ ต้องแก้ label consistency และเก็บคู่ positive/negative ที่สะอาดกว่านี้
