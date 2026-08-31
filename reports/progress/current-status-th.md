@@ -131,3 +131,28 @@
 | False Negative | 0 |
 
 สรุป: ยังไม่ควรหยุดงาน ML core เพราะ profile ที่ใกล้ใช้งานจริงที่สุดยังแยก negative ไม่ได้ ต้องแก้ label consistency และเก็บคู่ positive/negative ที่สะอาดกว่านี้
+
+## Label Consistency Fix Result
+
+ผล `dec-label-consistency-fix-2026-08-31` ตรวจ 6 targets และเหลือ safe to merge เพียง 1 target คือ `tomcat_CVE-2020-1938`
+
+quarantine 5 targets:
+
+- `tomcat_CVE-2017-12615`
+- `solr_non_vulnerable`
+- `shiro_non_vulnerable`
+- `thinkphp_5-rce`
+- `couchdb_CVE-2017-12635`
+
+หลัง merge แล้วได้ 40 targets / 87 features แต่ผล `strict_precheck` ยังเหมือนเดิม:
+
+| Metric | Result |
+| --- | ---: |
+| Accuracy | 0.500 |
+| Precision | 0.500 |
+| Recall | 1.000 |
+| F1 | 0.667 |
+| False Positive | 20 |
+| False Negative | 0 |
+
+ความหมาย: รอบนี้ไม่ได้ทำให้คะแนนดีขึ้น แต่ทำให้รู้ว่า dataset เดิมมี label/control target ที่ต้องแก้จริง ก่อนจะคาดหวังให้ ML แยก exploit/no-exploit ได้

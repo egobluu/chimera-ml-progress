@@ -72,6 +72,7 @@ Feedback กลับเข้า Dataset
 - [reports/quarantine/targeted-pair-quality-v01/TARGETED-PAIR-QUALITY-AUDIT-TH.md](reports/quarantine/targeted-pair-quality-v01/TARGETED-PAIR-QUALITY-AUDIT-TH.md) - ตรวจคุณภาพ targeted pair ก่อนนำเข้า train
 - [reports/evaluations/targeted-pair-fix-v01/TARGETED-PAIR-FIX-ML-RESULTS-TH.md](reports/evaluations/targeted-pair-fix-v01/TARGETED-PAIR-FIX-ML-RESULTS-TH.md) - ผลหลังรวมเฉพาะ targeted pair records ที่ consistent
 - [reports/evaluations/strict-precheck-improve-v01/STRICT-PRECHECK-IMPROVE-ML-RESULTS-TH.md](reports/evaluations/strict-precheck-improve-v01/STRICT-PRECHECK-IMPROVE-ML-RESULTS-TH.md) - ผลหลังรวม strict precheck safe targets รอบล่าสุด
+- [reports/evaluations/label-consistency-fix-v01/LABEL-CONSISTENCY-FIX-ML-RESULTS-TH.md](reports/evaluations/label-consistency-fix-v01/LABEL-CONSISTENCY-FIX-ML-RESULTS-TH.md) - ผลหลังคัด label consistency fix รอบล่าสุด
 
 ## ระดับความพร้อม
 

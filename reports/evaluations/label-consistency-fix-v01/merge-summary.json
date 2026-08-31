@@ -1,0 +1,15 @@
+{
+  "base_targets": 40,
+  "targets_with_backfill": 1,
+  "targets_without_backfill": 39,
+  "base_features": 86,
+  "backfill_numeric_features": 5,
+  "skipped_inconsistent_records": 0,
+  "skipped_disallowed_target_records": 30,
+  "require_consistent": true,
+  "allow_targets": [
+    "tomcat_CVE-2020-1938"
+  ],
+  "merged_features": 87,
+  "output_csv": "reports\\evaluations\\label-consistency-fix-v01\\target-exploitability-label-consistency-fix.csv"
+}

@@ -18,6 +18,7 @@
 - `evaluations/targeted-precondition-v02/` - ผลหลังเพิ่ม targeted precondition รอบแรก
 - `evaluations/targeted-pair-fix-v01/` - ผลหลังรวมเฉพาะ targeted pair records ที่ label consistency ผ่าน
 - `evaluations/strict-precheck-improve-v01/` - ผลหลังรวม strict precheck safe targets จาก Kali/OpenCode รอบล่าสุด
+- `evaluations/label-consistency-fix-v01/` - ผลหลังรวม label consistency fix ที่ safe target เหลือ 1 ตัว และ quarantine อีก 5 ตัว
 
 ## plans
 
