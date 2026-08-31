@@ -55,6 +55,7 @@ Feedback กลับเข้า Dataset
 
 ## เอกสารสำคัญ
 
+- [docs/00-navigation-th.md](docs/00-navigation-th.md) - สารบัญหลักว่าอ่าน repo นี้ยังไง
 - [docs/01-project-scope-th.md](docs/01-project-scope-th.md) - ขอบเขตงาน ML หลังเริ่มใช้ XGBoost Ranking
 - [docs/02-timeline-th.md](docs/02-timeline-th.md) - timeline ว่าทำอะไรไปแล้วตามลำดับ
 - [docs/03-training-and-evaluation-th.md](docs/03-training-and-evaluation-th.md) - วิธี train/test และ metric ที่ใช้
@@ -62,11 +63,13 @@ Feedback กลับเข้า Dataset
 - [docs/05-lessons-learned-th.md](docs/05-lessons-learned-th.md) - ปัญหาและสิ่งที่แก้
 - [docs/06-scanning-tools-th.md](docs/06-scanning-tools-th.md) - เครื่องมือที่ใช้ในงานจริงและงานเก็บ dataset
 - [docs/07-feature-catalog-th.md](docs/07-feature-catalog-th.md) - รายการ feature ทั้งหมดและ phase ที่ใช้ได้/ห้ามใช้
+- [docs/08-workflow-responsibilities-th.md](docs/08-workflow-responsibilities-th.md) - หน้าที่ของ Codex, OpenCode, ML, scanner และ Metasploit
 - [scripts/README.md](scripts/README.md) - script ที่ใช้ build dataset, train model และ inference
-- [reports/current-status-th.md](reports/current-status-th.md) - สรุปสถานะล่าสุด
-- [reports/targeted-precondition-plan-v02/TARGETED-PRECONDITION-PROBE-PLAN-TH.md](reports/targeted-precondition-plan-v02/TARGETED-PRECONDITION-PROBE-PLAN-TH.md) - แผน probe เจาะจงที่เกลาใหม่สำหรับลด false positive
-- [reports/targeted-precondition-merge-v02/TARGETED-PRECONDITION-ML-RESULTS-TH.md](reports/targeted-precondition-merge-v02/TARGETED-PRECONDITION-ML-RESULTS-TH.md) - ผล ML หลังรวม targeted precondition และข้อผิดพลาดที่ยังเหลือ
-- [reports/targeted-pair-quality-audit-v01/TARGETED-PAIR-QUALITY-AUDIT-TH.md](reports/targeted-pair-quality-audit-v01/TARGETED-PAIR-QUALITY-AUDIT-TH.md) - ตรวจคุณภาพ targeted pair ก่อนนำเข้า train
+- [reports/README.md](reports/README.md) - สารบัญ reports แยก progress/audit/evaluation/plan/quarantine
+- [reports/progress/current-status-th.md](reports/progress/current-status-th.md) - สรุปสถานะล่าสุด
+- [reports/plans/targeted-precondition-v02/TARGETED-PRECONDITION-PROBE-PLAN-TH.md](reports/plans/targeted-precondition-v02/TARGETED-PRECONDITION-PROBE-PLAN-TH.md) - แผน probe เจาะจงที่เกลาใหม่สำหรับลด false positive
+- [reports/evaluations/targeted-precondition-v02/TARGETED-PRECONDITION-ML-RESULTS-TH.md](reports/evaluations/targeted-precondition-v02/TARGETED-PRECONDITION-ML-RESULTS-TH.md) - ผล ML หลังรวม targeted precondition และข้อผิดพลาดที่ยังเหลือ
+- [reports/quarantine/targeted-pair-quality-v01/TARGETED-PAIR-QUALITY-AUDIT-TH.md](reports/quarantine/targeted-pair-quality-v01/TARGETED-PAIR-QUALITY-AUDIT-TH.md) - ตรวจคุณภาพ targeted pair ก่อนนำเข้า train
 
 ## ระดับความพร้อม
 

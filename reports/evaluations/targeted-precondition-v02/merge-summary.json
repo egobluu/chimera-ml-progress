@@ -1,0 +1,9 @@
+{
+  "base_targets": 40,
+  "targets_with_backfill": 11,
+  "targets_without_backfill": 29,
+  "base_features": 68,
+  "backfill_numeric_features": 19,
+  "merged_features": 78,
+  "output_csv": "reports\\targeted-precondition-merge-v02\\target-exploitability-with-targeted.csv"
+}
