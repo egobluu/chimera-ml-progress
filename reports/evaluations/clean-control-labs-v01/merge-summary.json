@@ -1,0 +1,20 @@
+{
+  "base_targets": 40,
+  "targets_with_backfill": 0,
+  "targets_without_backfill": 40,
+  "appended_new_targets": [
+    "couchdb_admin_party_clean",
+    "couchdb_auth_required_clean"
+  ],
+  "base_features": 87,
+  "backfill_numeric_features": 6,
+  "skipped_inconsistent_records": 1,
+  "skipped_disallowed_target_records": 63,
+  "require_consistent": true,
+  "allow_targets": [
+    "couchdb_admin_party_clean",
+    "couchdb_auth_required_clean"
+  ],
+  "merged_features": 90,
+  "output_csv": "reports\\evaluations\\clean-control-labs-v01\\target-exploitability-clean-control-labs.csv"
+}

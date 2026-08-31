@@ -156,3 +156,23 @@ quarantine 5 targets:
 | False Negative | 0 |
 
 ความหมาย: รอบนี้ไม่ได้ทำให้คะแนนดีขึ้น แต่ทำให้รู้ว่า dataset เดิมมี label/control target ที่ต้องแก้จริง ก่อนจะคาดหวังให้ ML แยก exploit/no-exploit ได้
+
+## Clean Control Labs Result
+
+ผล `dec-clean-control-labs-2026-09-01` ได้ clean CouchDB pair และเพิ่มเป็น target ใหม่ใน dataset:
+
+- `couchdb_admin_party_clean` เป็น positive
+- `couchdb_auth_required_clean` เป็น negative
+
+หลัง merge แล้ว dataset เพิ่มเป็น 42 targets / 90 features แต่ `strict_precheck` ยังไม่ผ่าน:
+
+| Metric | Result |
+| --- | ---: |
+| Accuracy | 0.500 |
+| Precision | 0.500 |
+| Recall | 1.000 |
+| F1 | 0.667 |
+| False Positive | 21 |
+| False Negative | 0 |
+
+`couchdb_auth_required_clean` ยังถูกทำนายผิดเป็น exploit แปลว่าโมเดลยังต้องการ clean positive/negative pair จากหลาย family กว่านี้ ไม่ใช่แค่ CouchDB คู่เดียว

@@ -16,6 +16,11 @@ from pathlib import Path
 
 BACKFILL_TOOLS = ("whatweb", "curl", "ffuf", "content_discovery")
 SKIP_FEATURES = {"detected_product", "detected_version"}
+SKIP_FEATURE_SUFFIXES = ("_version_detected",)
+
+
+def should_skip_feature(feature: str) -> bool:
+    return feature in SKIP_FEATURES or feature.endswith(SKIP_FEATURE_SUFFIXES)
 
 
 def numeric_value(value: object) -> float | None:
@@ -47,6 +52,7 @@ def load_backfill(
     allow_targets: set[str] | None = None,
 ) -> tuple[dict[str, dict[str, float]], list[str], int, int]:
     by_target: dict[str, dict[str, float]] = {}
+    labels_by_target: dict[str, int] = {}
     feature_names: set[str] = set()
     skipped_inconsistent = 0
     skipped_disallowed_target = 0
@@ -56,6 +62,8 @@ def load_backfill(
                 continue
             item = json.loads(line)
             target_id = item["target_id"]
+            expected_family = str(item.get("expected_family", ""))
+            labels_by_target.setdefault(target_id, 0 if expected_family == "no_exploit" else 1)
             if allow_targets is not None and target_id not in allow_targets:
                 skipped_disallowed_target += 1
                 continue
@@ -63,13 +71,14 @@ def load_backfill(
                 skipped_inconsistent += 1
                 continue
             feature = item.get("feature_name")
-            if not feature or feature in SKIP_FEATURES:
+            if not feature or should_skip_feature(feature):
                 continue
             value = numeric_value(item.get("feature_value"))
             if value is None:
                 continue
             by_target.setdefault(target_id, {})[feature] = value
             feature_names.add(feature)
+    by_target["__labels__"] = {target: float(label) for target, label in labels_by_target.items()}
     return by_target, sorted(feature_names), skipped_inconsistent, skipped_disallowed_target
 
 
@@ -102,6 +111,11 @@ def main() -> None:
         default="",
         help="Comma-separated target_id allow-list. Use this when a run contains quarantined targets.",
     )
+    parser.add_argument(
+        "--append-new-targets",
+        action="store_true",
+        help="Append allowed backfill targets that are not already present in the base dataset.",
+    )
     args = parser.parse_args()
 
     rows, base_fields = load_base(args.base_dataset)
@@ -111,6 +125,7 @@ def main() -> None:
         require_consistent=args.require_consistent,
         allow_targets=allow_targets,
     )
+    labels_by_target = {target: int(label) for target, label in backfill.pop("__labels__", {}).items()}
     merged_fields = base_fields + [name for name in backfill_fields if name not in base_fields]
 
     merged_rows: list[dict[str, str]] = []
@@ -127,6 +142,21 @@ def main() -> None:
         add_missing_defaults(merged, backfill_fields, has_backfill)
         merged_rows.append(merged)
 
+    appended_new_targets: list[str] = []
+    if args.append_new_targets:
+        existing_targets = {row["target_id"] for row in rows}
+        for target_id in sorted(backfill):
+            if target_id in existing_targets:
+                continue
+            merged = {field: "0" for field in merged_fields}
+            merged["target_id"] = target_id
+            merged["label"] = str(labels_by_target.get(target_id, 0))
+            for feature, value in backfill[target_id].items():
+                merged[feature] = str(int(value)) if value.is_integer() else str(value)
+            add_missing_defaults(merged, backfill_fields, has_backfill=True)
+            merged_rows.append(merged)
+            appended_new_targets.append(target_id)
+
     args.out_csv.parent.mkdir(parents=True, exist_ok=True)
     with args.out_csv.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=merged_fields)
@@ -137,6 +167,7 @@ def main() -> None:
         "base_targets": len(rows),
         "targets_with_backfill": targets_with_backfill,
         "targets_without_backfill": len(rows) - targets_with_backfill,
+        "appended_new_targets": appended_new_targets,
         "base_features": len(base_fields) - 2,
         "backfill_numeric_features": len(backfill_fields),
         "skipped_inconsistent_records": skipped_inconsistent,
