@@ -1,0 +1,11 @@
+{
+  "base_targets": 40,
+  "targets_with_backfill": 3,
+  "targets_without_backfill": 37,
+  "base_features": 78,
+  "backfill_numeric_features": 5,
+  "skipped_inconsistent_records": 11,
+  "require_consistent": true,
+  "merged_features": 79,
+  "output_csv": "reports\\evaluations\\targeted-pair-fix-v01\\target-exploitability-with-consistent-pair-fix.csv"
+}

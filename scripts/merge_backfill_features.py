@@ -41,14 +41,18 @@ def load_base(path: Path) -> tuple[list[dict[str, str]], list[str]]:
         return rows, list(reader.fieldnames or [])
 
 
-def load_backfill(path: Path) -> tuple[dict[str, dict[str, float]], list[str]]:
+def load_backfill(path: Path, require_consistent: bool = False) -> tuple[dict[str, dict[str, float]], list[str], int]:
     by_target: dict[str, dict[str, float]] = {}
     feature_names: set[str] = set()
+    skipped_inconsistent = 0
     with path.open(encoding="utf-8") as handle:
         for line in handle:
             if not line.strip():
                 continue
             item = json.loads(line)
+            if require_consistent and item.get("label_consistency") != "consistent":
+                skipped_inconsistent += 1
+                continue
             feature = item.get("feature_name")
             if not feature or feature in SKIP_FEATURES:
                 continue
@@ -58,7 +62,7 @@ def load_backfill(path: Path) -> tuple[dict[str, dict[str, float]], list[str]]:
             target_id = item["target_id"]
             by_target.setdefault(target_id, {})[feature] = value
             feature_names.add(feature)
-    return by_target, sorted(feature_names)
+    return by_target, sorted(feature_names), skipped_inconsistent
 
 
 def add_missing_defaults(row: dict[str, str], feature_names: list[str], has_backfill: bool) -> None:
@@ -80,10 +84,15 @@ def main() -> None:
     parser.add_argument("--backfill-jsonl", required=True, type=Path)
     parser.add_argument("--out-csv", required=True, type=Path)
     parser.add_argument("--summary-json", required=True, type=Path)
+    parser.add_argument(
+        "--require-consistent",
+        action="store_true",
+        help="Only merge feature records with label_consistency=consistent.",
+    )
     args = parser.parse_args()
 
     rows, base_fields = load_base(args.base_dataset)
-    backfill, backfill_fields = load_backfill(args.backfill_jsonl)
+    backfill, backfill_fields, skipped_inconsistent = load_backfill(args.backfill_jsonl, require_consistent=args.require_consistent)
     merged_fields = base_fields + [name for name in backfill_fields if name not in base_fields]
 
     merged_rows: list[dict[str, str]] = []
@@ -112,6 +121,8 @@ def main() -> None:
         "targets_without_backfill": len(rows) - targets_with_backfill,
         "base_features": len(base_fields) - 2,
         "backfill_numeric_features": len(backfill_fields),
+        "skipped_inconsistent_records": skipped_inconsistent,
+        "require_consistent": args.require_consistent,
         "merged_features": len(merged_fields) - 2,
         "output_csv": str(args.out_csv),
     }

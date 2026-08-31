@@ -38,9 +38,9 @@ Feedback กลับเข้า Dataset
 
 ## สถานะล่าสุด
 
-สถานะล่าสุดคือ **ML-only Exploitability Gate v0.2 สำเร็จตามเกณฑ์ prototype**
+สถานะล่าสุดคือ **ML-only Exploitability Gate v0.2 รันได้ครบ pipeline แล้ว** แต่ผลที่เหมาะกับการใช้งานจริงต้องดู profile `strict_precheck` เป็นหลัก
 
-ผลหลัก:
+ผลจาก full profile:
 
 | Metric | v0.1 | v0.2 |
 | --- | ---: | ---: |
@@ -51,7 +51,7 @@ Feedback กลับเข้า Dataset
 | gate-feature-evidence | 14/40 | 40/40 |
 | Features | 33 | 44 |
 
-ข้อควรระวัง: คะแนน v0.2 ยังมาจาก dataset ขนาดเล็ก 40 targets จึงยังไม่ใช่หลักฐานว่า generalize กับ target ใหม่ได้ดี ต้องทำ unseen target test ต่อ
+ข้อควรระวัง: คะแนน full profile ยังดีเกินจริง เพราะมี feature ที่ใกล้คำเฉลยหรือเกิดหลังตรวจ exploit แล้ว ส่วน `strict_precheck` หลังรวม targeted pair fix ยังมี FP=20 ที่ threshold 0.10 จึงยังไม่ควรพูดว่าโมเดลแม่นแล้ว
 
 ## เอกสารสำคัญ
 
@@ -70,13 +70,14 @@ Feedback กลับเข้า Dataset
 - [reports/plans/targeted-precondition-v02/TARGETED-PRECONDITION-PROBE-PLAN-TH.md](reports/plans/targeted-precondition-v02/TARGETED-PRECONDITION-PROBE-PLAN-TH.md) - แผน probe เจาะจงที่เกลาใหม่สำหรับลด false positive
 - [reports/evaluations/targeted-precondition-v02/TARGETED-PRECONDITION-ML-RESULTS-TH.md](reports/evaluations/targeted-precondition-v02/TARGETED-PRECONDITION-ML-RESULTS-TH.md) - ผล ML หลังรวม targeted precondition และข้อผิดพลาดที่ยังเหลือ
 - [reports/quarantine/targeted-pair-quality-v01/TARGETED-PAIR-QUALITY-AUDIT-TH.md](reports/quarantine/targeted-pair-quality-v01/TARGETED-PAIR-QUALITY-AUDIT-TH.md) - ตรวจคุณภาพ targeted pair ก่อนนำเข้า train
+- [reports/evaluations/targeted-pair-fix-v01/TARGETED-PAIR-FIX-ML-RESULTS-TH.md](reports/evaluations/targeted-pair-fix-v01/TARGETED-PAIR-FIX-ML-RESULTS-TH.md) - ผลหลังรวมเฉพาะ targeted pair records ที่ consistent
 
 ## ระดับความพร้อม
 
 ถ้าให้คะแนนภาพรวมเป้าหมายสุดท้ายเป็น 10/10:
 
 ```text
-ตอนนี้อยู่ประมาณ 2/10
+ตอนนี้อยู่ประมาณ 2/10 สำหรับ pipeline รวม และประมาณ 1/10 สำหรับ strict precheck ที่ไม่พึ่งข้อมูลหลังยิง exploit
 ```
 
 เพราะ:
@@ -85,3 +86,4 @@ Feedback กลับเข้า Dataset
 - มี dataset 20 positive / 20 negative ที่ balance
 - มี feature evidence ครบทุก target ที่ใช้ train
 - แต่ยังต้องพิสูจน์กับ target ใหม่ที่ไม่เคยอยู่ใน train
+- strict precheck ยัง false positive สูง ต้องเพิ่ม positive/negative pair ที่ label ไม่ขัดกัน

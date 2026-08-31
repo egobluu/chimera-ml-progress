@@ -2,9 +2,9 @@
 
 ## สรุปสถานะ
 
-ตอนนี้งาน ML เดินมาถึง **ML-only Exploitability Gate v0.2**
+ตอนนี้งาน ML เดินมาถึง **ML-only Exploitability Gate v0.2 + Targeted Pair Fix v01**
 
-ถือว่าผ่านเป้าหมาย prototype ระดับต้น เพราะ:
+ถือว่าผ่านเป้าหมาย prototype ระดับต้นในแง่ pipeline เพราะ:
 
 - ไม่พึ่ง Rule Gate เป็นตัวตัดสินหลัก
 - train/evaluate/infer ได้
@@ -51,14 +51,36 @@
 โมเดลแม่น 100% แล้ว
 ```
 
+## ผล Targeted Pair Fix v01
+
+รอบนี้รวมเฉพาะ feature records ที่มี `label_consistency=consistent` จาก `dec-targeted-pair-fix-2026-08-31`
+
+| รายการ | จำนวน |
+| --- | ---: |
+| targets ที่มี pair-fix feature ใช้ได้ | 3 |
+| records ที่ skip เพราะ inconsistent | 11 |
+| features หลัง merge | 79 |
+
+ผล `strict_precheck` ยังไม่ดีขึ้น:
+
+| Metric | Result |
+| --- | ---: |
+| Accuracy | 0.500 |
+| Precision | 0.500 |
+| Recall | 1.000 |
+| F1 | 0.667 |
+| False Positive | 20 |
+| False Negative | 0 |
+
+ความหมาย: โมเดลยังมอง negative เป็น exploit ได้ง่ายเกินไป เพราะ evidence ฝั่ง precheck ที่ reliable ยังน้อย ต้องแก้ label consistency และเก็บ pair features เพิ่มก่อน
+
 ## งานถัดไป
 
-1. ทำ leak audit ของ 44 features
-2. แยก feature เป็น `precheck`, `postcheck`, `forbidden`
-3. เพิ่ม unseen target 5-10 ตัว
-4. ให้ model infer ก่อนเฉลย
-5. ค่อยใช้ Metasploit/manual PoC ตรวจจริง
-6. วัดว่า false positive/false negative ยังต่ำไหม
+1. quarantine target ที่ label/evidence ขัดกัน
+2. แก้ target label เช่น target ที่ version หรือ precondition ไม่ตรง CVE
+3. เก็บ positive/negative pair ต่อ family ให้ครบ
+4. train `strict_precheck` ใหม่ด้วย dataset ที่ label consistency ผ่าน
+5. ทำ unseen target test โดยให้ model infer ก่อน แล้วค่อยใช้ Metasploit/manual PoC เฉลย
 
 ## Audit ล่าสุด
 
@@ -81,3 +103,9 @@
 ## Targeted Pair Quality Audit
 
 ผล `dec-targeted-precondition-pairs-2026-08-31` ยังไม่ควรนำเข้า train ตรง ๆ เพราะมี positive targets หลายตัวที่ได้ negative evidence เช่น `thinkphp_5-rce` ได้ `invokefunction_not_found`, `solr_CVE-2019-17558` ได้ `velocity_disabled`, `couchdb_CVE-2017-12635` ได้ `auth_required`, `shiro_CVE-2016-4437` ได้ `rememberme_not_seen` จึงต้อง quarantine แล้วแก้ lab/probe เฉพาะ family ก่อน
+
+## Targeted Pair Fix Result
+
+ผล `dec-targeted-pair-fix-2026-08-31` แก้ได้บางส่วน เช่น `solr_CVE-2019-17558`, `shiro_CVE-2016-4437`, และ `redis_non_vulnerable` แต่ยังมี target ที่ label/evidence inconsistent อยู่ เช่น `thinkphp_5-rce`, `couchdb_CVE-2017-12635`, `nginx_CVE-2017-7529`, `redis_auth_non_vulnerable`
+
+ใช้ได้เฉพาะ records ที่ consistent เท่านั้น รายละเอียดอยู่ที่ `reports/evaluations/targeted-pair-fix-v01/`
