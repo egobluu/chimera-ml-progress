@@ -74,6 +74,7 @@ Feedback กลับเข้า Dataset
 - [reports/evaluations/strict-precheck-improve-v01/STRICT-PRECHECK-IMPROVE-ML-RESULTS-TH.md](reports/evaluations/strict-precheck-improve-v01/STRICT-PRECHECK-IMPROVE-ML-RESULTS-TH.md) - ผลหลังรวม strict precheck safe targets รอบล่าสุด
 - [reports/evaluations/label-consistency-fix-v01/LABEL-CONSISTENCY-FIX-ML-RESULTS-TH.md](reports/evaluations/label-consistency-fix-v01/LABEL-CONSISTENCY-FIX-ML-RESULTS-TH.md) - ผลหลังคัด label consistency fix รอบล่าสุด
 - [reports/evaluations/clean-control-labs-v01/CLEAN-CONTROL-LABS-ML-RESULTS-TH.md](reports/evaluations/clean-control-labs-v01/CLEAN-CONTROL-LABS-ML-RESULTS-TH.md) - ผลหลังเพิ่ม CouchDB clean control pair เป็น target ใหม่
+- [reports/evaluations/clean-control-labs-v02/CLEAN-CONTROL-LABS-V02-ML-RESULTS-TH.md](reports/evaluations/clean-control-labs-v02/CLEAN-CONTROL-LABS-V02-ML-RESULTS-TH.md) - ผลหลังเพิ่ม clean control targets 9 ตัวแบบ precondition focus
 
 ## ระดับความพร้อม
 

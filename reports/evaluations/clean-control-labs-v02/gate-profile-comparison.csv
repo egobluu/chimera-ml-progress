@@ -1,0 +1,7 @@
+profile,features,threshold,accuracy,precision,recall,f1,tp,fp,tn,fn
+full_v02,90,0.2,0.8776,0.7931,1.0,0.8846,23,6,20,0
+strict_precheck,84,0.15,0.4898,0.4792,1.0,0.6479,23,25,1,0
+strict_no_negative_count,89,0.15,0.4898,0.4792,1.0,0.6479,23,25,1,0
+scanner_only,32,0.1,0.4694,0.4694,1.0,0.6389,23,26,0,0
+no_metasploit,86,0.2,0.8776,0.7931,1.0,0.8846,23,6,20,0
+no_nuclei_confirm,89,0.2,0.8776,0.7931,1.0,0.8846,23,6,20,0

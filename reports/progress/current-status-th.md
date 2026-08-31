@@ -176,3 +176,22 @@ quarantine 5 targets:
 | False Negative | 0 |
 
 `couchdb_auth_required_clean` ยังถูกทำนายผิดเป็น exploit แปลว่าโมเดลยังต้องการ clean positive/negative pair จากหลาย family กว่านี้ ไม่ใช่แค่ CouchDB คู่เดียว
+
+## Clean Control Labs v02 Result
+
+ผล `dec-clean-control-labs-2026-09-01` รุ่น Precondition Focus เพิ่ม target ใหม่ได้ 9 ตัว ทำให้ dataset เป็น 49 targets / 90 features
+
+clean pairs ที่เพิ่ม:
+
+- Tomcat PUT
+- Tomcat AJP
+- Shiro default key
+
+ผลล่าสุด:
+
+| Profile | F1 | FP | FN |
+| --- | ---: | ---: | ---: |
+| full_v02 | 0.885 | 6 | 0 |
+| strict_precheck | 0.648 | 25 | 0 |
+
+สรุป: test เริ่มสมจริงขึ้นเพราะ full profile ไม่ได้ 1.000 แล้ว แต่ `strict_precheck` ยังไม่ผ่าน ต้องเพิ่ม clean positive สำหรับ Solr/ThinkPHP/CouchDB และปรับ profile ให้เน้น precondition มากขึ้น

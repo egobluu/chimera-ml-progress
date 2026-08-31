@@ -1,0 +1,34 @@
+{
+  "base_targets": 40,
+  "targets_with_backfill": 0,
+  "targets_without_backfill": 40,
+  "appended_new_targets": [
+    "couchdb_auth_required_clean",
+    "shiro_default_key_negative",
+    "shiro_default_key_positive",
+    "solr_velocity_negative",
+    "thinkphp_rce_negative",
+    "tomcat_ajp_negative",
+    "tomcat_ajp_positive",
+    "tomcat_put_negative",
+    "tomcat_put_positive"
+  ],
+  "base_features": 87,
+  "backfill_numeric_features": 19,
+  "skipped_inconsistent_records": 0,
+  "skipped_disallowed_target_records": 74,
+  "require_consistent": true,
+  "allow_targets": [
+    "couchdb_auth_required_clean",
+    "shiro_default_key_negative",
+    "shiro_default_key_positive",
+    "solr_velocity_negative",
+    "thinkphp_rce_negative",
+    "tomcat_ajp_negative",
+    "tomcat_ajp_positive",
+    "tomcat_put_negative",
+    "tomcat_put_positive"
+  ],
+  "merged_features": 90,
+  "output_csv": "reports\\evaluations\\clean-control-labs-v02\\target-exploitability-clean-control-labs-v02.csv"
+}
