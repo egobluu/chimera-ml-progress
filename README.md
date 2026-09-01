@@ -83,6 +83,8 @@ Feedback กลับเข้า Dataset
 - [reports/evaluations/family-ranking-backfill-v01/FAMILY-RANKING-BACKFILL-V01-RESULTS-TH.md](reports/evaluations/family-ranking-backfill-v01/FAMILY-RANKING-BACKFILL-V01-RESULTS-TH.md) - ผล Family Ranker หลังเพิ่ม family-specific backfill features
 - [reports/evaluations/unknown-family-v01/UNKNOWN-FAMILY-V01-RESULTS-TH.md](reports/evaluations/unknown-family-v01/UNKNOWN-FAMILY-V01-RESULTS-TH.md) - ผลทดสอบ unknown-family/open-set guard
 - [reports/evaluations/unseen-validation-v01/UNSEEN-VALIDATION-CODEX-REVIEW-TH.md](reports/evaluations/unseen-validation-v01/UNSEEN-VALIDATION-CODEX-REVIEW-TH.md) - รีวิว unseen validation รอบแรกแบบ predict ก่อน verify
+- [reports/evaluations/unseen-validation-v02/UNSEEN-VALIDATION-V02-CODEX-REVIEW-TH.md](reports/evaluations/unseen-validation-v02/UNSEEN-VALIDATION-V02-CODEX-REVIEW-TH.md) - รีวิว unseen validation รอบสอง พร้อม audit จุดที่ผลสรุปขัดกับ prediction จริง
+- [reports/plans/feature-schema-alignment-v01/FEATURE-SCHEMA-ALIGNMENT-PLAN-TH.md](reports/plans/feature-schema-alignment-v01/FEATURE-SCHEMA-ALIGNMENT-PLAN-TH.md) - แผนปรับ feature schema ให้ OpenCode/feature extractor ตรงกับ runtime ML
 
 ## ระดับความพร้อม
 
@@ -99,3 +101,18 @@ Feedback กลับเข้า Dataset
 - มี feature evidence ครบทุก target ที่ใช้ train
 - มี Family Ranker ที่ Top-1 0.885 หลังเพิ่ม backfill features
 - แต่ยังต้องพิสูจน์กับ unseen target ใหม่ และทำ inference/API ให้ใช้งานจริง
+
+## Unseen Validation v02
+
+ผลล่าสุดจาก `dec-unseen-validation-v02-2026-09-01` ทำให้เห็นภาพจริงขึ้น:
+
+- Gate แยก vulnerable/negative controls ได้ดีในชุดทดสอบนี้
+- Ranker ยังพลาด Redis/Grafana variants เพราะ family-specific features ไม่ครบ
+- unknown-family guard ในไฟล์สรุปเดิมมีข้อมูลขัดกับ prediction จริง
+- runtime ถูก patch แล้วให้ `unknown_product_detected` บังคับไป `unknown_family_triage`
+
+สรุปสถานะที่ควรใช้พูดตอนนี้:
+
+```text
+ML prototype ใช้เป็น decision-support ได้แล้ว แต่ยังต้องทำ feature schema alignment ก่อน retrain/ranker รอบถัดไป
+```

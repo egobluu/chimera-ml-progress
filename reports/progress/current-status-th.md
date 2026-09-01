@@ -353,3 +353,32 @@ examples/output/
 ดังนั้น bottleneck รอบถัดไปคือ **Gate improvement** ไม่ใช่ Ranker
 
 ปรับ runtime เพิ่มให้มี `final_decision` เพื่อให้ LLM อ่านผลรวมของ Gate + Ranker + Unknown Guard ได้ง่ายขึ้น
+
+## Unseen Validation v02 Result
+
+ผล `dec-unseen-validation-v02-2026-09-01` ทดสอบ 12 targets:
+
+| Metric | Reported Result |
+| --- | ---: |
+| Completed/Total | 12/12 |
+| Gate accuracy | 1.000 |
+| Gate FP | 0 |
+| Gate FN | 0 |
+| Ranker Top-1 | 0.333 |
+
+Codex ตรวจเพิ่มแล้วพบว่าไฟล์สรุป v02 มีข้อมูลขัดกัน: evaluation รายงาน `unknown guard 100%` แต่ prediction จริงของ unknown-family targets หลายตัวเป็น `known_family_ready` และ `ready_for_safe_verification`
+
+แก้ runtime แล้วใน `scripts/predict_prototype.py`:
+
+- normalize alias `is_non_http_target` เป็น `is_non_http_service`
+- ถ้า `unknown_product_detected=1` และ unknown signal ไม่แพ้ known signal ให้บังคับเป็น `unknown_family_triage`
+
+หลัง patch ทดสอบกับ `unseen_drupal_01` แล้วได้:
+
+```text
+gate.decision = likely_exploitable
+ranker.decision = unknown_family
+final_decision = unknown_family_triage
+```
+
+สรุป: Gate เริ่มใช้ได้ดีขึ้น แต่ Ranker ยังต้องทำ feature schema alignment โดยเฉพาะ Redis/Grafana variants ก่อน retrain รอบต่อไป

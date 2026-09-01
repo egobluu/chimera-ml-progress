@@ -33,6 +33,23 @@ def load_json(path: Path) -> dict[str, object]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def normalize_feature_schema(features: dict[str, object]) -> list[str]:
+    warnings: list[str] = []
+    if "is_non_http_target" in features and "is_non_http_service" not in features:
+        features["is_non_http_service"] = features["is_non_http_target"]
+        warnings.append("normalized alias: is_non_http_target -> is_non_http_service")
+
+    if "version_in_vulnerable_range" in features:
+        vulnerable = 1 if as_float(features, "version_in_vulnerable_range") > 0 else 0
+        features.setdefault("version_in_vulnerable_range_true", vulnerable)
+        features.setdefault("version_in_vulnerable_range_false", 0 if vulnerable else 1)
+
+    if as_float(features, "unknown_product_detected") > 0:
+        warnings.append("unknown_product_detected present; known-family ranking requires extra guard")
+
+    return warnings
+
+
 def add_derived_precondition_features(features: dict[str, object]) -> None:
     positive = sum(1 for name in POSITIVE_PRECONDITION_FEATURES if as_float(features, name) > 0)
     negative = sum(1 for name in NEGATIVE_PRECONDITION_FEATURES if as_float(features, name) > 0)
@@ -87,6 +104,14 @@ def family_decision(top_family: dict[str, object], threshold: int) -> str:
     return "unknown_family"
 
 
+def should_force_unknown_family(features: dict[str, object]) -> bool:
+    if as_float(features, "unknown_product_detected") <= 0:
+        return False
+    unknown_count = as_float(features, "unknown_family_signal_count")
+    known_count = as_float(features, "known_family_signal_count")
+    return unknown_count >= 1 and known_count <= unknown_count
+
+
 def final_decision_from(gate_status: str, ranker_decision: str | None) -> str:
     if gate_status == "no_exploit":
         return "do_not_exploit_now"
@@ -126,6 +151,7 @@ def main() -> None:
     manifest = load_json(manifest_path)
     features = load_json(args.features)
     target_id = str(features.get("target_id") or args.features.stem)
+    schema_warnings = normalize_feature_schema(features)
     add_derived_precondition_features(features)
 
     gate_model = XGBClassifier()
@@ -148,6 +174,7 @@ def main() -> None:
         "final_decision": final_decision_from(gate_status, None),
         "recommended_next_action": "stop_or_collect_more_evidence",
         "reason_features": active_reason_features(features),
+        "schema_warnings": schema_warnings,
         "safety_note_th": "ยังไม่ยิง exploit อัตโนมัติ ต้องใช้ Metasploit check/manual PoC หลังผู้ใช้ยืนยัน",
     }
 
@@ -165,6 +192,9 @@ def main() -> None:
     ranked = rank_families(features, families, ranker_model)
     top = ranked[0]
     decision = family_decision(top, int(manifest["ranker"]["unknown_positive_signal_threshold"]))
+    if should_force_unknown_family(features):
+        decision = "unknown_family"
+        schema_warnings.append("unknown_product_detected forced unknown_family_triage")
     result["ranker"] = {
         "model": "family_ranker",
         "decision": decision,

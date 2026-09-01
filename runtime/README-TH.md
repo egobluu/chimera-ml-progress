@@ -200,3 +200,30 @@ reports/evaluations เก่าทุกอัน ถ้าอีกฝ่า�
 - Ranker ตอบได้เฉพาะ family ที่มีใน `prototype_manifest.json`
 - ถ้า evidence ไม่พอควรตอบ `unknown_family` หรือ `low_confidence`
 - หลัง unseen validation v01 พบว่า Gate ยัง false positive กับ unknown family ได้ จึงต้องดู `final_decision` ร่วมกับ Ranker/Unknown Guard เสมอ
+- หลัง unseen validation v02 เพิ่ม guard แล้ว ถ้า input มี `unknown_product_detected=1` และ signal ของ unknown มากกว่าหรือเท่ากับ known family ระบบจะบังคับ `final_decision=unknown_family_triage`
+
+## Feature schema ที่ต้องระวัง
+
+feature extractor ควรส่งชื่อหลักให้ตรง runtime:
+
+```text
+is_non_http_service
+```
+
+ถ้ายังส่งชื่อเก่า:
+
+```text
+is_non_http_target
+```
+
+runtime จะ normalize ให้ชั่วคราว แต่ควรแก้ฝั่ง scanner/feature extractor ให้ตรง schema เพื่อไม่ให้ train รอบต่อไปเพี้ยน
+
+ถ้าเจอ product ที่ยังไม่มีใน ranker เช่น Drupal, Laravel, Jetty, PHP-CGI หรือ JBoss ให้ส่ง:
+
+```text
+unknown_product_detected=1
+unknown_family_signal_count>=1
+known_family_signal_count=0
+```
+
+เพื่อให้ระบบตอบ `unknown_family_triage` แทนการเดา family ที่รู้จักอยู่แล้ว

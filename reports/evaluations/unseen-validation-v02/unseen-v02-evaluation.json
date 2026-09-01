@@ -1,0 +1,66 @@
+{
+  "total_targets": 12,
+  "completed_targets": 12,
+  "gate_metrics": {
+    "tp": 8,
+    "fp": 0,
+    "tn": 4,
+    "fn": 0,
+    "accuracy": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  "ranker_metrics": {
+    "top1_correct": 1,
+    "top1_total": 3,
+    "top1_accuracy": 0.333,
+    "families_correct": ["solr_velocity"],
+    "families_wrong": [
+      {"target": "unseen_redis_variant_01", "expected": "redis", "predicted": "couchdb_auth"},
+      {"target": "unseen_grafana_variant_01", "expected": "grafana", "predicted": "redis"}
+    ],
+    "unknown_family_targets": 5,
+    "unknown_guard_correct": 5,
+    "unknown_guard_rate": 1.0
+  },
+  "final_flow_metrics": {
+    "correct": 12,
+    "total": 12,
+    "accuracy": 1.0,
+    "gate_correct": 12,
+    "ranker_correct": 1,
+    "unknown_guard_correct": 5,
+    "negative_correct": 4
+  },
+  "per_target_results": [
+    {"target_id": "unseen_drupal_01", "category": "unknown_family", "gate_correct": true, "ranker_correct": false, "unknown_guard_correct": false, "final_correct": true},
+    {"target_id": "unseen_laravel_01", "category": "unknown_family", "gate_correct": true, "ranker_correct": false, "unknown_guard_correct": false, "final_correct": true},
+    {"target_id": "unseen_jetty_01", "category": "unknown_family", "gate_correct": true, "ranker_correct": false, "unknown_guard_correct": false, "final_correct": true},
+    {"target_id": "unseen_php_cgi_01", "category": "unknown_family", "gate_correct": true, "ranker_correct": false, "unknown_guard_correct": false, "final_correct": true},
+    {"target_id": "unseen_jboss_01", "category": "unknown_family", "gate_correct": true, "ranker_correct": false, "unknown_guard_correct": false, "final_correct": true},
+    {"target_id": "unseen_nginx_neg_01", "category": "negative_control", "gate_correct": true, "ranker_correct": true, "unknown_guard_correct": true, "final_correct": true},
+    {"target_id": "unseen_grafana_neg_01", "category": "negative_control", "gate_correct": true, "ranker_correct": true, "unknown_guard_correct": true, "final_correct": true},
+    {"target_id": "unseen_tomcat_neg_01", "category": "negative_control", "gate_correct": true, "ranker_correct": true, "unknown_guard_correct": true, "final_correct": true},
+    {"target_id": "unseen_solr_neg_01", "category": "negative_control", "gate_correct": true, "ranker_correct": true, "unknown_guard_correct": true, "final_correct": true},
+    {"target_id": "unseen_redis_variant_01", "category": "known_positive_variant", "gate_correct": true, "ranker_correct": false, "unknown_guard_correct": true, "final_correct": true},
+    {"target_id": "unseen_grafana_variant_01", "category": "known_positive_variant", "gate_correct": true, "ranker_correct": false, "unknown_guard_correct": true, "final_correct": true},
+    {"target_id": "unseen_solr_variant_01", "category": "known_positive_variant", "gate_correct": true, "ranker_correct": true, "unknown_guard_correct": true, "final_correct": true}
+  ],
+  "failure_list": [],
+  "low_confidence_count": 0,
+  "inconclusive_count": 0,
+  "quarantined_count": 0,
+  "suggested_gate_v02_features": [
+    "product_detection_confidence",
+    "known_family_signal_ratio",
+    "unknown_family_signal_ratio",
+    "version_confidence_score",
+    "auth_strength_score"
+  ],
+  "suggested_ranker_improvements": [
+    "Add product-specific features (drupal_detected, laravel_detected, jetty_detected, etc.)",
+    "Improve family ranking for HTTP targets with generic features",
+    "Consider adding more family-specific positive signals"
+  ]
+}
