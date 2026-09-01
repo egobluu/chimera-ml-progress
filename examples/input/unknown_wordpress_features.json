@@ -1,0 +1,10 @@
+{
+  "target_id": "example_unknown_wordpress_plugin",
+  "service_port": 80,
+  "is_http_target": 1,
+  "is_non_http_service": 0,
+  "whatweb_tech_detected": 1,
+  "endpoint_reachable_count": 1,
+  "login_path_found": 1,
+  "upload_path_found": 1
+}

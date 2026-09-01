@@ -8,9 +8,10 @@
 
 1. `README.md`
 2. `reports/progress/current-status-th.md`
-3. `docs/08-workflow-responsibilities-th.md`
-4. `docs/07-feature-catalog-th.md`
-5. `reports/quarantine/targeted-pair-quality-v01/TARGETED-PAIR-QUALITY-AUDIT-TH.md`
+3. `runtime/README-TH.md`
+4. `docs/09-llm-handoff-runtime-th.md`
+5. `docs/08-workflow-responsibilities-th.md`
+6. `docs/07-feature-catalog-th.md`
 
 ## หมวดเอกสาร
 
@@ -24,6 +25,18 @@
 | `docs/06-scanning-tools-th.md` | เครื่องมือที่ใช้เก็บ dataset และเครื่องมือที่จะใช้จริง |
 | `docs/07-feature-catalog-th.md` | รายการ feature ทั้งหมด แยก precheck/postcheck/leak-risk |
 | `docs/08-workflow-responsibilities-th.md` | หน้าที่ของ Codex, OpenCode, scanner, ML และ Metasploit |
+| `docs/09-llm-handoff-runtime-th.md` | วิธีส่งต่อให้ฝั่ง LLM/agentic และไฟล์ไหนคือ runtime ใช้จริง |
+
+## หมวด runtime
+
+| path | หน้าที่ |
+| --- | --- |
+| `runtime/README-TH.md` | คู่มือชุด runtime prototype อ่านก่อนเชื่อมกับ LLM |
+| `runtime/models/prototype/gate_precondition_only.json` | XGBoost Gate model ที่ใช้จริงระดับ prototype |
+| `runtime/models/prototype/family_ranker.json` | XGBoost Family Ranker model ที่ใช้จริงระดับ prototype |
+| `runtime/models/prototype/prototype_manifest.json` | manifest บอก feature, threshold, candidate families และ entrypoint |
+| `examples/input/` | ตัวอย่าง feature JSON ที่ส่งเข้า ML |
+| `examples/output/` | ตัวอย่าง JSON ที่ ML คืนให้ LLM |
 
 ## หมวด reports
 
@@ -47,12 +60,21 @@
 | `scripts/train_gate_profiles.py` | train หลาย profile เพื่อเทียบว่าพึ่ง feature รั่วไหม |
 | `scripts/plan_precondition_probes.py` | สร้างแผน probe จาก false positive/false negative |
 | `scripts/rank_target_two_stage.py` | ใช้ model inference target ใหม่ |
+| `scripts/train_runtime_models.py` | train model runtime prototype ที่ส่งต่อให้ LLM |
+| `scripts/predict_prototype.py` | entrypoint ใช้จริง รับ feature JSON แล้วคืน Gate + Ranker + Unknown Guard |
+| `scripts/evaluate_unknown_family.py` | ทดสอบ unknown-family behavior ของ Ranker |
 
 ## สถานะข้อมูลที่ควรจำ
 
-ตอนนี้ยังไม่ควรพูดว่า ML แม่น 100% เพราะ `full_v02` มี feature ที่ใกล้เฉลยเกินไป เช่น `negative_evidence_count` และ Metasploit postcheck features
+ตอนนี้ยังไม่ควรพูดว่า ML แม่น 100% เพราะ dataset ยังเล็กและยังต้องทดสอบ unseen target เพิ่ม
 
-ผลที่น่าเชื่อกว่าคือ `strict_precheck` ซึ่งตอนนี้ยังมี false positive สูง แปลว่าเราต้องเก็บ precondition feature ให้ตรงและสมดุลขึ้น
+ผลที่ควรใช้เป็น baseline คือ runtime prototype:
+
+- Gate: `precondition_only`
+- Ranker: `family_ranker`
+- Unknown guard: logic ใน `scripts/predict_prototype.py`
+
+ส่วน `reports/evaluations/*` คือประวัติการทดลองย้อนหลัง ไม่ใช่ entrypoint ที่ LLM ต้องเรียกทุกครั้ง
 
 ## ข้อมูลที่ห้ามใช้ train ก่อนแก้
 

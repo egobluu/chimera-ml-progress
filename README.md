@@ -64,6 +64,8 @@ Feedback กลับเข้า Dataset
 - [docs/06-scanning-tools-th.md](docs/06-scanning-tools-th.md) - เครื่องมือที่ใช้ในงานจริงและงานเก็บ dataset
 - [docs/07-feature-catalog-th.md](docs/07-feature-catalog-th.md) - รายการ feature ทั้งหมดและ phase ที่ใช้ได้/ห้ามใช้
 - [docs/08-workflow-responsibilities-th.md](docs/08-workflow-responsibilities-th.md) - หน้าที่ของ Codex, OpenCode, ML, scanner และ Metasploit
+- [docs/09-llm-handoff-runtime-th.md](docs/09-llm-handoff-runtime-th.md) - สิ่งที่ต้องส่งต่อให้ฝั่ง LLM/agentic และไฟล์ไหนคือของใช้จริง
+- [runtime/README-TH.md](runtime/README-TH.md) - คู่มือ runtime prototype ที่ควรเรียกใช้จริง
 - [scripts/README.md](scripts/README.md) - script ที่ใช้ build dataset, train model และ inference
 - [reports/README.md](reports/README.md) - สารบัญ reports แยก progress/audit/evaluation/plan/quarantine
 - [reports/progress/current-status-th.md](reports/progress/current-status-th.md) - สรุปสถานะล่าสุด

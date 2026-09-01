@@ -22,6 +22,9 @@ script เหล่านี้อ้าง path แบบ Kali report output �
 | `plan_precondition_probes.py` | สร้างแผน probe เจาะจงจาก false positive/false negative ของโมเดล |
 | `rank_target_two_stage.py` | ใช้ model ที่ train แล้ว inference target ใหม่แบบ exploit/no_exploit |
 | `audit_gate_features.py` | ตรวจ feature leak และแยก feature เป็น precheck/postcheck ก่อนเชื่อคะแนน model |
+| `train_runtime_models.py` | train ชุด model runtime prototype ที่ใช้ส่งต่อให้ฝั่ง LLM/agentic |
+| `predict_prototype.py` | entrypoint ใช้งานจริงระดับ prototype รับ feature JSON แล้วคืนผล Gate + Ranker + Unknown Guard |
+| `evaluate_unknown_family.py` | ทดสอบว่า Ranker จะทำอย่างไรเมื่อเจอ target นอก family ที่รู้จัก |
 
 ## Flow การใช้งาน
 

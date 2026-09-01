@@ -1,0 +1,56 @@
+{
+  "target_id": "example_unknown_wordpress_plugin",
+  "gate": {
+    "model": "gate_precondition_only",
+    "score": 0.874851,
+    "threshold": 0.15,
+    "decision": "likely_exploitable"
+  },
+  "ranker": {
+    "model": "family_ranker",
+    "decision": "unknown_family",
+    "top_families": [
+      {
+        "family": "nextjs",
+        "score": -0.231897,
+        "positive_signals": 1,
+        "negative_signals": 0
+      },
+      {
+        "family": "flask",
+        "score": -0.554627,
+        "positive_signals": 1,
+        "negative_signals": 0
+      },
+      {
+        "family": "jenkins",
+        "score": -0.554627,
+        "positive_signals": 1,
+        "negative_signals": 0
+      },
+      {
+        "family": "nexus",
+        "score": -0.554627,
+        "positive_signals": 1,
+        "negative_signals": 0
+      },
+      {
+        "family": "struts2",
+        "score": -0.554627,
+        "positive_signals": 1,
+        "negative_signals": 0
+      }
+    ]
+  },
+  "recommended_next_action": "unknown_family_scan_more_or_manual_triage",
+  "reason_features": [
+    "endpoint_reachable_count",
+    "has_positive_precondition_signal",
+    "is_http_target",
+    "login_path_found",
+    "service_port",
+    "upload_path_found",
+    "whatweb_tech_detected"
+  ],
+  "safety_note_th": "ยังไม่ยิง exploit อัตโนมัติ ต้องใช้ Metasploit check/manual PoC หลังผู้ใช้ยืนยัน"
+}

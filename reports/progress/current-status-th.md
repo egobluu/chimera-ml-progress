@@ -293,3 +293,36 @@ clean pairs ที่เพิ่ม:
 ข้อแลกเปลี่ยนคือ rule ที่เข้มขึ้นจะ reject known-positive บางตัวที่ evidence ยังน้อย เช่น Nexus, Joomla, NextJS, Tomcat PUT
 
 สรุป: ระบบจริงต้องมี output `unknown_family` หรือ `known_family_but_low_confidence` ก่อนเชื่อคำตอบจาก Ranker
+
+## Runtime Prototype Handoff
+
+เพิ่มชุด runtime สำหรับส่งต่อให้ฝั่ง LLM/agentic แล้ว:
+
+```text
+runtime/models/prototype/
+├── gate_precondition_only.json
+├── family_ranker.json
+└── prototype_manifest.json
+```
+
+entrypoint ที่ควรเรียก:
+
+```bash
+python scripts/predict_prototype.py --features examples/input/redis_likely_exploitable_features.json
+```
+
+ตัวอย่าง output อยู่ใน:
+
+```text
+examples/output/
+```
+
+สรุปว่าไฟล์ไหนใช้ทำอะไร:
+
+| กลุ่ม | ใช้ทำอะไร |
+| --- | --- |
+| `runtime/models/prototype/*` | model ที่ใช้จริงระดับ prototype |
+| `scripts/predict_prototype.py` | ให้ LLM/agentic เรียกเพื่อ predict |
+| `examples/input` / `examples/output` | ตัวอย่าง format input/output |
+| `scripts/train_*.py` | ใช้ train/retrain ไม่ใช่ตัวที่ LLM ต้องเรียกทุกครั้ง |
+| `reports/evaluations/*` | หลักฐานผลทดลองย้อนหลัง |
