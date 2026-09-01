@@ -2,7 +2,7 @@
 
 ## สรุปสถานะ
 
-ตอนนี้งาน ML เดินมาถึง **ML-only Exploitability Gate v0.2 + Strict Precheck Improve v01**
+ตอนนี้งาน ML เดินมาถึง **ML-only Exploitability Gate + XGBoost Family Ranker prototype**
 
 ถือว่าผ่านเป้าหมาย prototype ระดับต้นในแง่ pipeline เพราะ:
 
@@ -12,7 +12,8 @@
 - มี threshold tuning
 - มี feature schema
 - มี dataset target-level
-- มี evidence ครบ 40/40 validated targets
+- Gate ผ่านเกณฑ์ `precondition_only`
+- Family Ranker หลัง backfill ทาย family ได้ดีขึ้นชัดเจน
 
 ## Dataset ล่าสุด
 
@@ -21,8 +22,8 @@
 | validated_positive | 20 |
 | validated_negative | 20 |
 | inconclusive | 15 |
-| train/evaluate targets | 40 |
-| gate features | 44 |
+| train/evaluate targets | 65 |
+| gate/ranking features ล่าสุด | 119 |
 
 ## ผล v0.2
 
@@ -76,11 +77,11 @@
 
 ## งานถัดไป
 
-1. quarantine target ที่ label/evidence ขัดกัน
-2. แก้ target label เช่น target ที่ version หรือ precondition ไม่ตรง CVE
-3. เก็บ positive/negative pair ต่อ family ให้ครบ
-4. train `strict_precheck` ใหม่ด้วย dataset ที่ label consistency ผ่าน
-5. ทำ unseen target test โดยให้ model infer ก่อน แล้วค่อยใช้ Metasploit/manual PoC เฉลย
+1. freeze baseline ชุดนี้เป็น prototype
+2. ทำ inference flow รวม Gate -> Family Ranker
+3. ทำ output ภาษาไทยว่าแนะนำ exploit family ไหน เพราะ evidence อะไร
+4. ทดสอบ unseen target ใหม่ 5-10 ตัว โดยให้ model ทายก่อน แล้วค่อยใช้ Metasploit/manual PoC เฉลย
+5. เก็บ evidence เพิ่มเฉพาะ family ที่ยังพลาด เช่น Joomla, NextJS, Tomcat PUT
 
 ## Audit ล่าสุด
 
@@ -250,3 +251,27 @@ clean pairs ที่เพิ่ม:
 | original_positive | 20 | 0.350 | 0.400 | 0.417 |
 
 สรุป: Ranker ทำงานได้บน target ที่มี precondition feature สะอาด แต่ original positives ยังต้อง backfill family-specific evidence เพิ่มก่อน
+
+## Family Ranking Backfill v01 Result
+
+ผล `dec-family-ranking-backfill-2026-09-01` จาก Kali/OpenCode เพิ่ม family-specific evidence ให้ original positive targets 10 ตัว และ merge เฉพาะ records ที่ safe to merge
+
+ผลหลัง train/evaluate ใหม่:
+
+| Metric | ก่อน backfill | หลัง backfill |
+| --- | ---: | ---: |
+| Top-1 | 0.500 | 0.885 |
+| Top-3 | 0.539 | 0.885 |
+| Top-5 | 0.539 | 0.885 |
+| MRR | 0.551 | 0.897 |
+
+ผลแยกกลุ่ม:
+
+| Segment | Targets | Top-1 | MRR |
+| --- | ---: | ---: | ---: |
+| clean_control_positive | 6 | 1.000 | 1.000 |
+| original_positive | 20 | 0.850 | 0.866 |
+
+เคสที่ยังพลาดคือ `joomla_CVE-2023-23752`, `nextjs_CVE-2025-29927`, และ `tomcat_CVE-2017-12615` ซึ่งเป็น target ที่ backfill รอบนี้ quarantine หรือยังไม่มี evidence ที่เชื่อถือได้
+
+สรุป: **ML core อยู่ระดับใช้งาน prototype ได้แล้ว** ควรหยุดสแกนวนเพื่อไล่คะแนนชั่วคราว แล้วทำ inference/API สำหรับใช้งานจริงก่อน

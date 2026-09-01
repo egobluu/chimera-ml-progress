@@ -1,0 +1,8 @@
+{
+  "positive_targets": 26,
+  "candidate_families": 16,
+  "top1": 0.8846,
+  "top3": 0.8846,
+  "top5": 0.8846,
+  "mrr": 0.8966
+}

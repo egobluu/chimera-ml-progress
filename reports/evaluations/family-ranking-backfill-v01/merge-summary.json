@@ -1,0 +1,25 @@
+{
+  "base_targets": 65,
+  "targets_with_backfill": 10,
+  "targets_without_backfill": 55,
+  "appended_new_targets": [],
+  "base_features": 95,
+  "backfill_numeric_features": 40,
+  "skipped_inconsistent_records": 0,
+  "skipped_disallowed_target_records": 3,
+  "require_consistent": true,
+  "allow_targets": [
+    "couchdb_CVE-2017-12635",
+    "elasticsearch_CVE-2015-1427",
+    "flask_ssti",
+    "grafana_CVE-2021-43798",
+    "jenkins_CVE-2018-1000861",
+    "nginx_CVE-2017-7529",
+    "redis_CVE-2022-0543",
+    "solr_CVE-2017-12629-RCE",
+    "struts2_s2-045",
+    "thinkphp_5-rce"
+  ],
+  "merged_features": 119,
+  "output_csv": "reports\\evaluations\\family-ranking-backfill-v01\\target-exploitability-family-ranking-backfill.csv"
+}

@@ -78,13 +78,14 @@ Feedback กลับเข้า Dataset
 - [reports/evaluations/missing-positive-controls-v01/MISSING-POSITIVE-CONTROLS-ML-RESULTS-TH.md](reports/evaluations/missing-positive-controls-v01/MISSING-POSITIVE-CONTROLS-ML-RESULTS-TH.md) - ผลหลังเพิ่ม positive controls ที่ขาด และทดสอบ `precondition_only`
 - [reports/evaluations/negative-control-variations-v01/NEGATIVE-CONTROL-VARIATIONS-ML-RESULTS-TH.md](reports/evaluations/negative-control-variations-v01/NEGATIVE-CONTROL-VARIATIONS-ML-RESULTS-TH.md) - ผลหลังเพิ่ม negative controls จน `precondition_only` ผ่านเกณฑ์ prototype
 - [reports/evaluations/family-ranking-v01/FAMILY-RANKING-V01-RESULTS-TH.md](reports/evaluations/family-ranking-v01/FAMILY-RANKING-V01-RESULTS-TH.md) - ผลทดสอบ XGBoost Family Ranker รอบแรก
+- [reports/evaluations/family-ranking-backfill-v01/FAMILY-RANKING-BACKFILL-V01-RESULTS-TH.md](reports/evaluations/family-ranking-backfill-v01/FAMILY-RANKING-BACKFILL-V01-RESULTS-TH.md) - ผล Family Ranker หลังเพิ่ม family-specific backfill features
 
 ## ระดับความพร้อม
 
 ถ้าให้คะแนนภาพรวมเป้าหมายสุดท้ายเป็น 10/10:
 
 ```text
-ตอนนี้อยู่ประมาณ 3/10 สำหรับ pipeline รวม และ `precondition_only` ผ่านระดับ prototype แล้ว
+ตอนนี้อยู่ประมาณ 4/10 สำหรับ pipeline รวม เพราะ Gate และ Family Ranker ผ่านระดับ prototype แล้ว
 ```
 
 เพราะ:
@@ -92,5 +93,5 @@ Feedback กลับเข้า Dataset
 - มี ML-only Gate ที่ train/evaluate/infer ได้แล้ว
 - มี dataset 20 positive / 20 negative ที่ balance
 - มี feature evidence ครบทุก target ที่ใช้ train
-- แต่ยังต้องพิสูจน์กับ target ใหม่ที่ไม่เคยอยู่ใน train
-- strict precheck ยัง false positive สูง ต้องเพิ่ม positive/negative pair ที่ label ไม่ขัดกัน
+- มี Family Ranker ที่ Top-1 0.885 หลังเพิ่ม backfill features
+- แต่ยังต้องพิสูจน์กับ unseen target ใหม่ และทำ inference/API ให้ใช้งานจริง

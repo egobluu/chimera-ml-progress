@@ -31,35 +31,71 @@ FAMILY_FEATURES: dict[str, dict[str, set[str]]] = {
         "negative": {"default_key_unlikely", "version_patched"},
     },
     "solr_velocity": {
-        "positive": {"solr_core_found", "velocity_enabled", "config_api_accessible", "version_in_vulnerable_range"},
+        "positive": {
+            "solr_detected",
+            "solr_core_found",
+            "velocity_enabled",
+            "config_api_accessible",
+            "version_in_vulnerable_range",
+        },
         "negative": {"velocity_disabled", "config_api_blocked", "version_patched"},
     },
     "thinkphp_rce": {
-        "positive": {"invokefunction_reachable", "rce_endpoint_candidate_found", "version_in_vulnerable_range"},
+        "positive": {
+            "thinkphp_detected",
+            "invokefunction_reachable",
+            "rce_endpoint_accessible",
+            "rce_endpoint_candidate_found",
+            "version_in_vulnerable_range",
+        },
         "negative": {"invokefunction_not_found", "endpoint_not_found", "version_patched"},
     },
     "couchdb_auth": {
-        "positive": {"admin_party_enabled", "no_auth_required", "config_accessible", "users_db_accessible"},
+        "positive": {
+            "couchdb_detected",
+            "admin_party_enabled",
+            "no_auth_required",
+            "config_accessible",
+            "users_db_accessible",
+        },
         "negative": {"auth_required", "config_blocked", "version_patched"},
     },
     "redis": {
-        "positive": {"lua_available", "no_auth_required", "version_in_vulnerable_range"},
+        "positive": {
+            "redis_detected",
+            "redis_info_accessible",
+            "lua_available",
+            "no_auth_required",
+            "version_in_vulnerable_range",
+        },
         "negative": {"auth_required", "version_patched", "version_not_affected"},
     },
     "grafana": {
-        "positive": {"path_traversal_blocked", "version_in_vulnerable_range"},
-        "negative": {"version_patched", "auth_required"},
+        "positive": {
+            "grafana_detected",
+            "plugin_path_candidate_found",
+            "public_plugin_path_accessible",
+            "path_traversal_candidate_found",
+            "version_in_vulnerable_range",
+        },
+        "negative": {"path_traversal_blocked", "version_patched", "auth_required"},
     },
     "nexus": {
         "positive": {"anonymous_access", "endpoint_reachable_count", "version_in_vulnerable_range"},
         "negative": {"auth_required", "endpoint_missing_count", "version_patched"},
     },
     "jenkins": {
-        "positive": {"endpoint_reachable_count", "version_in_vulnerable_range"},
+        "positive": {
+            "jenkins_detected",
+            "cli_endpoint_reachable",
+            "stapler_endpoint_candidate_found",
+            "endpoint_reachable_count",
+            "version_in_vulnerable_range",
+        },
         "negative": {"auth_required", "endpoint_missing_count", "version_patched"},
     },
     "nginx": {
-        "positive": {"version_in_vulnerable_range"},
+        "positive": {"nginx_detected", "range_header_supported", "version_in_vulnerable_range"},
         "negative": {"version_patched", "wrong_version"},
     },
     "spring": {
@@ -67,7 +103,12 @@ FAMILY_FEATURES: dict[str, dict[str, set[str]]] = {
         "negative": {"spring_not_detected", "actuator_path_missing", "wrong_software_type"},
     },
     "struts2": {
-        "positive": {"endpoint_reachable_count", "version_in_vulnerable_range"},
+        "positive": {
+            "struts2_detected",
+            "upload_endpoint_reachable",
+            "endpoint_reachable_count",
+            "version_in_vulnerable_range",
+        },
         "negative": {"endpoint_missing_count", "version_patched"},
     },
     "phpmyadmin": {
@@ -75,12 +116,25 @@ FAMILY_FEATURES: dict[str, dict[str, set[str]]] = {
         "negative": {"endpoint_missing_count", "version_patched"},
     },
     "elasticsearch": {
-        "positive": {"version_in_vulnerable_range"},
+        "positive": {
+            "elasticsearch_detected",
+            "script_engine_enabled",
+            "groovy_enabled",
+            "dynamic_scripting_enabled",
+            "version_in_vulnerable_range",
+        },
         "negative": {"painless_sandbox_blocks", "version_patched"},
     },
     "flask": {
-        "positive": {"rce_endpoint_candidate_found", "endpoint_reachable_count"},
-        "negative": {"endpoint_missing_count", "version_patched"},
+        "positive": {
+            "flask_detected",
+            "jinja_detected",
+            "template_echo_observed",
+            "ssti_expression_evaluated",
+            "rce_endpoint_candidate_found",
+            "endpoint_reachable_count",
+        },
+        "negative": {"ssti_expression_blocked", "endpoint_missing_count", "version_patched"},
     },
     "joomla": {
         "positive": {"api_path_found", "no_auth_required", "version_in_vulnerable_range"},
