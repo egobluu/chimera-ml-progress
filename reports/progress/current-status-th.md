@@ -382,3 +382,15 @@ final_decision = unknown_family_triage
 ```
 
 สรุป: Gate เริ่มใช้ได้ดีขึ้น แต่ Ranker ยังต้องทำ feature schema alignment โดยเฉพาะ Redis/Grafana variants ก่อน retrain รอบต่อไป
+
+หลังเพิ่ม `scripts/evaluate_runtime_predictions.py` และ rerun จาก runtime ที่ patch แล้ว ได้ corrected metrics:
+
+| Metric | Corrected Result |
+| --- | ---: |
+| Gate accuracy | 1.000 |
+| Known-positive Ranker Top-1 | 0.333 |
+| Unknown rejection rate | 1.000 |
+| Safety flow accuracy | 1.000 |
+| Strict flow accuracy | 0.833 |
+
+ความหมาย: flow ตอนใช้งานไม่ปล่อย unknown ไปยิงมั่วแล้ว แต่ Ranker ยังผิดกับ Redis/Grafana เพราะ feature เฉพาะ family ไม่ครบ

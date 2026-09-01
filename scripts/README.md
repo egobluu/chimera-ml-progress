@@ -25,6 +25,7 @@ script เหล่านี้อ้าง path แบบ Kali report output �
 | `train_runtime_models.py` | train ชุด model runtime prototype ที่ใช้ส่งต่อให้ฝั่ง LLM/agentic |
 | `predict_prototype.py` | entrypoint ใช้งานจริงระดับ prototype รับ feature JSON แล้วคืนผล Gate + Ranker + Unknown Guard |
 | `evaluate_unknown_family.py` | ทดสอบว่า Ranker จะทำอย่างไรเมื่อเจอ target นอก family ที่รู้จัก |
+| `evaluate_runtime_predictions.py` | rerun runtime prediction จาก feature JSONL แล้วคำนวณ corrected metrics แยก safety กับ ranking |
 
 ## Flow การใช้งาน
 
@@ -37,6 +38,7 @@ python3 train_gate_profiles.py --dataset target-exploitability-dataset.csv --out
 python3 plan_precondition_probes.py --predictions derived/profile-audit/strict_precheck-predictions.csv --threshold 0.10 --out-dir derived/probe-plan
 python3 rank_target_two_stage.py --evidence-dir raw-curated/tomcat_CVE-2020-1938 --json
 python3 audit_gate_features.py --dataset target-exploitability-dataset.csv --out-dir derived/audit
+python3 evaluate_runtime_predictions.py --features-jsonl reports/evaluations/unseen-validation-v02/unseen-v02-precheck-features.jsonl --targets-jsonl reports/evaluations/unseen-validation-v02/unseen-v02-targets.jsonl --out-dir reports/evaluations/unseen-validation-v02
 ```
 
 ## หลักการสำคัญ

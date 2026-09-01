@@ -116,3 +116,15 @@ Feedback กลับเข้า Dataset
 ```text
 ML prototype ใช้เป็น decision-support ได้แล้ว แต่ยังต้องทำ feature schema alignment ก่อน retrain/ranker รอบถัดไป
 ```
+
+หลัง rerun corrected evaluation ด้วย runtime ที่ patch แล้ว:
+
+| Metric | Corrected Result |
+| --- | ---: |
+| Gate accuracy | 1.000 |
+| Known-positive Ranker Top-1 | 0.333 |
+| Unknown rejection rate | 1.000 |
+| Safety flow accuracy | 1.000 |
+| Strict flow accuracy | 0.833 |
+
+ตัวเลขนี้คือคำตอบที่ควรใช้แทน “100%” เดิม เพราะแยกชัดว่า flow ปลอดภัยขึ้น แต่ Ranker ยังพลาด Redis/Grafana

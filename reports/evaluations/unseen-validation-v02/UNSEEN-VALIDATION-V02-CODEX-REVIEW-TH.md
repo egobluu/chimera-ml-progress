@@ -184,3 +184,34 @@ Gate ต้องยังไม่มี FN
 Unknown-family ต้องไม่หลุดเป็น ready_for_safe_verification
 Ranker known-positive variants ต้อง Top-1 ดีขึ้นจาก 33.3%
 ```
+
+## Corrected Runtime Evaluation หลัง patch
+
+Codex รัน `scripts/evaluate_runtime_predictions.py` ใหม่จาก feature JSONL เดิม โดยใช้ runtime ที่ patch แล้ว ไม่ได้ใช้ตัวเลขจาก scanner-side summary ตรง ๆ
+
+ผล corrected:
+
+| Metric | Result |
+| --- | ---: |
+| Total targets | 12 |
+| Gate accuracy | 1.000 |
+| Gate TP | 8 |
+| Gate FP | 0 |
+| Gate TN | 4 |
+| Gate FN | 0 |
+| Known-positive Ranker Top-1 | 0.3333 |
+| Unknown rejection rate | 1.000 |
+| Safety flow accuracy | 1.000 |
+| Strict flow accuracy | 0.8333 |
+
+คำอธิบาย:
+
+- `Safety flow accuracy = 1.000` แปลว่า runtime หลัง patch ไม่ปล่อย unknown/negative ไปยิงอัตโนมัติ
+- `Strict flow accuracy = 0.8333` แปลว่ายังมี known-positive 2 ตัวที่ family rank ผิด
+- เคสที่ยังพลาดคือ `unseen_redis_variant_01` และ `unseen_grafana_variant_01`
+
+สรุปหลัง corrected evaluation:
+
+```text
+ระบบ flow ปลอดภัยขึ้นแล้ว แต่ Ranker ยังต้องแก้ feature schema/backfill สำหรับ Redis และ Grafana ก่อนพูดว่า ranking ใช้งานได้ดี
+```

@@ -1,0 +1,232 @@
+{
+  "total_targets": 12,
+  "gate_metrics": {
+    "tp": 8,
+    "fp": 0,
+    "tn": 4,
+    "fn": 0,
+    "accuracy": 1.0
+  },
+  "ranker_metrics": {
+    "known_positive_top1_correct": 1,
+    "known_positive_top1_total": 3,
+    "known_positive_top1_accuracy": 0.3333
+  },
+  "unknown_guard_metrics": {
+    "unknown_rejected": 5,
+    "unknown_total": 5,
+    "unknown_rejection_rate": 1.0
+  },
+  "final_flow_metrics": {
+    "safety_correct": 12,
+    "safety_total": 12,
+    "safety_accuracy": 1.0,
+    "strict_correct": 10,
+    "strict_total": 12,
+    "strict_accuracy": 0.8333
+  },
+  "per_target_results": [
+    {
+      "target_id": "unseen_drupal_01",
+      "category": "unknown_family",
+      "expected_family": "unknown",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "unknown_family_triage",
+      "predicted_top_family": "redis",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": [
+        "normalized alias: is_non_http_target -> is_non_http_service",
+        "unknown_product_detected present; known-family ranking requires extra guard",
+        "unknown_product_detected forced unknown_family_triage"
+      ]
+    },
+    {
+      "target_id": "unseen_grafana_neg_01",
+      "category": "negative_control",
+      "expected_family": "none",
+      "gate_decision": "no_exploit",
+      "final_decision": "do_not_exploit_now",
+      "predicted_top_family": null,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": [
+        "normalized alias: is_non_http_target -> is_non_http_service"
+      ]
+    },
+    {
+      "target_id": "unseen_grafana_variant_01",
+      "category": "known_positive_variant",
+      "expected_family": "grafana",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "redis",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": false,
+      "safety_correct": true,
+      "strict_flow_correct": false,
+      "schema_warnings": [
+        "normalized alias: is_non_http_target -> is_non_http_service"
+      ]
+    },
+    {
+      "target_id": "unseen_jboss_01",
+      "category": "unknown_family",
+      "expected_family": "unknown",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "unknown_family_triage",
+      "predicted_top_family": "nexus",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": [
+        "normalized alias: is_non_http_target -> is_non_http_service",
+        "unknown_product_detected present; known-family ranking requires extra guard",
+        "unknown_product_detected forced unknown_family_triage"
+      ]
+    },
+    {
+      "target_id": "unseen_jetty_01",
+      "category": "unknown_family",
+      "expected_family": "unknown",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "unknown_family_triage",
+      "predicted_top_family": "nexus",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": [
+        "normalized alias: is_non_http_target -> is_non_http_service",
+        "unknown_product_detected present; known-family ranking requires extra guard",
+        "unknown_product_detected forced unknown_family_triage"
+      ]
+    },
+    {
+      "target_id": "unseen_laravel_01",
+      "category": "unknown_family",
+      "expected_family": "unknown",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "unknown_family_triage",
+      "predicted_top_family": "thinkphp_rce",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": [
+        "normalized alias: is_non_http_target -> is_non_http_service",
+        "unknown_product_detected present; known-family ranking requires extra guard",
+        "unknown_product_detected forced unknown_family_triage"
+      ]
+    },
+    {
+      "target_id": "unseen_nginx_neg_01",
+      "category": "negative_control",
+      "expected_family": "none",
+      "gate_decision": "low_confidence",
+      "final_decision": "needs_more_evidence",
+      "predicted_top_family": null,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": [
+        "normalized alias: is_non_http_target -> is_non_http_service"
+      ]
+    },
+    {
+      "target_id": "unseen_php_cgi_01",
+      "category": "unknown_family",
+      "expected_family": "unknown",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "unknown_family_triage",
+      "predicted_top_family": "nexus",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": [
+        "normalized alias: is_non_http_target -> is_non_http_service",
+        "unknown_product_detected present; known-family ranking requires extra guard",
+        "unknown_product_detected forced unknown_family_triage"
+      ]
+    },
+    {
+      "target_id": "unseen_redis_variant_01",
+      "category": "known_positive_variant",
+      "expected_family": "redis",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "couchdb_auth",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": false,
+      "safety_correct": true,
+      "strict_flow_correct": false,
+      "schema_warnings": [
+        "normalized alias: is_non_http_target -> is_non_http_service"
+      ]
+    },
+    {
+      "target_id": "unseen_solr_neg_01",
+      "category": "negative_control",
+      "expected_family": "none",
+      "gate_decision": "low_confidence",
+      "final_decision": "needs_more_evidence",
+      "predicted_top_family": null,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": [
+        "normalized alias: is_non_http_target -> is_non_http_service"
+      ]
+    },
+    {
+      "target_id": "unseen_solr_variant_01",
+      "category": "known_positive_variant",
+      "expected_family": "solr_velocity",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "solr_velocity",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": [
+        "normalized alias: is_non_http_target -> is_non_http_service"
+      ]
+    },
+    {
+      "target_id": "unseen_tomcat_neg_01",
+      "category": "negative_control",
+      "expected_family": "none",
+      "gate_decision": "no_exploit",
+      "final_decision": "do_not_exploit_now",
+      "predicted_top_family": null,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": [
+        "normalized alias: is_non_http_target -> is_non_http_service"
+      ]
+    }
+  ]
+}
