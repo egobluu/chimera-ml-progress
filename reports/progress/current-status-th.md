@@ -394,3 +394,24 @@ final_decision = unknown_family_triage
 | Strict flow accuracy | 0.833 |
 
 ความหมาย: flow ตอนใช้งานไม่ปล่อย unknown ไปยิงมั่วแล้ว แต่ Ranker ยังผิดกับ Redis/Grafana เพราะ feature เฉพาะ family ไม่ครบ
+
+## Ranker Schema Backfill Redis/Grafana Result
+
+ผล `dec-ranker-schema-backfill-redis-grafana-2026-09-02` เติม feature เฉพาะ family ให้ 2 target ที่ Ranker พลาด:
+
+- `unseen_redis_variant_01`
+- `unseen_grafana_variant_01`
+
+หลัง merge feature แล้ว rerun corrected runtime evaluation:
+
+| Metric | Result |
+| --- | ---: |
+| Gate accuracy | 1.000 |
+| Known-positive Ranker Top-1 | 1.000 |
+| Unknown rejection rate | 1.000 |
+| Safety flow accuracy | 1.000 |
+| Strict flow accuracy | 1.000 |
+
+คำอธิบายสำคัญ: ผลนี้ไม่ได้แปลว่า production-ready หรือแม่น 100% กับ target ทั้งหมด แต่แปลว่า Ranker พลาดเพราะ Redis/Grafana feature ไม่ครบ เมื่อเติม canonical family-specific features แล้วชุด v02 ถูกทั้งหมด
+
+งานถัดไปคือ retrain ด้วย backfill records ที่ safe to merge แล้วทดสอบ v03 ด้วย target ใหม่

@@ -1,0 +1,4 @@
+{"target_id":"unseen_redis_variant_01","tool_name":"redis-cli","ran":true,"success":true,"reason_th":"redis-cli available and working, successfully probed INFO, PING, and EVAL commands","output_file":"raw/curl_or_probe.txt"}
+{"target_id":"unseen_redis_variant_01","tool_name":"docker-compose","ran":true,"success":true,"reason_th":"Docker container started successfully on port 6379","output_file":"raw/docker_ps.txt"}
+{"target_id":"unseen_grafana_variant_01","tool_name":"curl","ran":true,"success":true,"reason_th":"curl available and working, successfully probed API health, plugin path, and path traversal","output_file":"raw/curl_or_probe.txt"}
+{"target_id":"unseen_grafana_variant_01","tool_name":"docker-compose","ran":true,"success":true,"reason_th":"Docker container started successfully on port 3000","output_file":"raw/docker_ps.txt"}

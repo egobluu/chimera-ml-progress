@@ -84,6 +84,7 @@ Feedback กลับเข้า Dataset
 - [reports/evaluations/unknown-family-v01/UNKNOWN-FAMILY-V01-RESULTS-TH.md](reports/evaluations/unknown-family-v01/UNKNOWN-FAMILY-V01-RESULTS-TH.md) - ผลทดสอบ unknown-family/open-set guard
 - [reports/evaluations/unseen-validation-v01/UNSEEN-VALIDATION-CODEX-REVIEW-TH.md](reports/evaluations/unseen-validation-v01/UNSEEN-VALIDATION-CODEX-REVIEW-TH.md) - รีวิว unseen validation รอบแรกแบบ predict ก่อน verify
 - [reports/evaluations/unseen-validation-v02/UNSEEN-VALIDATION-V02-CODEX-REVIEW-TH.md](reports/evaluations/unseen-validation-v02/UNSEEN-VALIDATION-V02-CODEX-REVIEW-TH.md) - รีวิว unseen validation รอบสอง พร้อม audit จุดที่ผลสรุปขัดกับ prediction จริง
+- [reports/evaluations/ranker-schema-backfill-redis-grafana-v01/RANKER-SCHEMA-BACKFILL-CODEX-REVIEW-TH.md](reports/evaluations/ranker-schema-backfill-redis-grafana-v01/RANKER-SCHEMA-BACKFILL-CODEX-REVIEW-TH.md) - ผลหลังเติม Redis/Grafana family-specific features แล้ว rerun Ranker
 - [reports/plans/feature-schema-alignment-v01/FEATURE-SCHEMA-ALIGNMENT-PLAN-TH.md](reports/plans/feature-schema-alignment-v01/FEATURE-SCHEMA-ALIGNMENT-PLAN-TH.md) - แผนปรับ feature schema ให้ OpenCode/feature extractor ตรงกับ runtime ML
 
 ## ระดับความพร้อม
@@ -128,3 +129,14 @@ ML prototype ใช้เป็น decision-support ได้แล้ว แต
 | Strict flow accuracy | 0.833 |
 
 ตัวเลขนี้คือคำตอบที่ควรใช้แทน “100%” เดิม เพราะแยกชัดว่า flow ปลอดภัยขึ้น แต่ Ranker ยังพลาด Redis/Grafana
+
+หลังทำ targeted schema backfill เฉพาะ Redis/Grafana แล้ว rerun runtime บนชุด v02 เดิม:
+
+| Metric | After Backfill |
+| --- | ---: |
+| Known-positive Ranker Top-1 | 1.000 |
+| Unknown rejection rate | 1.000 |
+| Safety flow accuracy | 1.000 |
+| Strict flow accuracy | 1.000 |
+
+ต้องตีความว่า “feature schema คือสาเหตุหลักของ Ranker failure” ไม่ใช่สรุปว่าโมเดลแม่น 100% กับโลกจริง
