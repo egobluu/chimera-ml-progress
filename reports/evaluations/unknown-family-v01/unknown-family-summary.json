@@ -1,0 +1,120 @@
+{
+  "rules": {
+    "max_signal_decision": "known if any candidate family has at least 2 positive signals",
+    "top1_signal_decision": "known if the winning family has at least 2 positive signals",
+    "clean_top1_decision": "known if the winning family has at least 2 positive signals and 0 negative signals"
+  },
+  "known_positive_control": {
+    "max_signal_decision": {
+      "targets": 26,
+      "unknown_rejected": 7,
+      "unknown_reject_rate": 0.2692,
+      "forced_known_without_guard": 26,
+      "threshold_max_positive_signals": 2
+    },
+    "top1_signal_decision": {
+      "targets": 26,
+      "unknown_rejected": 7,
+      "unknown_reject_rate": 0.2692,
+      "forced_known_without_guard": 26,
+      "threshold_max_positive_signals": 2
+    },
+    "clean_top1_decision": {
+      "targets": 26,
+      "unknown_rejected": 9,
+      "unknown_reject_rate": 0.3462,
+      "forced_known_without_guard": 26,
+      "threshold_max_positive_signals": 2
+    }
+  },
+  "negative_or_no_exploit_rows": {
+    "max_signal_decision": {
+      "targets": 39,
+      "unknown_rejected": 36,
+      "unknown_reject_rate": 0.9231,
+      "forced_known_without_guard": 39,
+      "threshold_max_positive_signals": 2
+    },
+    "top1_signal_decision": {
+      "targets": 39,
+      "unknown_rejected": 38,
+      "unknown_reject_rate": 0.9744,
+      "forced_known_without_guard": 39,
+      "threshold_max_positive_signals": 2
+    },
+    "clean_top1_decision": {
+      "targets": 39,
+      "unknown_rejected": 39,
+      "unknown_reject_rate": 1.0,
+      "forced_known_without_guard": 39,
+      "threshold_max_positive_signals": 2
+    }
+  },
+  "synthetic_unknown_rows": {
+    "max_signal_decision": {
+      "targets": 4,
+      "unknown_rejected": 4,
+      "unknown_reject_rate": 1.0,
+      "forced_known_without_guard": 4,
+      "threshold_max_positive_signals": 2
+    },
+    "top1_signal_decision": {
+      "targets": 4,
+      "unknown_rejected": 4,
+      "unknown_reject_rate": 1.0,
+      "forced_known_without_guard": 4,
+      "threshold_max_positive_signals": 2
+    },
+    "clean_top1_decision": {
+      "targets": 4,
+      "unknown_rejected": 4,
+      "unknown_reject_rate": 1.0,
+      "forced_known_without_guard": 4,
+      "threshold_max_positive_signals": 2
+    }
+  },
+  "combined_unknown_rows": {
+    "max_signal_decision": {
+      "targets": 43,
+      "unknown_rejected": 40,
+      "unknown_reject_rate": 0.9302,
+      "forced_known_without_guard": 43,
+      "threshold_max_positive_signals": 2
+    },
+    "top1_signal_decision": {
+      "targets": 43,
+      "unknown_rejected": 42,
+      "unknown_reject_rate": 0.9767,
+      "forced_known_without_guard": 43,
+      "threshold_max_positive_signals": 2
+    },
+    "clean_top1_decision": {
+      "targets": 43,
+      "unknown_rejected": 43,
+      "unknown_reject_rate": 1.0,
+      "forced_known_without_guard": 43,
+      "threshold_max_positive_signals": 2
+    }
+  },
+  "known_candidate_families": [
+    "couchdb_auth",
+    "elasticsearch",
+    "flask",
+    "grafana",
+    "jenkins",
+    "joomla",
+    "nextjs",
+    "nexus",
+    "nginx",
+    "phpmyadmin",
+    "redis",
+    "shiro_key",
+    "solr_velocity",
+    "spring",
+    "struts2",
+    "thinkphp_rce",
+    "tomcat_ajp",
+    "tomcat_put"
+  ],
+  "note": "Without the open-set guard, the closed-set ranker always returns one known family."
+}

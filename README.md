@@ -79,6 +79,7 @@ Feedback กลับเข้า Dataset
 - [reports/evaluations/negative-control-variations-v01/NEGATIVE-CONTROL-VARIATIONS-ML-RESULTS-TH.md](reports/evaluations/negative-control-variations-v01/NEGATIVE-CONTROL-VARIATIONS-ML-RESULTS-TH.md) - ผลหลังเพิ่ม negative controls จน `precondition_only` ผ่านเกณฑ์ prototype
 - [reports/evaluations/family-ranking-v01/FAMILY-RANKING-V01-RESULTS-TH.md](reports/evaluations/family-ranking-v01/FAMILY-RANKING-V01-RESULTS-TH.md) - ผลทดสอบ XGBoost Family Ranker รอบแรก
 - [reports/evaluations/family-ranking-backfill-v01/FAMILY-RANKING-BACKFILL-V01-RESULTS-TH.md](reports/evaluations/family-ranking-backfill-v01/FAMILY-RANKING-BACKFILL-V01-RESULTS-TH.md) - ผล Family Ranker หลังเพิ่ม family-specific backfill features
+- [reports/evaluations/unknown-family-v01/UNKNOWN-FAMILY-V01-RESULTS-TH.md](reports/evaluations/unknown-family-v01/UNKNOWN-FAMILY-V01-RESULTS-TH.md) - ผลทดสอบ unknown-family/open-set guard
 
 ## ระดับความพร้อม
 

@@ -275,3 +275,21 @@ clean pairs ที่เพิ่ม:
 เคสที่ยังพลาดคือ `joomla_CVE-2023-23752`, `nextjs_CVE-2025-29927`, และ `tomcat_CVE-2017-12615` ซึ่งเป็น target ที่ backfill รอบนี้ quarantine หรือยังไม่มี evidence ที่เชื่อถือได้
 
 สรุป: **ML core อยู่ระดับใช้งาน prototype ได้แล้ว** ควรหยุดสแกนวนเพื่อไล่คะแนนชั่วคราว แล้วทำ inference/API สำหรับใช้งานจริงก่อน
+
+## Unknown Family v01 Result
+
+ทดสอบแล้วว่า Family Ranker เป็น closed-set model ถ้าไม่มี guard จะฝืนตอบหนึ่งใน known families เสมอ แม้ target จะเป็น unknown หรือ no-exploit
+
+เพิ่มสคริปต์ `scripts/evaluate_unknown_family.py` เพื่อวัด open-set behavior ด้วย rule จากจำนวน family-specific positive signals
+
+ผลหลัก:
+
+| กลุ่ม | Rule | Reject เป็น unknown |
+| --- | --- | ---: |
+| synthetic unknown 4 targets | ทุก rule | 4/4 |
+| negative/no_exploit 39 targets | `top1_signal_decision` | 38/39 |
+| negative/no_exploit 39 targets | `clean_top1_decision` | 39/39 |
+
+ข้อแลกเปลี่ยนคือ rule ที่เข้มขึ้นจะ reject known-positive บางตัวที่ evidence ยังน้อย เช่น Nexus, Joomla, NextJS, Tomcat PUT
+
+สรุป: ระบบจริงต้องมี output `unknown_family` หรือ `known_family_but_low_confidence` ก่อนเชื่อคำตอบจาก Ranker

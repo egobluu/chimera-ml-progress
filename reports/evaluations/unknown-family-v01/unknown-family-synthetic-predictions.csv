@@ -1,0 +1,5 @@
+target_id,label,inferred_known_family,top1_family,top1_score,top2_family,top2_score,score_margin,top1_positive_signals,top1_negative_signals,max_positive_signals,max_signal_decision,top1_signal_decision,clean_top1_decision
+unknown_wordpress_plugin_rce,1,,nextjs,0.069281,flask,-0.344874,0.414155,1,0,1,unknown_family,unknown_family,unknown_family
+unknown_laravel_debug_rce,1,,nextjs,0.069281,flask,-0.344874,0.414155,1,0,1,unknown_family,unknown_family,unknown_family
+unknown_generic_php_upload,1,,nextjs,0.069281,flask,-0.344874,0.414155,1,0,1,unknown_family,unknown_family,unknown_family
+unknown_drupal_rce,1,,nextjs,0.069281,flask,-0.344874,0.414155,1,0,1,unknown_family,unknown_family,unknown_family

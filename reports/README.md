@@ -25,6 +25,7 @@
 - `evaluations/negative-control-variations-v01/` - ผลหลังเพิ่ม negative control variations 13 ตัว จน `precondition_only` ผ่านเกณฑ์ prototype
 - `evaluations/family-ranking-v01/` - ผลทดสอบ XGBoost Family Ranker รอบแรก
 - `evaluations/family-ranking-backfill-v01/` - ผล Family Ranker หลัง merge family-specific backfill features จน Top-1 ผ่านระดับ prototype
+- `evaluations/unknown-family-v01/` - ผลทดสอบว่า Ranker จะทำอย่างไรเมื่อเจอ target นอก candidate family ที่รู้จัก
 
 ## plans
 
