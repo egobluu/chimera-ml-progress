@@ -1,0 +1,58 @@
+{"target_id":"unseen_grafana_neg_01","tool":"naabu","applicable":true,"result":"port 8888 found"}
+{"target_id":"unseen_grafana_neg_01","tool":"nmap","applicable":true,"result":"8888/tcp open"}
+{"target_id":"unseen_grafana_neg_01","tool":"httpx","applicable":true,"result":"nginx/1.31.4 detected"}
+{"target_id":"unseen_grafana_neg_01","tool":"nuclei","applicable":true,"result":"only info-level findings (missing headers)"}
+{"target_id":"unseen_grafana_neg_01","tool":"curl","applicable":true,"result":"200 OK, range header 206"}
+{"target_id":"unseen_grafana_neg_01","tool":"metasploit","applicable":false,"result":"no exploit needed - patched"}
+{"target_id":"unseen_grafana_variant_01","tool":"naabu","applicable":true,"result":"port 3000 found"}
+{"target_id":"unseen_grafana_variant_01","tool":"nmap","applicable":true,"result":"3000/tcp open"}
+{"target_id":"unseen_grafana_variant_01","tool":"nuclei","applicable":true,"result":"CVE-2021-43798, CVE-2025-4123 found"}
+{"target_id":"unseen_grafana_variant_01","tool":"curl","applicable":true,"result":"path traversal confirmed, /etc/passwd readable"}
+{"target_id":"unseen_grafana_variant_01","tool":"metasploit","applicable":true,"result":"module found"}
+{"target_id":"unseen_redis_neg_auth_01","tool":"naabu","applicable":true,"result":"port 6379 found"}
+{"target_id":"unseen_redis_neg_auth_01","tool":"nmap","applicable":true,"result":"6379/tcp open redis"}
+{"target_id":"unseen_redis_neg_auth_01","tool":"httpx","applicable":false,"result":"non-HTTP service"}
+{"target_id":"unseen_redis_neg_auth_01","tool":"nuclei","applicable":false,"result":"non-HTTP service"}
+{"target_id":"unseen_redis_neg_auth_01","tool":"redis-cli","applicable":true,"result":"auth required - all commands blocked"}
+{"target_id":"unseen_redis_neg_auth_01","tool":"metasploit","applicable":false,"result":"auth blocks exploitation"}
+{"target_id":"unseen_redis_variant_01","tool":"naabu","applicable":true,"result":"port 6379 found on host (not from naabu - nmap confirmed)"}
+{"target_id":"unseen_redis_variant_01","tool":"nmap","applicable":true,"result":"6379/tcp open redis"}
+{"target_id":"unseen_redis_variant_01","tool":"httpx","applicable":false,"result":"non-HTTP service"}
+{"target_id":"unseen_redis_variant_01","tool":"nuclei","applicable":false,"result":"non-HTTP service"}
+{"target_id":"unseen_redis_variant_01","tool":"redis-cli","applicable":true,"result":"all probes successful"}
+{"target_id":"unseen_redis_variant_01","tool":"metasploit","applicable":true,"result":"module found but manual poc used instead"}
+{"target_id":"unseen_solr_variant_01","tool":"naabu","applicable":true,"result":"port 8983 found"}
+{"target_id":"unseen_solr_variant_01","tool":"nmap","applicable":true,"result":"8983/tcp open"}
+{"target_id":"unseen_solr_variant_01","tool":"nuclei","applicable":true,"result":"CVE-2019-17558, CVE-2021-44228 found"}
+{"target_id":"unseen_solr_variant_01","tool":"curl","applicable":true,"result":"Cores API, Config API, Velocity all accessible"}
+{"target_id":"unseen_solr_variant_01","tool":"metasploit","applicable":true,"result":"modules found"}
+{"target_id":"unseen_tomcat_neg_01","tool":"naabu","applicable":true,"result":"port 8080 found"}
+{"target_id":"unseen_tomcat_neg_01","tool":"nmap","applicable":true,"result":"8080/tcp open, 8009/tcp closed"}
+{"target_id":"unseen_tomcat_neg_01","tool":"httpx","applicable":true,"result":"Tomcat 9.0.97 detected"}
+{"target_id":"unseen_tomcat_neg_01","tool":"nuclei","applicable":true,"result":"no critical PUT/AJP vulns found"}
+{"target_id":"unseen_tomcat_neg_01","tool":"curl","applicable":true,"result":"PUT rejected, AJP closed"}
+{"target_id":"unseen_tomcat_neg_01","tool":"metasploit","applicable":false,"result":"no exploit path available"}
+{"target_id":"unseen_tomcat_put_variant_01","tool":"naabu","applicable":true,"result":"port 8080 found"}
+{"target_id":"unseen_tomcat_put_variant_01","tool":"nmap","applicable":true,"result":"8080/tcp open http-proxy"}
+{"target_id":"unseen_tomcat_put_variant_01","tool":"httpx","applicable":true,"result":"no output (timeout or error)"}
+{"target_id":"unseen_tomcat_put_variant_01","tool":"nuclei","applicable":true,"result":"CVE-2017-12615, CVE-2017-12617 found"}
+{"target_id":"unseen_tomcat_put_variant_01","tool":"curl","applicable":true,"result":"PUT upload confirmed via /../ trick"}
+{"target_id":"unseen_tomcat_put_variant_01","tool":"metasploit","applicable":true,"result":"exploit/multi/http/tomcat_jsp_upload_bypass found"}
+{"target_id":"unseen_unknown_drupal_01","tool":"naabu","applicable":true,"result":"port 8080 found"}
+{"target_id":"unseen_unknown_drupal_01","tool":"nmap","applicable":true,"result":"8080/tcp open"}
+{"target_id":"unseen_unknown_drupal_01","tool":"httpx","applicable":true,"result":"Drupal 8.5.0 detected"}
+{"target_id":"unseen_unknown_drupal_01","tool":"nuclei","applicable":true,"result":"drupal-detect, drupal-install found"}
+{"target_id":"unseen_unknown_drupal_01","tool":"curl","applicable":true,"result":"200 OK"}
+{"target_id":"unseen_unknown_drupal_01","tool":"metasploit","applicable":true,"result":"Drupal modules found"}
+{"target_id":"unseen_unknown_laravel_01","tool":"naabu","applicable":true,"result":"port 8080 found"}
+{"target_id":"unseen_unknown_laravel_01","tool":"nmap","applicable":true,"result":"8080/tcp open"}
+{"target_id":"unseen_unknown_laravel_01","tool":"httpx","applicable":true,"result":"Laravel 8.4.2, PHP 7.4.15 detected"}
+{"target_id":"unseen_unknown_laravel_01","tool":"nuclei","applicable":true,"result":"CVE-2021-3129 critical RCE found"}
+{"target_id":"unseen_unknown_laravel_01","tool":"curl","applicable":true,"result":"200 OK, Ignite accessible"}
+{"target_id":"unseen_unknown_laravel_01","tool":"metasploit","applicable":true,"result":"Laravel module found"}
+{"target_id":"unseen_unknown_wordpress_01","tool":"naabu","applicable":true,"result":"port 8080 found"}
+{"target_id":"unseen_unknown_wordpress_01","tool":"nmap","applicable":true,"result":"8080/tcp open"}
+{"target_id":"unseen_unknown_wordpress_01","tool":"httpx","applicable":true,"result":"Jetty 9.4.40 detected"}
+{"target_id":"unseen_unknown_wordpress_01","tool":"nuclei","applicable":true,"result":"CVE-2021-34429 found"}
+{"target_id":"unseen_unknown_wordpress_01","tool":"curl","applicable":true,"result":"200 OK"}
+{"target_id":"unseen_unknown_wordpress_01","tool":"metasploit","applicable":true,"result":"Jetty modules found"}

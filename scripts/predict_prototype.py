@@ -87,6 +87,20 @@ def family_decision(top_family: dict[str, object], threshold: int) -> str:
     return "unknown_family"
 
 
+def final_decision_from(gate_status: str, ranker_decision: str | None) -> str:
+    if gate_status == "no_exploit":
+        return "do_not_exploit_now"
+    if gate_status == "low_confidence":
+        return "needs_more_evidence"
+    if ranker_decision == "known_family_ready":
+        return "ready_for_safe_verification"
+    if ranker_decision == "known_family_but_blocked_or_low_confidence":
+        return "manual_triage_before_exploit"
+    if ranker_decision == "unknown_family":
+        return "unknown_family_triage"
+    return "needs_more_evidence"
+
+
 def active_reason_features(features: dict[str, object], limit: int = 12) -> list[str]:
     active = [
         name
@@ -131,6 +145,7 @@ def main() -> None:
             "decision": gate_status,
         },
         "ranker": None,
+        "final_decision": final_decision_from(gate_status, None),
         "recommended_next_action": "stop_or_collect_more_evidence",
         "reason_features": active_reason_features(features),
         "safety_note_th": "ยังไม่ยิง exploit อัตโนมัติ ต้องใช้ Metasploit check/manual PoC หลังผู้ใช้ยืนยัน",
@@ -155,6 +170,7 @@ def main() -> None:
         "decision": decision,
         "top_families": ranked[: args.top_k],
     }
+    result["final_decision"] = final_decision_from(gate_status, decision)
     if decision == "known_family_ready":
         result["recommended_next_action"] = "run_safe_metasploit_check_or_manual_probe"
     elif decision == "known_family_but_blocked_or_low_confidence":

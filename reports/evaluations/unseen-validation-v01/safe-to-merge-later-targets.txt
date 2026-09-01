@@ -1,0 +1,18 @@
+# safe-to-merge-later-targets.txt
+# These targets can be merged into training data after review
+
+# Known-family positives (validated)
+unseen_redis_variant_01  redis  validated_positive
+unseen_tomcat_put_variant_01  tomcat_put  validated_positive
+unseen_solr_variant_01  solr_velocity  validated_positive
+unseen_grafana_variant_01  grafana  validated_positive
+
+# Negative controls (validated)
+unseen_redis_neg_auth_01  redis  validated_negative
+unseen_tomcat_neg_01  tomcat_put  validated_negative
+unseen_grafana_neg_01  nginx  validated_negative (gate FP)
+
+# Unknown-family (ranker correct, gate FP)
+unseen_unknown_wordpress_01  unknown  unknown_family (Jetty)
+unseen_unknown_drupal_01  unknown  unknown_family
+unseen_unknown_laravel_01  unknown  unknown_family

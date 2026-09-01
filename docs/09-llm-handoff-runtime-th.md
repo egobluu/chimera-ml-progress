@@ -57,6 +57,16 @@ feature JSON
 9. ห้ามยิง exploit จริงอัตโนมัติ ต้องให้ user ยืนยันก่อน
 10. เก็บผล postcheck กลับ dataset เป็น feedback
 
+ถ้าใช้ runtime รุ่นล่าสุด ให้อ่าน `final_decision` ก่อน เพราะ field นี้รวม Gate + Ranker + Unknown Guard ให้แล้ว:
+
+| final_decision | LLM ควรทำอะไร |
+| --- | --- |
+| `do_not_exploit_now` | อธิบายว่า evidence ยังไม่ควรยิง |
+| `needs_more_evidence` | เสนอ scan/probe เพิ่ม |
+| `ready_for_safe_verification` | แนะนำ Metasploit check/manual probe แบบปลอดภัย |
+| `manual_triage_before_exploit` | ให้คนตรวจเงื่อนไขที่ block ก่อน |
+| `unknown_family_triage` | บอกว่าอาจอยู่นอก family ที่โมเดลรู้จัก |
+
 ## ทำไมไม่ให้ LLM อ่าน raw แล้วตัดสินเอง
 
 เพราะ raw scanner output มี noise เยอะและแต่ละ tool เขียนไม่เหมือนกัน

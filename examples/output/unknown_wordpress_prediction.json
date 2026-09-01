@@ -42,6 +42,7 @@
       }
     ]
   },
+  "final_decision": "unknown_family_triage",
   "recommended_next_action": "unknown_family_scan_more_or_manual_triage",
   "reason_features": [
     "endpoint_reachable_count",

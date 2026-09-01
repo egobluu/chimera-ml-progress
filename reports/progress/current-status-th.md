@@ -326,3 +326,30 @@ examples/output/
 | `examples/input` / `examples/output` | ตัวอย่าง format input/output |
 | `scripts/train_*.py` | ใช้ train/retrain ไม่ใช่ตัวที่ LLM ต้องเรียกทุกครั้ง |
 | `reports/evaluations/*` | หลักฐานผลทดลองย้อนหลัง |
+
+## Unseen Validation v01 Result
+
+ผล `dec-unseen-validation-v01-2026-09-01` เป็นการทดสอบแบบโลกจริงรอบแรก เพราะ model ต้อง predict ก่อน แล้วจึง verify ทีหลัง
+
+ผลรวม:
+
+| Metric | Result |
+| --- | ---: |
+| Total targets | 10 |
+| Gate accuracy | 0.600 |
+| Gate TP | 4 |
+| Gate FP | 4 |
+| Gate TN | 2 |
+| Gate FN | 0 |
+| Ranker Top-1 | 1.000 |
+| Unknown rejection | 1.000 |
+
+สรุป:
+
+- Ranker ทาย known-family variants ถูก 4/4
+- Unknown guard reject unknown-family ถูก 3/3
+- Gate ยัง FP กับ unknown-family และ patched nginx รวม 4 targets
+
+ดังนั้น bottleneck รอบถัดไปคือ **Gate improvement** ไม่ใช่ Ranker
+
+ปรับ runtime เพิ่มให้มี `final_decision` เพื่อให้ LLM อ่านผลรวมของ Gate + Ranker + Unknown Guard ได้ง่ายขึ้น

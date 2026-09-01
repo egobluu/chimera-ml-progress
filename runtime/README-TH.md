@@ -54,6 +54,7 @@ output เป็น JSON เช่น:
       }
     ]
   },
+  "final_decision": "ready_for_safe_verification",
   "recommended_next_action": "run_safe_metasploit_check_or_manual_probe"
 }
 ```
@@ -198,3 +199,4 @@ reports/evaluations เก่าทุกอัน ถ้าอีกฝ่า�
 - ยังต้องให้ Metasploit/manual PoC ยืนยันหลัง ML แนะนำ
 - Ranker ตอบได้เฉพาะ family ที่มีใน `prototype_manifest.json`
 - ถ้า evidence ไม่พอควรตอบ `unknown_family` หรือ `low_confidence`
+- หลัง unseen validation v01 พบว่า Gate ยัง false positive กับ unknown family ได้ จึงต้องดู `final_decision` ร่วมกับ Ranker/Unknown Guard เสมอ

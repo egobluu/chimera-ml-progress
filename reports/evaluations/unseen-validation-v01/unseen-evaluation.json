@@ -1,0 +1,137 @@
+{
+  "total_targets": 10,
+  "gate": {
+    "true_positive": 4,
+    "false_positive": 4,
+    "true_negative": 2,
+    "false_negative": 0,
+    "accuracy": 0.6
+  },
+  "ranker": {
+    "top1_correct": 4,
+    "top1_total": 4,
+    "top1_accuracy": 1.0,
+    "known_family_ready_count": 4
+  },
+  "unknown_family": {
+    "total": 3,
+    "rejected": 3,
+    "rejection_rate": 1.0
+  },
+  "low_confidence": 1,
+  "inconclusive": 0,
+  "per_target_results": [
+    {
+      "target_id": "unseen_grafana_neg_01",
+      "expected_family": "nginx",
+      "validation_status": "validated_negative",
+      "gate_decision": "likely_exploitable",
+      "ranker_decision": "known_family_but_blocked_or_low_confidence",
+      "top1_family": "nginx",
+      "correct": true
+    },
+    {
+      "target_id": "unseen_grafana_variant_01",
+      "expected_family": "grafana",
+      "validation_status": "validated_positive",
+      "gate_decision": "likely_exploitable",
+      "ranker_decision": "known_family_ready",
+      "top1_family": "grafana",
+      "correct": true
+    },
+    {
+      "target_id": "unseen_redis_neg_auth_01",
+      "expected_family": "redis",
+      "validation_status": "validated_negative",
+      "gate_decision": "no_exploit",
+      "ranker_decision": null,
+      "top1_family": null,
+      "correct": true
+    },
+    {
+      "target_id": "unseen_redis_variant_01",
+      "expected_family": "redis",
+      "validation_status": "validated_positive",
+      "gate_decision": "likely_exploitable",
+      "ranker_decision": "known_family_ready",
+      "top1_family": "redis",
+      "correct": true
+    },
+    {
+      "target_id": "unseen_solr_variant_01",
+      "expected_family": "solr_velocity",
+      "validation_status": "validated_positive",
+      "gate_decision": "likely_exploitable",
+      "ranker_decision": "known_family_ready",
+      "top1_family": "solr_velocity",
+      "correct": true
+    },
+    {
+      "target_id": "unseen_tomcat_neg_01",
+      "expected_family": "tomcat_put",
+      "validation_status": "validated_negative",
+      "gate_decision": "no_exploit",
+      "ranker_decision": null,
+      "top1_family": null,
+      "correct": true
+    },
+    {
+      "target_id": "unseen_tomcat_put_variant_01",
+      "expected_family": "tomcat_put",
+      "validation_status": "validated_positive",
+      "gate_decision": "likely_exploitable",
+      "ranker_decision": "known_family_ready",
+      "top1_family": "tomcat_put",
+      "correct": true
+    },
+    {
+      "target_id": "unseen_unknown_drupal_01",
+      "expected_family": "unknown",
+      "validation_status": "unknown_family",
+      "gate_decision": "likely_exploitable",
+      "ranker_decision": "unknown_family",
+      "top1_family": "nextjs",
+      "correct": true
+    },
+    {
+      "target_id": "unseen_unknown_laravel_01",
+      "expected_family": "unknown",
+      "validation_status": "unknown_family",
+      "gate_decision": "likely_exploitable",
+      "ranker_decision": "unknown_family",
+      "top1_family": "nextjs",
+      "correct": true
+    },
+    {
+      "target_id": "unseen_unknown_wordpress_01",
+      "expected_family": "unknown",
+      "validation_status": "unknown_family",
+      "gate_decision": "likely_exploitable",
+      "ranker_decision": "unknown_family",
+      "top1_family": "nextjs",
+      "correct": true
+    }
+  ],
+  "failures": [
+    {
+      "target": "unseen_grafana_neg_01",
+      "type": "gate_fp",
+      "detail": "gate=likely_exploitable on validated_negative"
+    },
+    {
+      "target": "unseen_unknown_drupal_01",
+      "type": "gate_fp",
+      "detail": "gate=likely_exploitable on unknown_family"
+    },
+    {
+      "target": "unseen_unknown_laravel_01",
+      "type": "gate_fp",
+      "detail": "gate=likely_exploitable on unknown_family"
+    },
+    {
+      "target": "unseen_unknown_wordpress_01",
+      "type": "gate_fp",
+      "detail": "gate=likely_exploitable on unknown_family"
+    }
+  ]
+}

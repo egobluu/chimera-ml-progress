@@ -82,6 +82,7 @@ Feedback กลับเข้า Dataset
 - [reports/evaluations/family-ranking-v01/FAMILY-RANKING-V01-RESULTS-TH.md](reports/evaluations/family-ranking-v01/FAMILY-RANKING-V01-RESULTS-TH.md) - ผลทดสอบ XGBoost Family Ranker รอบแรก
 - [reports/evaluations/family-ranking-backfill-v01/FAMILY-RANKING-BACKFILL-V01-RESULTS-TH.md](reports/evaluations/family-ranking-backfill-v01/FAMILY-RANKING-BACKFILL-V01-RESULTS-TH.md) - ผล Family Ranker หลังเพิ่ม family-specific backfill features
 - [reports/evaluations/unknown-family-v01/UNKNOWN-FAMILY-V01-RESULTS-TH.md](reports/evaluations/unknown-family-v01/UNKNOWN-FAMILY-V01-RESULTS-TH.md) - ผลทดสอบ unknown-family/open-set guard
+- [reports/evaluations/unseen-validation-v01/UNSEEN-VALIDATION-CODEX-REVIEW-TH.md](reports/evaluations/unseen-validation-v01/UNSEEN-VALIDATION-CODEX-REVIEW-TH.md) - รีวิว unseen validation รอบแรกแบบ predict ก่อน verify
 
 ## ระดับความพร้อม
 

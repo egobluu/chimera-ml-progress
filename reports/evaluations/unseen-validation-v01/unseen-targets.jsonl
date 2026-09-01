@@ -1,0 +1,10 @@
+{"target_id":"unseen_redis_variant_01","expected_family":"redis","category":"known_variant","cve":"CVE-2022-0543","lab":"vulhub/redis:CVE-2022-0543","port":6379}
+{"target_id":"unseen_tomcat_put_variant_01","expected_family":"tomcat_put","category":"known_variant","cve":"CVE-2017-12615","lab":"vulhub/tomcat:CVE-2017-12615","port":8080}
+{"target_id":"unseen_solr_variant_01","expected_family":"solr_velocity","category":"known_variant","cve":"CVE-2019-0193","lab":"vulhub/solr:CVE-2019-0193","port":8983}
+{"target_id":"unseen_grafana_variant_01","expected_family":"grafana","category":"known_variant","cve":"CVE-2021-43798","lab":"vulhub/grafana:CVE-2021-43798","port":3000}
+{"target_id":"unseen_redis_neg_auth_01","expected_family":"redis","category":"negative_control","cve":"none","lab":"redis:7.0 with auth","port":6379}
+{"target_id":"unseen_tomcat_neg_01","expected_family":"tomcat_put","category":"negative_control","cve":"none","lab":"vulhub/tomcat:CVE-2025-24813 (patched)","port":8080}
+{"target_id":"unseen_grafana_neg_01","expected_family":"nginx","category":"negative_control","cve":"none","lab":"nginx:latest (patched)","port":8888}
+{"target_id":"unseen_unknown_wordpress_01","expected_family":"unknown","category":"unknown_family","cve":"CVE-2021-34429","lab":"vulhub/jetty:CVE-2021-34429","port":8080}
+{"target_id":"unseen_unknown_drupal_01","expected_family":"unknown","category":"unknown_family","cve":"CVE-2018-7600","lab":"vulhub/drupal:CVE-2018-7600","port":8080}
+{"target_id":"unseen_unknown_laravel_01","expected_family":"unknown","category":"unknown_family","cve":"CVE-2021-3129","lab":"vulhub/laravel:CVE-2021-3129","port":8080}

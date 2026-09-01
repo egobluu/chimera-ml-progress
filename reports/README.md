@@ -26,6 +26,7 @@
 - `evaluations/family-ranking-v01/` - ผลทดสอบ XGBoost Family Ranker รอบแรก
 - `evaluations/family-ranking-backfill-v01/` - ผล Family Ranker หลัง merge family-specific backfill features จน Top-1 ผ่านระดับ prototype
 - `evaluations/unknown-family-v01/` - ผลทดสอบว่า Ranker จะทำอย่างไรเมื่อเจอ target นอก candidate family ที่รู้จัก
+- `evaluations/unseen-validation-v01/` - ผล unseen validation รอบแรก วัด predict ก่อน verify ทีหลัง
 
 ## plans
 
