@@ -228,3 +228,25 @@ clean pairs ที่เพิ่ม:
 เกณฑ์หยุดที่ตั้งไว้คือ FP <= 5, FN <= 2, F1 >= 0.80 ซึ่งรอบนี้ผ่านแล้ว
 
 สรุป: หยุดสแกนวนเพื่อแก้ ML core ได้แล้วในระดับ prototype งานถัดไปควร freeze baseline, ทำ clean dataset ตัด target quarantined ออก, แล้วเริ่มทำ inference/API สำหรับใช้งานจริง
+
+## Family Ranking v01 Result
+
+เริ่มทดสอบ XGBoost Family Ranker แล้ว โดยให้ Gate แยก exploit/no-exploit ก่อน แล้ว Ranker จัดอันดับเฉพาะ exploit family
+
+ผลรวมยังไม่ผ่าน:
+
+| Metric | Result |
+| --- | ---: |
+| Top-1 | 0.500 |
+| Top-3 | 0.538 |
+| Top-5 | 0.538 |
+| MRR | 0.551 |
+
+แต่ถ้าแยกเฉพาะ clean-control positive targets ที่เพิ่งเก็บมา ผลดีมาก:
+
+| Segment | Targets | Top-1 | Top-3 | MRR |
+| --- | ---: | ---: | ---: | ---: |
+| clean_control_positive | 6 | 1.000 | 1.000 | 1.000 |
+| original_positive | 20 | 0.350 | 0.400 | 0.417 |
+
+สรุป: Ranker ทำงานได้บน target ที่มี precondition feature สะอาด แต่ original positives ยังต้อง backfill family-specific evidence เพิ่มก่อน

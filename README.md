@@ -77,6 +77,7 @@ Feedback กลับเข้า Dataset
 - [reports/evaluations/clean-control-labs-v02/CLEAN-CONTROL-LABS-V02-ML-RESULTS-TH.md](reports/evaluations/clean-control-labs-v02/CLEAN-CONTROL-LABS-V02-ML-RESULTS-TH.md) - ผลหลังเพิ่ม clean control targets 9 ตัวแบบ precondition focus
 - [reports/evaluations/missing-positive-controls-v01/MISSING-POSITIVE-CONTROLS-ML-RESULTS-TH.md](reports/evaluations/missing-positive-controls-v01/MISSING-POSITIVE-CONTROLS-ML-RESULTS-TH.md) - ผลหลังเพิ่ม positive controls ที่ขาด และทดสอบ `precondition_only`
 - [reports/evaluations/negative-control-variations-v01/NEGATIVE-CONTROL-VARIATIONS-ML-RESULTS-TH.md](reports/evaluations/negative-control-variations-v01/NEGATIVE-CONTROL-VARIATIONS-ML-RESULTS-TH.md) - ผลหลังเพิ่ม negative controls จน `precondition_only` ผ่านเกณฑ์ prototype
+- [reports/evaluations/family-ranking-v01/FAMILY-RANKING-V01-RESULTS-TH.md](reports/evaluations/family-ranking-v01/FAMILY-RANKING-V01-RESULTS-TH.md) - ผลทดสอบ XGBoost Family Ranker รอบแรก
 
 ## ระดับความพร้อม
 

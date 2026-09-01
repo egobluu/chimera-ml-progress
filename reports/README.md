@@ -23,6 +23,7 @@
 - `evaluations/clean-control-labs-v02/` - ผลหลังเพิ่ม clean control targets 9 ตัวแบบ precondition focus
 - `evaluations/missing-positive-controls-v01/` - ผลหลังเพิ่ม positive controls ที่ขาด และเพิ่ม profile `precondition_only`
 - `evaluations/negative-control-variations-v01/` - ผลหลังเพิ่ม negative control variations 13 ตัว จน `precondition_only` ผ่านเกณฑ์ prototype
+- `evaluations/family-ranking-v01/` - ผลทดสอบ XGBoost Family Ranker รอบแรก
 
 ## plans
 
