@@ -1,0 +1,93 @@
+[
+  {
+    "profile": "full_v02",
+    "features": 100,
+    "threshold": 0.15,
+    "accuracy": 0.9538,
+    "precision": 0.9259,
+    "recall": 0.9615,
+    "f1": 0.9434,
+    "tp": 25,
+    "fp": 2,
+    "tn": 37,
+    "fn": 1
+  },
+  {
+    "profile": "strict_precheck",
+    "features": 94,
+    "threshold": 0.15,
+    "accuracy": 0.9538,
+    "precision": 0.9259,
+    "recall": 0.9615,
+    "f1": 0.9434,
+    "tp": 25,
+    "fp": 2,
+    "tn": 37,
+    "fn": 1
+  },
+  {
+    "profile": "strict_no_negative_count",
+    "features": 99,
+    "threshold": 0.15,
+    "accuracy": 0.9538,
+    "precision": 0.9259,
+    "recall": 0.9615,
+    "f1": 0.9434,
+    "tp": 25,
+    "fp": 2,
+    "tn": 37,
+    "fn": 1
+  },
+  {
+    "profile": "precondition_only",
+    "features": 44,
+    "threshold": 0.15,
+    "accuracy": 0.9538,
+    "precision": 0.9259,
+    "recall": 0.9615,
+    "f1": 0.9434,
+    "tp": 25,
+    "fp": 2,
+    "tn": 37,
+    "fn": 1
+  },
+  {
+    "profile": "scanner_only",
+    "features": 32,
+    "threshold": 0.1,
+    "accuracy": 0.4,
+    "precision": 0.4,
+    "recall": 1.0,
+    "f1": 0.5714,
+    "tp": 26,
+    "fp": 39,
+    "tn": 0,
+    "fn": 0
+  },
+  {
+    "profile": "no_metasploit",
+    "features": 96,
+    "threshold": 0.15,
+    "accuracy": 0.9538,
+    "precision": 0.9259,
+    "recall": 0.9615,
+    "f1": 0.9434,
+    "tp": 25,
+    "fp": 2,
+    "tn": 37,
+    "fn": 1
+  },
+  {
+    "profile": "no_nuclei_confirm",
+    "features": 99,
+    "threshold": 0.15,
+    "accuracy": 0.9538,
+    "precision": 0.9259,
+    "recall": 0.9615,
+    "f1": 0.9434,
+    "tp": 25,
+    "fp": 2,
+    "tn": 37,
+    "fn": 1
+  }
+]

@@ -76,13 +76,14 @@ Feedback กลับเข้า Dataset
 - [reports/evaluations/clean-control-labs-v01/CLEAN-CONTROL-LABS-ML-RESULTS-TH.md](reports/evaluations/clean-control-labs-v01/CLEAN-CONTROL-LABS-ML-RESULTS-TH.md) - ผลหลังเพิ่ม CouchDB clean control pair เป็น target ใหม่
 - [reports/evaluations/clean-control-labs-v02/CLEAN-CONTROL-LABS-V02-ML-RESULTS-TH.md](reports/evaluations/clean-control-labs-v02/CLEAN-CONTROL-LABS-V02-ML-RESULTS-TH.md) - ผลหลังเพิ่ม clean control targets 9 ตัวแบบ precondition focus
 - [reports/evaluations/missing-positive-controls-v01/MISSING-POSITIVE-CONTROLS-ML-RESULTS-TH.md](reports/evaluations/missing-positive-controls-v01/MISSING-POSITIVE-CONTROLS-ML-RESULTS-TH.md) - ผลหลังเพิ่ม positive controls ที่ขาด และทดสอบ `precondition_only`
+- [reports/evaluations/negative-control-variations-v01/NEGATIVE-CONTROL-VARIATIONS-ML-RESULTS-TH.md](reports/evaluations/negative-control-variations-v01/NEGATIVE-CONTROL-VARIATIONS-ML-RESULTS-TH.md) - ผลหลังเพิ่ม negative controls จน `precondition_only` ผ่านเกณฑ์ prototype
 
 ## ระดับความพร้อม
 
 ถ้าให้คะแนนภาพรวมเป้าหมายสุดท้ายเป็น 10/10:
 
 ```text
-ตอนนี้อยู่ประมาณ 2/10 สำหรับ pipeline รวม และประมาณ 1/10 สำหรับ strict precheck ที่ไม่พึ่งข้อมูลหลังยิง exploit
+ตอนนี้อยู่ประมาณ 3/10 สำหรับ pipeline รวม และ `precondition_only` ผ่านระดับ prototype แล้ว
 ```
 
 เพราะ:

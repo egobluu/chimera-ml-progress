@@ -212,3 +212,19 @@ clean pairs ที่เพิ่ม:
 | precondition_only | 0.788 | 14 | 0 |
 
 สรุป: `precondition_only` ดีขึ้นชัดเจนและควรใช้เป็น candidate profile หลักรอบถัดไป แต่ยังไม่ถึงเกณฑ์หยุด เพราะ FP ยังมากกว่า 5
+
+## Negative Control Variations Result
+
+ผล `dec-negative-control-variations-2026-09-01` เพิ่ม negative controls 13 targets ทำให้ dataset เป็น 65 targets / 95 features
+
+หลังเพิ่ม derived precondition features แล้ว `precondition_only` ผ่านเกณฑ์ prototype:
+
+| Profile | F1 | FP | FN |
+| --- | ---: | ---: | ---: |
+| precondition_only | 0.943 | 2 | 1 |
+| strict_precheck | 0.943 | 2 | 1 |
+| scanner_only | 0.571 | 39 | 0 |
+
+เกณฑ์หยุดที่ตั้งไว้คือ FP <= 5, FN <= 2, F1 >= 0.80 ซึ่งรอบนี้ผ่านแล้ว
+
+สรุป: หยุดสแกนวนเพื่อแก้ ML core ได้แล้วในระดับ prototype งานถัดไปควร freeze baseline, ทำ clean dataset ตัด target quarantined ออก, แล้วเริ่มทำ inference/API สำหรับใช้งานจริง

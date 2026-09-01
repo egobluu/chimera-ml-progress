@@ -122,6 +122,63 @@ PRECONDITION_FEATURES = {
     "precondition_probe_missing",
 }
 
+POSITIVE_PRECONDITION_FEATURES = {
+    "version_in_vulnerable_range",
+    "version_in_vulnerable_range_true",
+    "precondition_pass_count",
+    "no_auth_required",
+    "endpoint_reachable_count",
+    "method_put_allowed",
+    "jsp_upload_candidate",
+    "ajp_port_open",
+    "anonymous_access",
+    "velocity_enabled",
+    "config_api_accessible",
+    "solr_core_found",
+    "invokefunction_reachable",
+    "rce_endpoint_candidate_found",
+    "admin_party_enabled",
+    "config_accessible",
+    "users_db_accessible",
+    "default_key_likely",
+}
+
+NEGATIVE_PRECONDITION_FEATURES = {
+    "version_in_vulnerable_range_false",
+    "version_not_affected",
+    "version_patched",
+    "precondition_fail_count",
+    "auth_required",
+    "endpoint_missing_count",
+    "method_put_rejected",
+    "upload_blocked",
+    "wrong_context_path",
+    "ajp_port_closed",
+    "ajp_not_exposed",
+    "velocity_disabled",
+    "config_api_blocked",
+    "invokefunction_not_found",
+    "default_key_unlikely",
+    "spring_not_detected",
+    "wrong_software_type",
+    "painless_sandbox_blocks",
+    "path_traversal_blocked",
+    "auth_blocks_exploit",
+    "endpoint_not_found",
+    "wrong_version",
+    "actuator_path_missing",
+    "precondition_probe_missing",
+    "config_blocked",
+}
+
+DERIVED_PRECONDITION_FEATURES = {
+    "precondition_positive_signal_count",
+    "precondition_negative_signal_count",
+    "precondition_signal_balance",
+    "has_positive_precondition_signal",
+    "has_negative_precondition_signal",
+}
+
 
 def load_dataset(path: Path) -> tuple[list[str], np.ndarray, dict[str, np.ndarray]]:
     rows = list(csv.DictReader(path.open(encoding="utf-8", newline="")))
@@ -132,7 +189,25 @@ def load_dataset(path: Path) -> tuple[list[str], np.ndarray, dict[str, np.ndarra
         name: np.array([float(row.get(name) or 0) for row in rows])
         for name in columns
     }
+    add_derived_precondition_features(data, len(rows))
     return targets, labels, data
+
+
+def add_derived_precondition_features(data: dict[str, np.ndarray], row_count: int) -> None:
+    positive = np.zeros(row_count)
+    negative = np.zeros(row_count)
+    for name in POSITIVE_PRECONDITION_FEATURES:
+        if name in data:
+            positive += (data[name] > 0).astype(float)
+    for name in NEGATIVE_PRECONDITION_FEATURES:
+        if name in data:
+            negative += (data[name] > 0).astype(float)
+
+    data["precondition_positive_signal_count"] = positive
+    data["precondition_negative_signal_count"] = negative
+    data["precondition_signal_balance"] = positive - negative
+    data["has_positive_precondition_signal"] = (positive > 0).astype(float)
+    data["has_negative_precondition_signal"] = (negative > 0).astype(float)
 
 
 def profile_features(profile: str, all_features: list[str]) -> list[str]:
@@ -145,7 +220,7 @@ def profile_features(profile: str, all_features: list[str]) -> list[str]:
     if profile == "scanner_only":
         return [name for name in all_features if name in BASIC_SCANNER_FEATURES]
     if profile == "precondition_only":
-        return [name for name in all_features if name in PRECONDITION_FEATURES]
+        return [name for name in all_features if name in PRECONDITION_FEATURES | DERIVED_PRECONDITION_FEATURES]
     if profile == "no_metasploit":
         return [name for name in all_features if name not in METASPLOIT_FEATURES]
     if profile == "no_nuclei_confirm":

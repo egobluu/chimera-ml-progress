@@ -1,0 +1,42 @@
+{
+  "base_targets": 52,
+  "targets_with_backfill": 0,
+  "targets_without_backfill": 52,
+  "appended_new_targets": [
+    "couchdb_auth_negative_v01",
+    "couchdb_auth_negative_v02",
+    "shiro_key_negative_v01",
+    "shiro_key_negative_v02",
+    "shiro_key_negative_v03",
+    "thinkphp_rce_negative_v01",
+    "thinkphp_rce_negative_v02",
+    "tomcat_ajp_negative_v01",
+    "tomcat_ajp_negative_v02",
+    "tomcat_ajp_negative_v03",
+    "tomcat_put_negative_v01",
+    "tomcat_put_negative_v02",
+    "tomcat_put_negative_v03"
+  ],
+  "base_features": 92,
+  "backfill_numeric_features": 18,
+  "skipped_inconsistent_records": 0,
+  "skipped_disallowed_target_records": 5,
+  "require_consistent": true,
+  "allow_targets": [
+    "couchdb_auth_negative_v01",
+    "couchdb_auth_negative_v02",
+    "shiro_key_negative_v01",
+    "shiro_key_negative_v02",
+    "shiro_key_negative_v03",
+    "thinkphp_rce_negative_v01",
+    "thinkphp_rce_negative_v02",
+    "tomcat_ajp_negative_v01",
+    "tomcat_ajp_negative_v02",
+    "tomcat_ajp_negative_v03",
+    "tomcat_put_negative_v01",
+    "tomcat_put_negative_v02",
+    "tomcat_put_negative_v03"
+  ],
+  "merged_features": 95,
+  "output_csv": "reports\\evaluations\\negative-control-variations-v01\\target-exploitability-negative-control-variations.csv"
+}
