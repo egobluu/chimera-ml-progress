@@ -85,6 +85,7 @@ Feedback กลับเข้า Dataset
 - [reports/evaluations/unseen-validation-v01/UNSEEN-VALIDATION-CODEX-REVIEW-TH.md](reports/evaluations/unseen-validation-v01/UNSEEN-VALIDATION-CODEX-REVIEW-TH.md) - รีวิว unseen validation รอบแรกแบบ predict ก่อน verify
 - [reports/evaluations/unseen-validation-v02/UNSEEN-VALIDATION-V02-CODEX-REVIEW-TH.md](reports/evaluations/unseen-validation-v02/UNSEEN-VALIDATION-V02-CODEX-REVIEW-TH.md) - รีวิว unseen validation รอบสอง พร้อม audit จุดที่ผลสรุปขัดกับ prediction จริง
 - [reports/evaluations/ranker-schema-backfill-redis-grafana-v01/RANKER-SCHEMA-BACKFILL-CODEX-REVIEW-TH.md](reports/evaluations/ranker-schema-backfill-redis-grafana-v01/RANKER-SCHEMA-BACKFILL-CODEX-REVIEW-TH.md) - ผลหลังเติม Redis/Grafana family-specific features แล้ว rerun Ranker
+- [reports/evaluations/unseen-validation-v03/UNSEEN-VALIDATION-V03-CODEX-REVIEW-TH.md](reports/evaluations/unseen-validation-v03/UNSEEN-VALIDATION-V03-CODEX-REVIEW-TH.md) - ผล unseen v03 หลังตรวจ metric ใหม่และแก้ runtime guard จาก failure จริง
 - [reports/plans/feature-schema-alignment-v01/FEATURE-SCHEMA-ALIGNMENT-PLAN-TH.md](reports/plans/feature-schema-alignment-v01/FEATURE-SCHEMA-ALIGNMENT-PLAN-TH.md) - แผนปรับ feature schema ให้ OpenCode/feature extractor ตรงกับ runtime ML
 
 ## ระดับความพร้อม
@@ -148,3 +149,16 @@ runtime prototype ล่าสุดถูก retrain แล้วจาก data
 - [reports/evaluations/ranker-schema-backfill-redis-grafana-v01/RUNTIME-RETRAIN-RESULTS-TH.md](reports/evaluations/ranker-schema-backfill-redis-grafana-v01/RUNTIME-RETRAIN-RESULTS-TH.md)
 
 งานพิสูจน์ถัดไปต้องเป็น unseen validation v03 ด้วย target ใหม่ เพราะ Redis/Grafana จาก v02 ถูกนำเข้า train แล้ว
+
+## Unseen Validation v03
+
+v03 เป็นรอบที่มีประโยชน์เพราะเจอ failure จริง:
+
+- unknown target ส่ง `unknown_product_detected=0`
+- Solr negative ขาด canonical `velocity_disabled`
+- CouchDB ใช้ alias ไม่ตรง schema
+- Tomcat AJP แพ้ Nexus เพราะ generic signal bias
+
+หลังแก้ runtime guard แล้ว corrected evaluation บน v03 ผ่านครบ 11/11 แต่ต้องตีความว่าเป็น post-hoc fix ไม่ใช่ production accuracy
+
+งานถัดไปคือ v04 target ใหม่ เพื่อพิสูจน์ว่า guard/schema ใหม่ generalize ได้จริง

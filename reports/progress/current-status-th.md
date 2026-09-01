@@ -447,3 +447,42 @@ reports/evaluations/ranker-schema-backfill-redis-grafana-v01/target-exploitabili
 default runtime ใน `runtime/models/prototype/` ถูก promote เป็นรุ่นนี้แล้ว
 
 ข้อควรระวัง: `unseen_redis_variant_01` และ `unseen_grafana_variant_01` ไม่ใช่ unseen อีกต่อไป เพราะถูกนำเข้า training dataset แล้ว ต้องใช้ v03 targets ใหม่เท่านั้นในการพิสูจน์รอบต่อไป
+
+## Unseen Validation v03 Result
+
+ผล `dec-unseen-validation-v03-2026-09-02` เป็น unseen ใหม่หลัง retrain runtime:
+
+source report ระบุ 11/12 targets completed แต่ตัวเลขบางส่วนขัดกัน จึง reconstruct JSONL จาก per-target files แล้ว rerun corrected evaluation
+
+ก่อนแก้ runtime guard เพิ่ม:
+
+| Metric | Result |
+| --- | ---: |
+| Gate accuracy | 0.9091 |
+| Gate FP | 1 |
+| Gate FN | 0 |
+| Known-positive Ranker Top-1 | 0.6000 |
+| Unknown rejection rate | 0.0000 |
+| Safety flow accuracy | 0.7273 |
+| Strict flow accuracy | 0.5455 |
+
+failure หลัก:
+
+- unknown target ตั้ง `unknown_product_detected=0`
+- Solr negative ไม่มี canonical `velocity_disabled`
+- CouchDB ใช้ alias ไม่ตรง schema
+- Tomcat AJP แพ้ Nexus เพราะ generic signal bias
+
+หลังแก้ runtime guard/normalization/rerank:
+
+| Metric | Result |
+| --- | ---: |
+| Gate accuracy | 1.0000 |
+| Gate FP | 0 |
+| Gate FN | 0 |
+| Known-positive Ranker Top-1 | 1.0000 |
+| Unknown rejection rate | 1.0000 |
+| Safety flow accuracy | 1.0000 |
+| Strict flow accuracy | 1.0000 |
+
+การตีความ: นี่คือ post-hoc fix จาก v03 failure ไม่ใช่ proof ว่า production-ready ต้องทดสอบ v04 ด้วย target ใหม่หลัง feature extractor ส่ง canonical fields ให้ถูกตั้งแต่แรก

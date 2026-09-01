@@ -26,6 +26,7 @@ from predict_prototype import (
     load_json,
     normalize_feature_schema,
     rank_families,
+    should_downgrade_for_blocking_evidence,
     should_force_unknown_family,
 )
 
@@ -56,6 +57,9 @@ def predict(features: dict[str, object], model_dir: Path, top_k: int) -> dict[st
     gate_score = float(gate_model.predict_proba(X_gate)[0][1])
     gate_threshold = float(manifest["gate"]["threshold"])
     gate_status = gate_decision(gate_score, gate_threshold)
+    if gate_status == "likely_exploitable" and should_downgrade_for_blocking_evidence(features):
+        gate_status = "low_confidence"
+        schema_warnings.append("blocking negative evidence downgraded likely_exploitable to low_confidence")
 
     result: dict[str, object] = {
         "target_id": target_id,

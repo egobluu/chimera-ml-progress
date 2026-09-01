@@ -1,0 +1,71 @@
+{
+  "run_id": "dec-unseen-validation-v03-2026-09-02",
+  "run_date": "2026-09-01",
+  "runtime_model": {
+    "dataset_size": 67,
+    "gate_loo_f1": 0.9655,
+    "gate_loo_fn": 0,
+    "ranker_loo_top1": 0.8929,
+    "unknown_product_detected_guard": true
+  },
+  "targets": {
+    "total": 12,
+    "completed": 11,
+    "blocked": 1,
+    "categories": {
+      "known_positive_variants": 5,
+      "negative_controls": 4,
+      "unknown_family_positives": 3
+    }
+  },
+  "gate_evaluation": {
+    "total": 11,
+    "tp": 8,
+    "tn": 3,
+    "fp": 0,
+    "fn": 0,
+    "accuracy": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "fp_targets": [],
+    "fn_targets": []
+  },
+  "unknown_guard_evaluation": {
+    "total": 3,
+    "correct_reject": 3,
+    "accuracy": 1.0,
+    "details": {
+      "drupal_unknown_v03": "unknown_guard_correct (no drupal family in ranker)",
+      "php_cgi_unknown_v03": "unknown_guard_correct (no php_cgi family in ranker)",
+      "wordpress_unknown_v03": "blocked_by_disk_space"
+    }
+  },
+  "ranker_evaluation": {
+    "known_positive_total": 5,
+    "top1_correct": 2,
+    "top1_accuracy": 0.4,
+    "details": {
+      "tomcat_put_new_01": {"top1": "tomcat_put", "correct": true},
+      "tomcat_ajp_new_01": {"top1": "nexus", "correct": false, "top2": "tomcat_ajp"},
+      "couchdb_auth_new_01": {"top1": "couchdb_auth", "correct": true},
+      "shiro_key_new_01": {"top1": "shiro_key", "correct": true},
+      "jenkins_new_01": {"top1": "jenkins", "correct": true, "note": "blocked_or_low_confidence"}
+    }
+  },
+  "safety_flow_evaluation": {
+    "total": 11,
+    "safe_correct": 11,
+    "unsafe_incorrect": 0,
+    "accuracy": 1.0
+  },
+  "strict_flow_evaluation": {
+    "total": 11,
+    "correct": 10,
+    "incorrect": 1,
+    "accuracy": 0.909,
+    "details": {
+      "solr_velocity_disabled_neg_v03": "gate_fp"
+    }
+  }
+}

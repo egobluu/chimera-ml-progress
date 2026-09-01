@@ -1,0 +1,199 @@
+{
+  "total_targets": 11,
+  "gate_metrics": {
+    "tp": 7,
+    "fp": 0,
+    "tn": 4,
+    "fn": 0,
+    "accuracy": 1.0
+  },
+  "ranker_metrics": {
+    "known_positive_top1_correct": 5,
+    "known_positive_top1_total": 5,
+    "known_positive_top1_accuracy": 1.0
+  },
+  "unknown_guard_metrics": {
+    "unknown_rejected": 2,
+    "unknown_total": 2,
+    "unknown_rejection_rate": 1.0
+  },
+  "final_flow_metrics": {
+    "safety_correct": 11,
+    "safety_total": 11,
+    "safety_accuracy": 1.0,
+    "strict_correct": 11,
+    "strict_total": 11,
+    "strict_accuracy": 1.0
+  },
+  "per_target_results": [
+    {
+      "target_id": "couchdb_auth_new_01",
+      "category": "known_positive_variant",
+      "expected_family": "couchdb_auth",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "couchdb_auth",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": [
+        "normalized alias: admin_party -> admin_party_enabled",
+        "normalized alias: config_endpoint_accessible -> config_accessible"
+      ]
+    },
+    {
+      "target_id": "drupal_unknown_v03",
+      "category": "unknown_family",
+      "expected_family": "unknown",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "unknown_family_triage",
+      "predicted_top_family": "nexus",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": [
+        "derived unknown_product_detected from unknown product fingerprint",
+        "unknown_product_detected present; known-family ranking requires extra guard",
+        "unknown_product_detected forced unknown_family_triage"
+      ]
+    },
+    {
+      "target_id": "grafana_patched_neg_v03",
+      "category": "negative_control",
+      "expected_family": "none",
+      "gate_decision": "no_exploit",
+      "final_decision": "do_not_exploit_now",
+      "predicted_top_family": null,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": []
+    },
+    {
+      "target_id": "jenkins_new_01",
+      "category": "known_positive_variant",
+      "expected_family": "jenkins",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "manual_triage_before_exploit",
+      "predicted_top_family": "jenkins",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": []
+    },
+    {
+      "target_id": "php_cgi_unknown_v03",
+      "category": "unknown_family",
+      "expected_family": "unknown",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "unknown_family_triage",
+      "predicted_top_family": "nexus",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": [
+        "derived unknown_product_detected from unknown product fingerprint",
+        "unknown_product_detected present; known-family ranking requires extra guard",
+        "unknown_product_detected forced unknown_family_triage"
+      ]
+    },
+    {
+      "target_id": "redis_patched_neg_v03",
+      "category": "negative_control",
+      "expected_family": "none",
+      "gate_decision": "no_exploit",
+      "final_decision": "do_not_exploit_now",
+      "predicted_top_family": null,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": []
+    },
+    {
+      "target_id": "shiro_key_new_01",
+      "category": "known_positive_variant",
+      "expected_family": "shiro_key",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "shiro_key",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": []
+    },
+    {
+      "target_id": "solr_velocity_disabled_neg_v03",
+      "category": "negative_control",
+      "expected_family": "none",
+      "gate_decision": "low_confidence",
+      "final_decision": "needs_more_evidence",
+      "predicted_top_family": null,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": [
+        "normalized alias: velocity_template_accessible -> velocity_enabled",
+        "derived velocity_disabled from Solr velocity probe fields",
+        "blocking negative evidence downgraded likely_exploitable to low_confidence"
+      ]
+    },
+    {
+      "target_id": "tomcat_ajp_new_01",
+      "category": "known_positive_variant",
+      "expected_family": "tomcat_ajp",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "tomcat_ajp",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": []
+    },
+    {
+      "target_id": "tomcat_put_blocked_neg_v03",
+      "category": "negative_control",
+      "expected_family": "none",
+      "gate_decision": "low_confidence",
+      "final_decision": "needs_more_evidence",
+      "predicted_top_family": null,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": []
+    },
+    {
+      "target_id": "tomcat_put_new_01",
+      "category": "known_positive_variant",
+      "expected_family": "tomcat_put",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "tomcat_put",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": []
+    }
+  ]
+}

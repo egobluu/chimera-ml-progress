@@ -1,0 +1,11 @@
+{"target_id": "couchdb_auth_new_01", "category": "known_positive_variant", "expected_family": "couchdb_auth", "validation_status": "validated_positive", "verification_result": "vulnerable", "safe_to_merge": true}
+{"target_id": "drupal_unknown_v03", "category": "unknown_family", "expected_family": "unknown", "validation_status": "validated_positive", "verification_result": "vulnerable", "safe_to_merge": true}
+{"target_id": "grafana_patched_neg_v03", "category": "negative_control", "expected_family": "none", "validation_status": "validated_negative", "verification_result": "not_vulnerable", "safe_to_merge": true}
+{"target_id": "jenkins_new_01", "category": "known_positive_variant", "expected_family": "jenkins", "validation_status": "validated_positive", "verification_result": "vulnerable", "safe_to_merge": true}
+{"target_id": "php_cgi_unknown_v03", "category": "unknown_family", "expected_family": "unknown", "validation_status": "validated_positive", "verification_result": "vulnerable", "safe_to_merge": true}
+{"target_id": "redis_patched_neg_v03", "category": "negative_control", "expected_family": "none", "validation_status": "validated_negative", "verification_result": "not_vulnerable", "safe_to_merge": true}
+{"target_id": "shiro_key_new_01", "category": "known_positive_variant", "expected_family": "shiro_key", "validation_status": "validated_positive", "verification_result": "vulnerable", "safe_to_merge": true}
+{"target_id": "solr_velocity_disabled_neg_v03", "category": "negative_control", "expected_family": "none", "validation_status": "validated_negative", "verification_result": "not_vulnerable", "safe_to_merge": true}
+{"target_id": "tomcat_ajp_new_01", "category": "known_positive_variant", "expected_family": "tomcat_ajp", "validation_status": "validated_positive", "verification_result": "vulnerable", "safe_to_merge": true}
+{"target_id": "tomcat_put_blocked_neg_v03", "category": "negative_control", "expected_family": "none", "validation_status": "validated_negative", "verification_result": "not_vulnerable", "safe_to_merge": true}
+{"target_id": "tomcat_put_new_01", "category": "known_positive_variant", "expected_family": "tomcat_put", "validation_status": "validated_positive", "verification_result": "vulnerable", "safe_to_merge": true}

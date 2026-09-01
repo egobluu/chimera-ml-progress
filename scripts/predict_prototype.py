@@ -21,6 +21,68 @@ from train_gate_profiles import NEGATIVE_PRECONDITION_FEATURES, POSITIVE_PRECOND
 
 DEFAULT_MODEL_DIR = Path("runtime/models/prototype")
 
+UNKNOWN_PRODUCT_FEATURES = {
+    "coldfusion_detected",
+    "drupal_detected",
+    "jboss_detected",
+    "jetty_detected",
+    "laravel_detected",
+    "php_cgi_detected",
+    "php_detected",
+    "wordpress_detected",
+}
+
+SCHEMA_ALIASES = {
+    "admin_party": "admin_party_enabled",
+    "config_endpoint_accessible": "config_accessible",
+    "velocity_template_accessible": "velocity_enabled",
+}
+
+BLOCKING_NEGATIVE_FEATURES = {
+    "version_in_vulnerable_range_false",
+    "version_not_affected",
+    "version_patched",
+    "auth_required",
+    "method_put_rejected",
+    "upload_blocked",
+    "ajp_port_closed",
+    "ajp_not_exposed",
+    "velocity_disabled",
+    "config_api_blocked",
+    "invokefunction_not_found",
+    "default_key_unlikely",
+    "path_traversal_blocked",
+    "auth_blocks_exploit",
+    "endpoint_not_found",
+    "config_blocked",
+}
+
+STRONG_POSITIVE_PRECONDITIONS = {
+    "method_put_allowed",
+    "jsp_upload_candidate",
+    "ajp_port_open",
+    "velocity_enabled",
+    "config_api_accessible",
+    "invokefunction_reachable",
+    "admin_party_enabled",
+    "config_accessible",
+    "users_db_accessible",
+    "default_key_likely",
+    "redis_info_accessible",
+    "lua_available",
+    "plugin_path_candidate_found",
+    "public_plugin_path_accessible",
+    "path_traversal_candidate_found",
+    "cli_endpoint_reachable",
+}
+
+GENERIC_RANKER_FEATURES = {
+    "anonymous_access",
+    "endpoint_reachable_count",
+    "no_auth_required",
+    "version_in_vulnerable_range",
+}
+
 
 def as_float(row: dict[str, object], name: str) -> float:
     try:
@@ -39,10 +101,31 @@ def normalize_feature_schema(features: dict[str, object]) -> list[str]:
         features["is_non_http_service"] = features["is_non_http_target"]
         warnings.append("normalized alias: is_non_http_target -> is_non_http_service")
 
+    for old_name, new_name in SCHEMA_ALIASES.items():
+        if old_name in features and new_name not in features:
+            features[new_name] = features[old_name]
+            warnings.append(f"normalized alias: {old_name} -> {new_name}")
+
+    if as_float(features, "solr_detected") > 0 and as_float(features, "velocity_enabled") <= 0:
+        if (
+            "velocity_endpoint_found" in features
+            or "velocity_template_accessible" in features
+            or "velocity_rce_candidate" in features
+        ):
+            features.setdefault("velocity_disabled", 1)
+            warnings.append("derived velocity_disabled from Solr velocity probe fields")
+
     if "version_in_vulnerable_range" in features:
         vulnerable = 1 if as_float(features, "version_in_vulnerable_range") > 0 else 0
         features.setdefault("version_in_vulnerable_range_true", vulnerable)
         features.setdefault("version_in_vulnerable_range_false", 0 if vulnerable else 1)
+
+    if (
+        any(as_float(features, name) > 0 for name in UNKNOWN_PRODUCT_FEATURES)
+        and as_float(features, "known_family_signal_count") <= 0
+    ):
+        features["unknown_product_detected"] = 1
+        warnings.append("derived unknown_product_detected from unknown product fingerprint")
 
     if as_float(features, "unknown_product_detected") > 0:
         warnings.append("unknown_product_detected present; known-family ranking requires extra guard")
@@ -68,11 +151,26 @@ def gate_decision(score: float, threshold: float) -> str:
     return "no_exploit"
 
 
+def should_downgrade_for_blocking_evidence(features: dict[str, object]) -> bool:
+    negative = sum(1 for name in BLOCKING_NEGATIVE_FEATURES if as_float(features, name) > 0)
+    strong_positive = sum(1 for name in STRONG_POSITIVE_PRECONDITIONS if as_float(features, name) > 0)
+    return negative > 0 and strong_positive == 0
+
+
 def signal_counts(features: dict[str, object], family: str) -> tuple[int, int]:
     spec = FAMILY_FEATURES[family]
     positive = sum(1 for name in spec["positive"] if as_float(features, name) > 0)
     negative = sum(1 for name in spec["negative"] if as_float(features, name) > 0)
     return positive, negative
+
+
+def specific_positive_signal_count(features: dict[str, object], family: str) -> int:
+    spec = FAMILY_FEATURES[family]
+    return sum(
+        1
+        for name in spec["positive"]
+        if name not in GENERIC_RANKER_FEATURES and as_float(features, name) > 0
+    )
 
 
 def rank_families(features: dict[str, object], families: list[str], model: XGBRanker) -> list[dict[str, object]]:
@@ -83,13 +181,25 @@ def rank_families(features: dict[str, object], families: list[str], model: XGBRa
     output = []
     for family, score in ranked:
         positive, negative = signal_counts(features, family)
+        specific_positive = specific_positive_signal_count(features, family)
         output.append(
             {
                 "family": family,
                 "score": round(float(score), 6),
                 "positive_signals": positive,
                 "negative_signals": negative,
+                "specific_positive_signals": specific_positive,
             }
+        )
+    if any(int(row["specific_positive_signals"]) > 0 for row in output):
+        output = sorted(
+            output,
+            key=lambda row: (
+                int(row["specific_positive_signals"]) > 0,
+                int(row["specific_positive_signals"]),
+                float(row["score"]),
+            ),
+            reverse=True,
         )
     return output
 
@@ -161,6 +271,9 @@ def main() -> None:
     gate_score = float(gate_model.predict_proba(X_gate)[0][1])
     gate_threshold = float(manifest["gate"]["threshold"])
     gate_status = gate_decision(gate_score, gate_threshold)
+    if gate_status == "likely_exploitable" and should_downgrade_for_blocking_evidence(features):
+        gate_status = "low_confidence"
+        schema_warnings.append("blocking negative evidence downgraded likely_exploitable to low_confidence")
 
     result: dict[str, object] = {
         "target_id": target_id,

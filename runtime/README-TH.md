@@ -233,3 +233,14 @@ known_family_signal_count=0
 ```
 
 เพื่อให้ระบบตอบ `unknown_family_triage` แทนการเดา family ที่รู้จักอยู่แล้ว
+
+## Runtime guard หลัง Unseen v03
+
+runtime เพิ่ม guard เพื่อกัน failure ที่เจอใน v03:
+
+- derive `unknown_product_detected=1` จาก fingerprint ของ product นอก family เช่น Drupal/PHP-CGI
+- normalize alias สำคัญ เช่น `admin_party -> admin_party_enabled`
+- downgrade เป็น `low_confidence` เมื่อมี blocking negative evidence แต่ไม่มี strong positive precondition
+- rerank โดยให้ family-specific signal สำคัญกว่า generic signal
+
+ผลคือ runtime จะ conservative ขึ้น: ถ้าหลักฐานไม่ชัด จะไม่รีบส่งไป `ready_for_safe_verification`
