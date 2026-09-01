@@ -415,3 +415,35 @@ final_decision = unknown_family_triage
 คำอธิบายสำคัญ: ผลนี้ไม่ได้แปลว่า production-ready หรือแม่น 100% กับ target ทั้งหมด แต่แปลว่า Ranker พลาดเพราะ Redis/Grafana feature ไม่ครบ เมื่อเติม canonical family-specific features แล้วชุด v02 ถูกทั้งหมด
 
 งานถัดไปคือ retrain ด้วย backfill records ที่ safe to merge แล้วทดสอบ v03 ด้วย target ใหม่
+
+## Runtime Retrain After Redis/Grafana Backfill
+
+retrain runtime prototype แล้วด้วย dataset 67 targets:
+
+```text
+reports/evaluations/ranker-schema-backfill-redis-grafana-v01/target-exploitability-family-ranking-backfill-plus-redis-grafana.csv
+```
+
+ผล Gate LOO:
+
+| Metric | Result |
+| --- | ---: |
+| Accuracy | 0.9701 |
+| Precision | 0.9333 |
+| Recall | 1.0000 |
+| F1 | 0.9655 |
+| FP | 2 |
+| FN | 0 |
+
+ผล Ranker LOO:
+
+| Metric | Result |
+| --- | ---: |
+| Top-1 | 0.8929 |
+| Top-3 | 0.8929 |
+| Top-5 | 0.8929 |
+| MRR | 0.9035 |
+
+default runtime ใน `runtime/models/prototype/` ถูก promote เป็นรุ่นนี้แล้ว
+
+ข้อควรระวัง: `unseen_redis_variant_01` และ `unseen_grafana_variant_01` ไม่ใช่ unseen อีกต่อไป เพราะถูกนำเข้า training dataset แล้ว ต้องใช้ v03 targets ใหม่เท่านั้นในการพิสูจน์รอบต่อไป

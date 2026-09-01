@@ -2,7 +2,7 @@
   "name": "chimera-ml-prototype-runtime",
   "dataset": "reports\\evaluations\\ranker-schema-backfill-redis-grafana-v01\\target-exploitability-family-ranking-backfill-plus-redis-grafana.csv",
   "gate": {
-    "model_path": "runtime\\models\\prototype\\gate_precondition_only.json",
+    "model_path": "runtime\\models\\ranker-schema-backfill-v01\\gate_precondition_only.json",
     "profile": "precondition_only",
     "features": [
       "version_in_vulnerable_range_true",
@@ -65,7 +65,7 @@
     "train_targets": 67
   },
   "ranker": {
-    "model_path": "runtime\\models\\prototype\\family_ranker.json",
+    "model_path": "runtime\\models\\ranker-schema-backfill-v01\\family_ranker.json",
     "families": [
       "couchdb_auth",
       "elasticsearch",

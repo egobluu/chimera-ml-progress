@@ -1,0 +1,19 @@
+{
+  "base_dataset": "reports\\evaluations\\family-ranking-backfill-v01\\target-exploitability-family-ranking-backfill.csv",
+  "backfill_jsonl": "reports\\evaluations\\ranker-schema-backfill-redis-grafana-v01\\merged-ranker-schema-backfill-features.jsonl",
+  "base_rows": 65,
+  "output_rows": 67,
+  "safe_records": 2,
+  "skipped_records": [],
+  "appended_targets": [
+    "unseen_grafana_variant_01",
+    "unseen_redis_variant_01"
+  ],
+  "replaced_targets": [],
+  "new_columns": [
+    "http_port_count",
+    "open_port_count",
+    "service_count"
+  ],
+  "note_th": "ถ้า target จาก unseen validation ถูกนำเข้า train แล้ว ห้ามใช้ target เดิมนั้น เป็นหลักฐาน unseen evaluation รอบถัดไป"
+}

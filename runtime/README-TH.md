@@ -13,6 +13,12 @@ runtime/
     └── prototype_manifest.json
 ```
 
+รุ่นปัจจุบัน train จาก dataset 67 targets หลังเพิ่ม Redis/Grafana schema backfill แล้ว รายละเอียดอยู่ที่:
+
+```text
+reports/evaluations/ranker-schema-backfill-redis-grafana-v01/RUNTIME-RETRAIN-RESULTS-TH.md
+```
+
 สรุปสั้น:
 
 ```text

@@ -140,3 +140,11 @@ ML prototype ใช้เป็น decision-support ได้แล้ว แต
 | Strict flow accuracy | 1.000 |
 
 ต้องตีความว่า “feature schema คือสาเหตุหลักของ Ranker failure” ไม่ใช่สรุปว่าโมเดลแม่น 100% กับโลกจริง
+
+runtime prototype ล่าสุดถูก retrain แล้วจาก dataset 67 targets:
+
+- `runtime/models/prototype/`
+- `runtime/models/ranker-schema-backfill-v01/`
+- [reports/evaluations/ranker-schema-backfill-redis-grafana-v01/RUNTIME-RETRAIN-RESULTS-TH.md](reports/evaluations/ranker-schema-backfill-redis-grafana-v01/RUNTIME-RETRAIN-RESULTS-TH.md)
+
+งานพิสูจน์ถัดไปต้องเป็น unseen validation v03 ด้วย target ใหม่ เพราะ Redis/Grafana จาก v02 ถูกนำเข้า train แล้ว

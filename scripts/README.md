@@ -17,6 +17,7 @@ script เหล่านี้อ้าง path แบบ Kali report output �
 | `generate_gate_features.py` | สร้าง `gate-feature-evidence.jsonl` ให้ครบทุก validated target |
 | `build_dataset.py` | รวม JSONL/raw evidence เป็น `target-exploitability-dataset.csv` |
 | `merge_backfill_features.py` | รวม light backfill features เข้ากับ target-level dataset เดิม |
+| `merge_ranker_backfill_dataset.py` | รวม JSONL backfill ที่ safe_to_merge เข้า CSV dataset สำหรับ train runtime/ranker |
 | `train_gate_model.py` | train XGBoost binary classifier สำหรับ ML-only Exploitability Gate |
 | `train_gate_profiles.py` | train/evaluate หลาย feature profile เพื่อดูว่าโมเดลพึ่ง feature รั่วมากแค่ไหน |
 | `plan_precondition_probes.py` | สร้างแผน probe เจาะจงจาก false positive/false negative ของโมเดล |
@@ -33,6 +34,7 @@ script เหล่านี้อ้าง path แบบ Kali report output �
 python3 generate_gate_features.py
 python3 build_dataset.py
 python3 merge_backfill_features.py --base-dataset target-exploitability-dataset.csv --backfill-jsonl merged-backfill-precheck-features.jsonl --out-csv target-exploitability-with-light-backfill.csv --summary-json merge-summary.json
+python3 merge_ranker_backfill_dataset.py --base-dataset reports/evaluations/family-ranking-backfill-v01/target-exploitability-family-ranking-backfill.csv --backfill-jsonl reports/evaluations/ranker-schema-backfill-redis-grafana-v01/merged-ranker-schema-backfill-features.jsonl --audit-jsonl reports/evaluations/ranker-schema-backfill-redis-grafana-v01/label-consistency-audit.jsonl --out-csv reports/evaluations/ranker-schema-backfill-redis-grafana-v01/target-exploitability-family-ranking-backfill-plus-redis-grafana.csv --summary-json reports/evaluations/ranker-schema-backfill-redis-grafana-v01/dataset-merge-summary.json
 python3 train_gate_model.py
 python3 train_gate_profiles.py --dataset target-exploitability-dataset.csv --out-dir derived/profile-audit
 python3 plan_precondition_probes.py --predictions derived/profile-audit/strict_precheck-predictions.csv --threshold 0.10 --out-dir derived/probe-plan
