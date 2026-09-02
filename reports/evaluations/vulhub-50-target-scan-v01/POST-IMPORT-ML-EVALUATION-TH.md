@@ -103,3 +103,29 @@ unknown-family 8 ตัวถูกต้องตาม runtime ปัจจุ
 2. rerun หรือเติม raw evidence ให้ rows ที่เหลือ
 3. แยก row ที่เป็น synthetic/label-only ออกจาก scanner-derived feature
 4. สร้าง CVE resolver validation จาก `cve-enrichment.jsonl`
+
+## Curation Result
+
+หลังเพิ่ม `scripts/curate_imported_scan_batch.py` และชี้ raw evidence ไปที่ shared folder:
+
+| Split | Count | ความหมาย |
+| --- | ---: | --- |
+| train_ready_strict | 14 | มี raw evidence folder จริง และ runtime strict ผ่าน |
+| validation_only | 37 | runtime ผ่าน แต่ raw evidence ยังไม่ครบ จึงใช้เป็น regression ได้ก่อน |
+| needs_recheck | 0 | ไม่มีแถวที่ runtime fail หรือ feature/validation หาย |
+
+ผล runtime check เฉพาะ `train_ready_strict`:
+
+| Metric | Result |
+| --- | ---: |
+| Total | 14 |
+| Gate TP/FP/TN/FN | 7/0/7/0 |
+| Ranker Top-1 | 7/7 |
+| Safety flow | 14/14 |
+| Strict flow | 14/14 |
+
+Decision ล่าสุด:
+
+- ใช้ `train_ready_strict` เป็น candidate สำหรับ train รอบถัดไปได้ หลังคนตรวจ raw evidence แบบ spot check
+- ใช้ `validation_only` เป็น regression/compatibility suite ต่อไปก่อน
+- อย่าเอา 51 rows ทั้งหมดไป train ทันที

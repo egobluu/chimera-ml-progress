@@ -1,0 +1,30 @@
+{
+  "total_rows": 51,
+  "split_counts": {
+    "train_ready_strict": 14,
+    "validation_only": 37
+  },
+  "category_counts": {
+    "known_positive": 15,
+    "negative_control": 28,
+    "unknown_family": 8
+  },
+  "raw_evidence_count": 14,
+  "raw_evidence_ids": [
+    "couchdb_negative_001",
+    "couchdb_positive_001",
+    "grafana_cve_2021_43798_positive_001",
+    "grafana_negative_001",
+    "mysql_negative_001",
+    "nginx_negative_001",
+    "redis_auth_negative_001",
+    "redis_lua_positive_001",
+    "redis_negative_001",
+    "shiro_positive_001",
+    "solr_velocity_positive_001",
+    "tomcat_ajp_positive_001",
+    "tomcat_put_negative_001",
+    "tomcat_put_positive_001"
+  ],
+  "report_has_missing_images_note": true
+}

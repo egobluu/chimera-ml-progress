@@ -27,6 +27,7 @@ script เหล่านี้อ้าง path แบบ Kali report output �
 | `predict_prototype.py` | entrypoint ใช้งานจริงระดับ prototype รับ feature JSON แล้วคืนผล Gate + Ranker + Unknown Guard |
 | `evaluate_unknown_family.py` | ทดสอบว่า Ranker จะทำอย่างไรเมื่อเจอ target นอก family ที่รู้จัก |
 | `evaluate_runtime_predictions.py` | rerun runtime prediction จาก feature JSONL แล้วคำนวณ corrected metrics แยก safety กับ ranking |
+| `curate_imported_scan_batch.py` | แยก imported scanner batch เป็น train-ready, validation-only และ needs-recheck ก่อน retrain |
 | `validate_target_manifest.py` | ตรวจ target manifest ก่อนส่งให้ scanner/OpenCode ว่า JSONL, field, category และ target_id ถูกต้อง |
 
 ## Flow การใช้งาน
