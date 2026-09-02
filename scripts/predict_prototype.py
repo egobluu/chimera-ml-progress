@@ -83,6 +83,9 @@ GENERIC_RANKER_FEATURES = {
     "version_in_vulnerable_range",
 }
 
+MIN_READY_RANKER_MARGIN = 0.25
+MIN_READY_SPECIFIC_POSITIVE_SIGNALS = 1
+
 
 def as_float(row: dict[str, object], name: str) -> float:
     try:
@@ -211,14 +214,87 @@ def rank_families(features: dict[str, object], families: list[str], model: XGBRa
     return output
 
 
-def family_decision(top_family: dict[str, object], threshold: int) -> str:
+def ranker_confidence(ranked: list[dict[str, object]]) -> dict[str, object]:
+    if not ranked:
+        return {
+            "level": "no_rank",
+            "top_score": None,
+            "runner_up_score": None,
+            "margin": None,
+            "reason": "ไม่มีผลจัดอันดับ family",
+        }
+    top_score = float(ranked[0]["score"])
+    runner_up_score = float(ranked[1]["score"]) if len(ranked) > 1 else None
+    margin = None if runner_up_score is None else round(top_score - runner_up_score, 6)
+    if margin is None:
+        level = "single_candidate"
+        reason = "มี candidate family เดียว จึงไม่มีอันดับสองให้เทียบ"
+    elif margin >= MIN_READY_RANKER_MARGIN:
+        level = "clear_margin"
+        reason = "อันดับหนึ่งชนะอันดับสองชัดเจน"
+    else:
+        level = "low_margin"
+        reason = "อันดับหนึ่งกับอันดับสองคะแนนใกล้กัน ควรให้คนตรวจหรือเก็บ evidence เพิ่มก่อน"
+    return {
+        "level": level,
+        "top_score": round(top_score, 6),
+        "runner_up_score": round(runner_up_score, 6) if runner_up_score is not None else None,
+        "margin": margin,
+        "min_ready_margin": MIN_READY_RANKER_MARGIN,
+        "reason": reason,
+    }
+
+
+def family_readiness(features: dict[str, object], family: str) -> dict[str, object]:
+    spec = FAMILY_FEATURES[family]
+    specific_positive = sorted(
+        name
+        for name in spec["positive"]
+        if name not in GENERIC_RANKER_FEATURES and as_float(features, name) > 0
+    )
+    blocking_negative = sorted(name for name in spec["negative"] if as_float(features, name) > 0)
+    missing_specific_positive = sorted(
+        name
+        for name in spec["positive"]
+        if name not in GENERIC_RANKER_FEATURES and name not in features
+    )
+    ready = (
+        len(specific_positive) >= MIN_READY_SPECIFIC_POSITIVE_SIGNALS
+        and not blocking_negative
+    )
+    if ready:
+        reason = "มีหลักฐานเฉพาะ family เพียงพอ และไม่พบตัวบล็อกของ family นี้"
+    elif blocking_negative:
+        reason = "พบตัวบล็อกของ family นี้ จึงไม่ควรถือว่าพร้อมตรวจต่ออัตโนมัติ"
+    else:
+        reason = "หลักฐานเฉพาะ family ยังบางเกินไป ควรเก็บ evidence เพิ่มก่อน"
+    return {
+        "ready": ready,
+        "specific_positive_signals": specific_positive,
+        "blocking_negative_signals": blocking_negative,
+        "missing_specific_positive_features": missing_specific_positive,
+        "min_ready_specific_positive_signals": MIN_READY_SPECIFIC_POSITIVE_SIGNALS,
+        "reason": reason,
+    }
+
+
+def family_decision(
+    top_family: dict[str, object],
+    threshold: int,
+    confidence: dict[str, object] | None = None,
+    readiness: dict[str, object] | None = None,
+) -> str:
     positive = int(top_family["positive_signals"])
     negative = int(top_family["negative_signals"])
-    if positive >= threshold and negative == 0:
-        return "known_family_ready"
-    if positive >= threshold:
+    if positive < threshold:
+        return "unknown_family"
+    if readiness is not None and not bool(readiness["ready"]):
         return "known_family_but_blocked_or_low_confidence"
-    return "unknown_family"
+    if confidence is not None and confidence.get("level") == "low_margin":
+        return "known_family_but_blocked_or_low_confidence"
+    if negative == 0:
+        return "known_family_ready"
+    return "known_family_but_blocked_or_low_confidence"
 
 
 def should_force_unknown_family(features: dict[str, object]) -> bool:
@@ -311,13 +387,22 @@ def main() -> None:
     families = list(manifest["ranker"]["families"])
     ranked = rank_families(features, families, ranker_model)
     top = ranked[0]
-    decision = family_decision(top, int(manifest["ranker"]["unknown_positive_signal_threshold"]))
+    confidence = ranker_confidence(ranked)
+    readiness = family_readiness(features, str(top["family"]))
+    decision = family_decision(
+        top,
+        int(manifest["ranker"]["unknown_positive_signal_threshold"]),
+        confidence,
+        readiness,
+    )
     if should_force_unknown_family(features):
         decision = "unknown_family"
         schema_warnings.append("unknown_product_detected forced unknown_family_triage")
     result["ranker"] = {
         "model": "family_ranker",
         "decision": decision,
+        "confidence": confidence,
+        "family_readiness": readiness,
         "top_families": ranked[: args.top_k],
     }
     result["final_decision"] = final_decision_from(gate_status, decision)

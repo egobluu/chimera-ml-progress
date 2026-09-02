@@ -21,11 +21,13 @@ from predict_prototype import (
     add_derived_precondition_features,
     as_float,
     family_decision,
+    family_readiness,
     final_decision_from,
     gate_decision,
     load_json,
     normalize_feature_schema,
     rank_families,
+    ranker_confidence,
     should_downgrade_for_blocking_evidence,
     should_force_unknown_family,
 )
@@ -83,9 +85,13 @@ def predict(features: dict[str, object], model_dir: Path, top_k: int) -> dict[st
     ranker_model.load_model(model_dir / "family_ranker.json")
     families = list(manifest["ranker"]["families"])
     ranked = rank_families(features, families, ranker_model)
+    confidence = ranker_confidence(ranked)
+    readiness = family_readiness(features, str(ranked[0]["family"]))
     decision = family_decision(
         ranked[0],
         int(manifest["ranker"]["unknown_positive_signal_threshold"]),
+        confidence,
+        readiness,
     )
     if should_force_unknown_family(features):
         decision = "unknown_family"
@@ -94,6 +100,8 @@ def predict(features: dict[str, object], model_dir: Path, top_k: int) -> dict[st
     result["ranker"] = {
         "model": "family_ranker",
         "decision": decision,
+        "confidence": confidence,
+        "family_readiness": readiness,
         "top_families": ranked[:top_k],
     }
     result["final_decision"] = final_decision_from(gate_status, decision)
@@ -131,6 +139,8 @@ def evaluate(
     unknown_total = unknown_rejected = 0
     safety_correct = 0
     strict_correct = 0
+    low_margin_count = 0
+    not_ready_count = 0
 
     for prediction in predictions:
         target_id = str(prediction["target_id"])
@@ -143,6 +153,13 @@ def evaluate(
         gate_decision_value = str(prediction["gate"]["decision"])  # type: ignore[index]
         final_decision = str(prediction["final_decision"])
         predicted_family = top_family(prediction)
+        ranker = prediction.get("ranker")
+        confidence = ranker.get("confidence") if isinstance(ranker, dict) else None
+        readiness = ranker.get("family_readiness") if isinstance(ranker, dict) else None
+        if isinstance(confidence, dict) and confidence.get("level") == "low_margin":
+            low_margin_count += 1
+        if isinstance(readiness, dict) and not bool(readiness.get("ready")):
+            not_ready_count += 1
 
         expected_exploitable = is_known_positive or is_unknown_family
         predicted_exploitable = gate_decision_value == "likely_exploitable"
@@ -196,6 +213,8 @@ def evaluate(
                 "ranker_top1_correct": top1_ok,
                 "safety_correct": safety_ok,
                 "strict_flow_correct": strict_ok,
+                "ranker_confidence": confidence,
+                "family_readiness": readiness,
                 "schema_warnings": prediction.get("schema_warnings", []),
             }
         )
@@ -225,6 +244,10 @@ def evaluate(
             if unknown_total
             else 0,
         },
+        "ranker_safety_metrics": {
+            "low_margin_count": low_margin_count,
+            "family_not_ready_count": not_ready_count,
+        },
         "final_flow_metrics": {
             "safety_correct": safety_correct,
             "safety_total": total,
@@ -241,6 +264,7 @@ def write_report(metrics: dict[str, object], output_path: Path) -> None:
     gate = metrics["gate_metrics"]  # type: ignore[index]
     ranker = metrics["ranker_metrics"]  # type: ignore[index]
     unknown = metrics["unknown_guard_metrics"]  # type: ignore[index]
+    ranker_safety = metrics["ranker_safety_metrics"]  # type: ignore[index]
     final = metrics["final_flow_metrics"]  # type: ignore[index]
     text = f"""# Corrected Runtime Evaluation
 
@@ -259,6 +283,8 @@ def write_report(metrics: dict[str, object], output_path: Path) -> None:
 | Gate TN | {gate["tn"]} |
 | Gate FN | {gate["fn"]} |
 | Known-positive Ranker Top-1 | {ranker["known_positive_top1_accuracy"]} |
+| Ranker low-margin count | {ranker_safety["low_margin_count"]} |
+| Family not-ready count | {ranker_safety["family_not_ready_count"]} |
 | Unknown rejection rate | {unknown["unknown_rejection_rate"]} |
 | Safety flow accuracy | {final["safety_accuracy"]} |
 | Strict flow accuracy | {final["strict_accuracy"]} |

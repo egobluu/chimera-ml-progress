@@ -1,0 +1,142 @@
+{
+  "total_targets": 4,
+  "gate_metrics": {
+    "tp": 2,
+    "fp": 0,
+    "tn": 2,
+    "fn": 0,
+    "accuracy": 1.0
+  },
+  "ranker_metrics": {
+    "known_positive_top1_correct": 2,
+    "known_positive_top1_total": 2,
+    "known_positive_top1_accuracy": 1.0
+  },
+  "unknown_guard_metrics": {
+    "unknown_rejected": 0,
+    "unknown_total": 0,
+    "unknown_rejection_rate": 0
+  },
+  "ranker_safety_metrics": {
+    "low_margin_count": 0,
+    "family_not_ready_count": 0
+  },
+  "final_flow_metrics": {
+    "safety_correct": 4,
+    "safety_total": 4,
+    "safety_accuracy": 1.0,
+    "strict_correct": 4,
+    "strict_total": 4,
+    "strict_accuracy": 1.0
+  },
+  "per_target_results": [
+    {
+      "target_id": "solr_positive_unseen_01",
+      "category": "known_positive",
+      "expected_family": "solr_velocity",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "solr_velocity",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": {
+        "level": "clear_margin",
+        "top_score": 3.408491,
+        "runner_up_score": 1.70793,
+        "margin": 1.700561,
+        "min_ready_margin": 0.25,
+        "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
+      },
+      "family_readiness": {
+        "ready": true,
+        "specific_positive_signals": [
+          "config_api_accessible",
+          "solr_core_found",
+          "solr_detected",
+          "velocity_enabled"
+        ],
+        "blocking_negative_signals": [],
+        "missing_specific_positive_features": [],
+        "min_ready_specific_positive_signals": 1,
+        "reason": "มีหลักฐานเฉพาะ family เพียงพอ และไม่พบตัวบล็อกของ family นี้"
+      },
+      "schema_warnings": []
+    },
+    {
+      "target_id": "solr_positive_unseen_02",
+      "category": "known_positive",
+      "expected_family": "solr_velocity",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "solr_velocity",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": {
+        "level": "clear_margin",
+        "top_score": 3.408491,
+        "runner_up_score": 1.70793,
+        "margin": 1.700561,
+        "min_ready_margin": 0.25,
+        "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
+      },
+      "family_readiness": {
+        "ready": true,
+        "specific_positive_signals": [
+          "config_api_accessible",
+          "solr_core_found",
+          "solr_detected",
+          "velocity_enabled"
+        ],
+        "blocking_negative_signals": [],
+        "missing_specific_positive_features": [],
+        "min_ready_specific_positive_signals": 1,
+        "reason": "มีหลักฐานเฉพาะ family เพียงพอ และไม่พบตัวบล็อกของ family นี้"
+      },
+      "schema_warnings": []
+    },
+    {
+      "target_id": "solr_negative_unseen_01",
+      "category": "negative_control",
+      "expected_family": "none",
+      "gate_decision": "low_confidence",
+      "final_decision": "needs_more_evidence",
+      "predicted_top_family": null,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": null,
+      "family_readiness": null,
+      "schema_warnings": [
+        "derived velocity_disabled from Solr velocity probe fields",
+        "blocking negative evidence downgraded likely_exploitable to low_confidence"
+      ]
+    },
+    {
+      "target_id": "solr_negative_unseen_02",
+      "category": "negative_control",
+      "expected_family": "none",
+      "gate_decision": "low_confidence",
+      "final_decision": "needs_more_evidence",
+      "predicted_top_family": null,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": null,
+      "family_readiness": null,
+      "schema_warnings": [
+        "derived velocity_disabled from Solr velocity probe fields",
+        "blocking negative evidence downgraded likely_exploitable to low_confidence"
+      ]
+    }
+  ]
+}

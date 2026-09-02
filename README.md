@@ -270,3 +270,50 @@ v04 ใช้ target ใหม่ 12 ตัวและ corrected evaluation ล
 - [reports/evaluations/unseen-solr-schema-validation-v01/UNSEEN-SOLR-SCHEMA-CODEX-REVIEW-TH.md](reports/evaluations/unseen-solr-schema-validation-v01/UNSEEN-SOLR-SCHEMA-CODEX-REVIEW-TH.md)
 
 ข้อควรระวัง: นี่เป็น Solr-only unseen validation 4 targets ไม่ใช่คะแนน production ของทั้งระบบ
+
+## Multi-family Unseen Validation
+
+รอบ `dec-multifamily-unseen-validation-2026-09-02` ทดสอบ unseen targets ใหม่ 10 ตัว ครอบคลุม Redis, Grafana, Tomcat PUT, Tomcat AJP และ CouchDB โดยยังไม่เอาเข้า train ก่อน:
+
+| Family | Positive | Negative | Result |
+| --- | ---: | ---: | --- |
+| Redis | 1 | 1 | 2/2 safe_to_merge |
+| Grafana | 1 | 1 | 2/2 safe_to_merge |
+| Tomcat PUT | 1 | 1 | 2/2 safe_to_merge |
+| Tomcat AJP | 1 | 1 | 2/2 safe_to_merge |
+| CouchDB | 1 | 1 | 2/2 safe_to_merge |
+
+ผล runtime evaluation ด้วย default runtime:
+
+| Metric | Result |
+| --- | ---: |
+| Gate FP/FN | 0 / 0 |
+| Known-positive Ranker Top-1 | 1.0000 |
+| Safety flow | 1.0000 |
+| Strict flow | 1.0000 |
+
+รายงานหลัก:
+
+- [reports/evaluations/multifamily-unseen-validation-v01/UNSEEN-MULTIFAMILY-CODEX-REVIEW-TH.md](reports/evaluations/multifamily-unseen-validation-v01/UNSEEN-MULTIFAMILY-CODEX-REVIEW-TH.md)
+
+ข้อควรระวัง: ผลนี้เป็น multi-family unseen validation ชุดเล็ก 10 targets และไม่มี unknown-family target จึงบอกได้ว่า prototype ดีขึ้นชัดใน scope นี้ แต่ยังไม่ใช่ production accuracy
+
+## Ranker Safety Guard
+
+หลัง multi-family unseen validation เพิ่ม runtime guard เพื่อให้ Ranker ไม่มั่นใจเกินไปเมื่อหลักฐานบางหรือคะแนน family สูสีกัน:
+
+- เพิ่ม `ranker.confidence` เพื่อดูว่าอันดับหนึ่งชนะอันดับสองชัดไหม
+- เพิ่ม `ranker.family_readiness` เพื่อดูว่ามีหลักฐานเฉพาะ family พอไหม
+- ถ้าคะแนนสูสีหรือหลักฐานเฉพาะ family ไม่พอ จะลดจากพร้อมตรวจต่อเป็น manual triage
+
+Regression ด้วย default runtime ยังไม่ถอยบนชุดที่มี feature สะอาด:
+
+| Validation set | Gate FP/FN | Ranker Top-1 | Safety flow | Strict flow |
+| --- | ---: | ---: | ---: | ---: |
+| Multi-family unseen v01 | 0 / 0 | 1.0000 | 1.0000 | 1.0000 |
+| Unseen Solr schema v01 | 0 / 0 | 1.0000 | 1.0000 | 1.0000 |
+
+รายงานหลัก:
+
+- [reports/evaluations/ranker-safety-guard-v01/RANKER-SAFETY-GUARD-CODEX-REVIEW-TH.md](reports/evaluations/ranker-safety-guard-v01/RANKER-SAFETY-GUARD-CODEX-REVIEW-TH.md)
+- [reports/plans/opencode-unknown-family-validation-v01/OPENCODE-PROMPT-TH.md](reports/plans/opencode-unknown-family-validation-v01/OPENCODE-PROMPT-TH.md)

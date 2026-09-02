@@ -704,3 +704,73 @@ Solr extractor/probe schema ใหม่แก้ปัญหา Solr positive/n
 ```
 
 ยังไม่ควร claim ว่าระบบแม่น 100% เพราะเป็น Solr-only 4 targets งานถัดไปควรทำ unseen validation แบบเดียวกันกับ family อื่น เช่น Tomcat, Redis, Grafana, CouchDB
+
+## Multi-family Unseen Validation v01 Result
+
+ผล `dec-multifamily-unseen-validation-2026-09-02`:
+
+| รายการ | จำนวน |
+| --- | ---: |
+| total targets | 10 |
+| validated_positive | 5 |
+| validated_negative | 5 |
+| safe_to_merge | 10 |
+| quarantined | 0 |
+
+ครอบคลุม 5 family:
+
+- Redis
+- Grafana
+- Tomcat PUT
+- Tomcat AJP
+- CouchDB
+
+Codex ยังไม่ merge เข้า train ก่อน แต่ใช้เป็น honest multi-family validation
+
+ผล runtime evaluation ด้วย default runtime:
+
+| Metric | Result |
+| --- | ---: |
+| Gate accuracy | 1.0000 |
+| Gate FP | 0 |
+| Gate FN | 0 |
+| Known-positive Ranker Top-1 | 1.0000 |
+| Safety flow accuracy | 1.0000 |
+| Strict flow accuracy | 1.0000 |
+
+หมายเหตุเรื่อง label: OpenCode ใช้ชื่อ `redis_lua`, `grafana_path_traversal`, `couchdb` แต่ runtime Ranker ใช้ canonical family `redis`, `grafana`, `couchdb_auth` จึงมีไฟล์ `runtime-targets.jsonl` สำหรับ mapping โดยเก็บ source label เดิมไว้ใน `source_expected_family`
+
+การตีความ:
+
+```text
+ML runtime prototype ผ่าน multi-family unseen validation ชุดเล็ก 10 targets และเข้าใกล้ prototype ใช้งานจริงระดับพื้นฐานมากขึ้น
+```
+
+ข้อจำกัด: รอบนี้ยังไม่มี unknown-family target และจำนวน target ยังน้อย จึงยังไม่ใช่ production accuracy งานถัดไปควรเพิ่ม unknown-family unseen และทำ regression ก่อนตัดสินใจ retrain/promote runtime
+
+## Ranker Safety Guard v01 Result
+
+Codex เพิ่ม guard ใน runtime โดยยังไม่ retrain model:
+
+- ถ้าอันดับหนึ่งกับอันดับสองคะแนนใกล้กัน จะถือว่า ranking ยังไม่มั่นใจ (`ranker_confidence = low_margin`)
+- ถ้า family ที่ Ranker เลือกไม่มีหลักฐานเฉพาะ family พอ จะถือว่ายังไม่พร้อม (`family_readiness.ready = false`)
+- ถ้าเข้าเงื่อนไขเหล่านี้ ระบบจะลดจากพร้อมตรวจต่อ (`known_family_ready`) เป็นต้องตรวจมือก่อน (`known_family_but_blocked_or_low_confidence`)
+
+ผล regression หลังแก้:
+
+| Validation set | Gate FP/FN | Ranker Top-1 | Low-margin | Family not-ready | Safety flow | Strict flow |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Multi-family unseen v01 | 0 / 0 | 1.0000 | 0 | 0 | 1.0000 | 1.0000 |
+| Unseen Solr schema v01 | 0 / 0 | 1.0000 | 0 | 0 | 1.0000 | 1.0000 |
+
+การตีความ:
+
+```text
+ชุดที่มี feature สะอาดยังผ่านเหมือนเดิม แต่ runtime มีข้อมูลและ guard เพิ่มเพื่อกัน Ranker มั่นใจเกินไปเมื่อเจอ feature บาง/noisy
+```
+
+งานถัดไปให้ OpenCode/Kali เก็บ unknown-family + weak/noisy feature validation ตาม prompt:
+
+```text
+reports/plans/opencode-unknown-family-validation-v01/OPENCODE-PROMPT-TH.md
+```
