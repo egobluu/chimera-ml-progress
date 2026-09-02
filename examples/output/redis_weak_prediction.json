@@ -1,0 +1,26 @@
+{
+  "target_id": "example_redis_weak",
+  "gate": {
+    "model": "gate_precondition_only",
+    "score": 0.933099,
+    "threshold": 0.15,
+    "decision": "low_confidence"
+  },
+  "ranker": null,
+  "final_decision": "needs_more_evidence",
+  "recommended_next_action": "stop_or_collect_more_evidence",
+  "reason_features": [
+    "has_positive_precondition_signal",
+    "is_non_http_service",
+    "no_auth_required",
+    "redis_detected",
+    "redis_info_accessible",
+    "service_port",
+    "version_in_vulnerable_range",
+    "version_in_vulnerable_range_true"
+  ],
+  "schema_warnings": [
+    "blocking negative evidence downgraded likely_exploitable to low_confidence"
+  ],
+  "safety_note_th": "ยังไม่ยิง exploit อัตโนมัติ ต้องใช้ Metasploit check/manual PoC หลังผู้ใช้ยืนยัน"
+}

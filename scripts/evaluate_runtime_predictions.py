@@ -93,7 +93,7 @@ def predict(features: dict[str, object], model_dir: Path, top_k: int) -> dict[st
         confidence,
         readiness,
     )
-    if should_force_unknown_family(features):
+    if should_force_unknown_family(features, readiness):
         decision = "unknown_family"
         schema_warnings.append("unknown_product_detected forced unknown_family_triage")
 
@@ -128,6 +128,20 @@ def top_family(prediction: dict[str, object]) -> str | None:
     return str(value) if value is not None else None
 
 
+def top_families(prediction: dict[str, object], limit: int) -> list[str]:
+    ranker = prediction.get("ranker")
+    if not isinstance(ranker, dict):
+        return []
+    families = ranker.get("top_families")
+    if not isinstance(families, list):
+        return []
+    output: list[str] = []
+    for row in families[:limit]:
+        if isinstance(row, dict) and row.get("family") is not None:
+            output.append(str(row["family"]))
+    return output
+
+
 def evaluate(
     targets: list[dict[str, object]],
     predictions: list[dict[str, object]],
@@ -135,7 +149,7 @@ def evaluate(
     target_by_id = {str(row["target_id"]): row for row in targets}
     per_target: list[dict[str, object]] = []
     gate_tp = gate_fp = gate_tn = gate_fn = 0
-    known_total = known_top1 = 0
+    known_total = known_top1 = known_top3 = 0
     unknown_total = unknown_rejected = 0
     safety_correct = 0
     strict_correct = 0
@@ -148,7 +162,7 @@ def evaluate(
         category = str(target["category"])
         expected_family = str(target["expected_family"])
         is_known_positive = category.startswith("known_positive")
-        is_unknown_family = category == "unknown_family"
+        is_unknown_family = category.startswith("unknown_family")
         is_negative_control = category == "negative_control"
         gate_decision_value = str(prediction["gate"]["decision"])  # type: ignore[index]
         final_decision = str(prediction["final_decision"])
@@ -188,7 +202,9 @@ def evaluate(
         elif is_known_positive:
             known_total += 1
             top1_ok = predicted_family == expected_family
+            top3_ok = expected_family in top_families(prediction, 3)
             known_top1 += 1 if top1_ok else 0
+            known_top3 += 1 if top3_ok else 0
             safety_ok = final_decision in {
                 "ready_for_safe_verification",
                 "manual_triage_before_exploit",
@@ -221,6 +237,13 @@ def evaluate(
 
     total = len(predictions)
     gate_accuracy = (gate_tp + gate_tn) / total if total else 0
+    gate_precision = gate_tp / (gate_tp + gate_fp) if gate_tp + gate_fp else 0
+    gate_recall = gate_tp / (gate_tp + gate_fn) if gate_tp + gate_fn else 0
+    gate_f1 = (
+        2 * gate_precision * gate_recall / (gate_precision + gate_recall)
+        if gate_precision + gate_recall
+        else 0
+    )
     return {
         "total_targets": total,
         "gate_metrics": {
@@ -229,11 +252,19 @@ def evaluate(
             "tn": gate_tn,
             "fn": gate_fn,
             "accuracy": round(gate_accuracy, 4),
+            "precision": round(gate_precision, 4),
+            "recall": round(gate_recall, 4),
+            "f1": round(gate_f1, 4),
         },
         "ranker_metrics": {
             "known_positive_top1_correct": known_top1,
             "known_positive_top1_total": known_total,
             "known_positive_top1_accuracy": round(known_top1 / known_total, 4)
+            if known_total
+            else 0,
+            "known_positive_top3_correct": known_top3,
+            "known_positive_top3_total": known_total,
+            "known_positive_top3_accuracy": round(known_top3 / known_total, 4)
             if known_total
             else 0,
         },
@@ -282,7 +313,11 @@ def write_report(metrics: dict[str, object], output_path: Path) -> None:
 | Gate FP | {gate["fp"]} |
 | Gate TN | {gate["tn"]} |
 | Gate FN | {gate["fn"]} |
+| Gate precision | {gate["precision"]} |
+| Gate recall | {gate["recall"]} |
+| Gate F1 | {gate["f1"]} |
 | Known-positive Ranker Top-1 | {ranker["known_positive_top1_accuracy"]} |
+| Known-positive Ranker Top-3 | {ranker["known_positive_top3_accuracy"]} |
 | Ranker low-margin count | {ranker_safety["low_margin_count"]} |
 | Family not-ready count | {ranker_safety["family_not_ready_count"]} |
 | Unknown rejection rate | {unknown["unknown_rejection_rate"]} |

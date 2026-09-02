@@ -10,8 +10,11 @@
 2. `reports/progress/current-status-th.md`
 3. `runtime/README-TH.md`
 4. `docs/09-llm-handoff-runtime-th.md`
-5. `docs/08-workflow-responsibilities-th.md`
-6. `docs/07-feature-catalog-th.md`
+5. `docs/10-ml-from-zero-th.md`
+6. `docs/11-ml-runtime-integration-contract-th.md`
+7. `docs/12-llm-decision-explainer-th.md`
+8. `docs/08-workflow-responsibilities-th.md`
+9. `docs/07-feature-catalog-th.md`
 
 ## หมวดเอกสาร
 
@@ -26,6 +29,9 @@
 | `docs/07-feature-catalog-th.md` | รายการ feature ทั้งหมด แยก precheck/postcheck/leak-risk |
 | `docs/08-workflow-responsibilities-th.md` | หน้าที่ของ Codex, OpenCode, scanner, ML และ Metasploit |
 | `docs/09-llm-handoff-runtime-th.md` | วิธีส่งต่อให้ฝั่ง LLM/agentic และไฟล์ไหนคือ runtime ใช้จริง |
+| `docs/10-ml-from-zero-th.md` | คู่มือสอนจากศูนย์ว่า ML ในงานนี้คืออะไร train ยังไง metric แปลว่าอะไร และต่อ LLM ยังไง |
+| `docs/11-ml-runtime-integration-contract-th.md` | contract ระหว่าง scanner, ML runtime และ LLM พร้อม input/output examples และ checklist ก่อน train/promote |
+| `docs/12-llm-decision-explainer-th.md` | วิธีใช้สคริปต์แปลง prediction JSON เป็นคำอธิบาย/next action สำหรับ LLM/operator |
 
 ## หมวด runtime
 

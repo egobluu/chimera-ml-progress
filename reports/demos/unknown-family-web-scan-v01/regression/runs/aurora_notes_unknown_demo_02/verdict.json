@@ -1,0 +1,14 @@
+{
+  "gate_correct": true,
+  "ranker_unknown_guard_correct": true,
+  "final_decision_correct": true,
+  "exploitability_prediction_correct": true,
+  "known_family_ranking_trusted": false,
+  "top_ranked_family": "redis",
+  "expected_family": "aurora_notes",
+  "expected_known_to_model": false,
+  "expected_exploitable": true,
+  "predicted_gate_exploitable": true,
+  "predicted_safe_known_family_verification": false,
+  "overall_correct": true
+}

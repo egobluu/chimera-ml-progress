@@ -1,0 +1,9 @@
+services:
+  acme-zerocms:
+    build:
+      context: ./target
+    container_name: chimera-acme-zerocms-unknown
+    ports:
+      - "18080:8080"
+    environment:
+      - CHIMERA_DEMO_TARGET=acme_zerocms

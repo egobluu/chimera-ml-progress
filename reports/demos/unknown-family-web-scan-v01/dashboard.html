@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chimera Unknown-family ML Demo</title>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; background: #f6f8fb; color: #17212b; }
+    header { background: #182635; color: white; padding: 24px; }
+    main { max-width: 1180px; margin: 0 auto; padding: 22px; }
+    h1 { margin: 0; font-size: 28px; }
+    h2 { margin-top: 28px; font-size: 20px; }
+    table { width: 100%; border-collapse: collapse; background: white; border: 1px solid #d8e0e7; }
+    th, td { border-bottom: 1px solid #e6ebef; padding: 10px; text-align: left; vertical-align: top; }
+    th { background: #eef3f7; }
+    code, pre { background: #eef3f7; border-radius: 4px; }
+    code { padding: 2px 4px; }
+    pre { padding: 14px; overflow: auto; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .band { background: white; border: 1px solid #d8e0e7; padding: 16px; }
+    .pass { color: #0b6b3a; font-weight: 700; }
+    .fail { color: #a4161a; font-weight: 700; }
+    .warn { color: #8a5a00; font-weight: 700; }
+    iframe { width: 100%; height: 320px; border: 1px solid #cdd6df; background: white; }
+    @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Chimera ML Unknown-family Web Scan Demo</h1>
+    <p>Target: <code>http://127.0.0.1:18080</code></p>
+  </header>
+  <main>
+    <section class="grid">
+      <div class="band">
+        <h2>เฉลยของ Target</h2>
+        <table>
+          <tr><th>รายการ</th><th>ค่า</th></tr>
+          <tr><td>Product</td><td>Acme ZeroCMS</td></tr>
+          <tr><td>Family จริง</td><td><code>acme_zerocms</code></td></tr>
+          <tr><td>ML รู้จัก family นี้ไหม</td><td>False</td></tr>
+          <tr><td>ควรมองว่ายิงได้ไหมในระดับ Gate</td><td>True</td></tr>
+          <tr><td>Expected final</td><td><code>unknown_family_triage</code></td></tr>
+        </table>
+      </div>
+      <div class="band">
+        <h2>ผลตัดสิน</h2>
+        <table>
+          <tr><th>Pass</th><th>ผล</th></tr>
+          <tr><td>Pass 1: Gate ทาย exploitability ถูกไหม</td><td><span class="pass">ถูก</span></td></tr>
+          <tr><td>Pass 2: Ranker/Unknown guard กัน family ที่ไม่รู้จักถูกไหม</td><td><span class="pass">ถูก</span></td></tr>
+          <tr><td>Final decision ถูกไหม</td><td><span class="pass">ถูก</span></td></tr>
+          <tr><td>Overall</td><td><span class="pass">ถูก</span></td></tr>
+        </table>
+      </div>
+    </section>
+    <h2>ML Prediction</h2>
+    <table>
+      <tr><th>Field</th><th>Value</th></tr>
+      <tr><td>Gate decision</td><td><code>likely_exploitable</code></td></tr>
+      <tr><td>Gate score / threshold</td><td><code>0.933099 / 0.15</code></td></tr>
+      <tr><td>Ranker decision</td><td><code>unknown_family</code></td></tr>
+      <tr><td>Top ranked known family</td><td><code>redis</code></td></tr>
+      <tr><td>Final decision</td><td><code>unknown_family_triage</code></td></tr>
+      <tr><td>ML บอกให้ยิง known-family verification ไหม</td><td>False</td></tr>
+    </table>
+    <h2>Ranker Top Families</h2>
+    <table>
+      <tr><th>Family</th><th>Score</th><th>Positive signals</th><th>Specific positive</th></tr>
+      <tr><td>redis</td><td>0.737769</td><td>2</td><td>0</td></tr>
+<tr><td>joomla</td><td>0.238025</td><td>2</td><td>0</td></tr>
+<tr><td>nextjs</td><td>-0.313506</td><td>2</td><td>0</td></tr>
+<tr><td>jenkins</td><td>-0.415275</td><td>2</td><td>0</td></tr>
+<tr><td>nexus</td><td>-0.415275</td><td>2</td><td>0</td></tr>
+<tr><td>struts2</td><td>-0.415275</td><td>2</td><td>0</td></tr>
+<tr><td>couchdb_auth</td><td>-0.522171</td><td>1</td><td>0</td></tr>
+<tr><td>flask</td><td>-0.735973</td><td>1</td><td>0</td></tr>
+    </table>
+    <h2>Target Preview</h2>
+    <iframe src="http://127.0.0.1:18080"></iframe>
+    <h2>Feature ที่ scanner ส่งเข้า ML</h2>
+    <table>
+      <tr><th>Feature</th><th>Value</th></tr>
+      <tr><td><code>auth_required</code></td><td>0</td></tr>
+<tr><td><code>cve</code></td><td>CVE-2099-0001</td></tr>
+<tr><td><code>demo_target_url</code></td><td>http://127.0.0.1:18080</td></tr>
+<tr><td><code>endpoint_missing_count</code></td><td>0</td></tr>
+<tr><td><code>endpoint_reachable_count</code></td><td>1</td></tr>
+<tr><td><code>is_http_target</code></td><td>1</td></tr>
+<tr><td><code>is_non_http_service</code></td><td>0</td></tr>
+<tr><td><code>known_family_signal_count</code></td><td>0</td></tr>
+<tr><td><code>login_path_found</code></td><td>0</td></tr>
+<tr><td><code>no_auth_required</code></td><td>1</td></tr>
+<tr><td><code>service_port</code></td><td>18080</td></tr>
+<tr><td><code>target_id</code></td><td>acme_zerocms_unknown_demo_01</td></tr>
+<tr><td><code>unknown_family_signal_count</code></td><td>2</td></tr>
+<tr><td><code>unknown_product_detected</code></td><td>1</td></tr>
+<tr><td><code>upload_path_found</code></td><td>0</td></tr>
+<tr><td><code>version_in_vulnerable_range</code></td><td>1</td></tr>
+<tr><td><code>version_in_vulnerable_range_false</code></td><td>0</td></tr>
+<tr><td><code>version_in_vulnerable_range_true</code></td><td>1</td></tr>
+<tr><td><code>whatweb_tech_detected</code></td><td>1</td></tr>
+    </table>
+    <section class="grid">
+      <div>
+        <h2>Ground Truth JSON</h2>
+        <pre>{
+  &quot;target_id&quot;: &quot;acme_zerocms_unknown_demo_01&quot;,
+  &quot;product&quot;: &quot;Acme ZeroCMS&quot;,
+  &quot;family&quot;: &quot;acme_zerocms&quot;,
+  &quot;runtime_family_known_to_model&quot;: false,
+  &quot;expected_runtime_category&quot;: &quot;unknown_family&quot;,
+  &quot;expected_exploitable&quot;: true,
+  &quot;expected_gate_decision&quot;: &quot;likely_exploitable&quot;,
+  &quot;expected_final_decision&quot;: &quot;unknown_family_triage&quot;,
+  &quot;expected_ranker_behavior&quot;: &quot;do_not_trust_known_family_ranking&quot;,
+  &quot;demo_cve&quot;: &quot;CVE-2099-0001&quot;,
+  &quot;notes&quot;: &quot;Local synthetic lab target. It is intentionally unknown to the current Family Ranker.&quot;
+}</pre>
+      </div>
+      <div>
+        <h2>Prediction JSON</h2>
+        <pre>{
+  &quot;target_id&quot;: &quot;acme_zerocms_unknown_demo_01&quot;,
+  &quot;gate&quot;: {
+    &quot;model&quot;: &quot;gate_precondition_only&quot;,
+    &quot;score&quot;: 0.933099,
+    &quot;threshold&quot;: 0.15,
+    &quot;decision&quot;: &quot;likely_exploitable&quot;
+  },
+  &quot;ranker&quot;: {
+    &quot;model&quot;: &quot;family_ranker&quot;,
+    &quot;decision&quot;: &quot;unknown_family&quot;,
+    &quot;confidence&quot;: {
+      &quot;level&quot;: &quot;clear_margin&quot;,
+      &quot;top_score&quot;: 0.737769,
+      &quot;runner_up_score&quot;: 0.238025,
+      &quot;margin&quot;: 0.499744,
+      &quot;min_ready_margin&quot;: 0.25,
+      &quot;reason&quot;: &quot;อันดับหนึ่งชนะอันดับสองชัดเจน&quot;
+    },
+    &quot;family_readiness&quot;: {
+      &quot;ready&quot;: false,
+      &quot;specific_positive_signals&quot;: [],
+      &quot;blocking_negative_signals&quot;: [],
+      &quot;missing_specific_positive_features&quot;: [
+        &quot;lua_available&quot;,
+        &quot;redis_detected&quot;,
+        &quot;redis_info_accessible&quot;
+      ],
+      &quot;min_ready_specific_positive_signals&quot;: 1,
+      &quot;reason&quot;: &quot;scanner ระบุว่า known-family signal ยังไม่พอ จึงไม่ควรถือว่าพร้อมตรวจต่ออัตโนมัติ&quot;
+    },
+    &quot;top_families&quot;: [
+      {
+        &quot;family&quot;: &quot;redis&quot;,
+        &quot;score&quot;: 0.737769,
+        &quot;positive_signals&quot;: 2,
+        &quot;negative_signals&quot;: 0,
+        &quot;specific_positive_signals&quot;: 0
+      },
+      {
+        &quot;family&quot;: &quot;joomla&quot;,
+        &quot;score&quot;: 0.238025,
+        &quot;positive_signals&quot;: 2,
+        &quot;negative_signals&quot;: 0,
+        &quot;specific_positive_signals&quot;: 0
+      },
+      {
+        &quot;family&quot;: &quot;nextjs&quot;,
+        &quot;score&quot;: -0.313506,
+        &quot;positive_signals&quot;: 2,
+        &quot;negative_signals&quot;: 0,
+        &quot;specific_positive_signals&quot;: 0
+      },
+      {
+        &quot;family&quot;: &quot;jenkins&quot;,
+        &quot;score&quot;: -0.415275,
+        &quot;positive_signals&quot;: 2,
+        &quot;negative_signals&quot;: 0,
+        &quot;specific_positive_signals&quot;: 0
+      },
+      {
+        &quot;family&quot;: &quot;nexus&quot;,
+        &quot;score&quot;: -0.415275,
+        &quot;positive_signals&quot;: 2,
+        &quot;negative_signals&quot;: 0,
+        &quot;specific_positive_signals&quot;: 0
+      },
+      {
+        &quot;family&quot;: &quot;struts2&quot;,
+        &quot;score&quot;: -0.415275,
+        &quot;positive_signals&quot;: 2,
+        &quot;negative_signals&quot;: 0,
+        &quot;specific_positive_signals&quot;: 0
+      },
+      {
+        &quot;family&quot;: &quot;couchdb_auth&quot;,
+        &quot;score&quot;: -0.522171,
+        &quot;positive_signals&quot;: 1,
+        &quot;negative_signals&quot;: 0,
+        &quot;specific_positive_signals&quot;: 0
+      },
+      {
+        &quot;family&quot;: &quot;flask&quot;,
+        &quot;score&quot;: -0.735973,
+        &quot;positive_signals&quot;: 1,
+        &quot;negative_signals&quot;: 0,
+        &quot;specific_positive_signals&quot;: 0
+      }
+    ]
+  },
+  &quot;final_decision&quot;: &quot;unknown_family_triage&quot;,
+  &quot;recommended_next_action&quot;: &quot;unknown_family_scan_more_or_manual_triage&quot;,
+  &quot;reason_features&quot;: [
+    &quot;endpoint_reachable_count&quot;,
+    &quot;has_positive_precondition_signal&quot;,
+    &quot;is_http_target&quot;,
+    &quot;no_auth_required&quot;,
+    &quot;service_port&quot;,
+    &quot;unknown_family_signal_count&quot;,
+    &quot;unknown_product_detected&quot;,
+    &quot;version_in_vulnerable_range&quot;,
+    &quot;version_in_vulnerable_range_true&quot;,
+    &quot;whatweb_tech_detected&quot;
+  ],
+  &quot;schema_warnings&quot;: [
+    &quot;unknown_product_detected present; known-family ranking requires extra guard&quot;,
+    &quot;unknown_product_detected forced unknown_family_triage&quot;
+  ],
+  &quot;safety_note_th&quot;: &quot;ยังไม่ยิง exploit อัตโนมัติ ต้องใช้ Metasploit check/manual PoC หลังผู้ใช้ยืนยัน&quot;
+}</pre>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

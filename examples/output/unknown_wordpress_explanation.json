@@ -1,0 +1,90 @@
+{
+  "target_id": "example_unknown_wordpress_plugin",
+  "final_decision": "unknown_family_triage",
+  "meaning_th": "target อาจมีประเด็น แต่ไม่อยู่ใน family ที่ Ranker รู้จัก",
+  "recommended_next_action": "unknown_family_scan_more_or_manual_triage",
+  "requires_user_approval": true,
+  "may_run_safe_verification": false,
+  "may_run_exploit": false,
+  "gate": {
+    "decision": "likely_exploitable",
+    "score": 0.884658,
+    "threshold": 0.15
+  },
+  "ranker": {
+    "decision": "unknown_family",
+    "confidence_level": "clear_margin",
+    "confidence_margin": 0.53496,
+    "family_ready": false,
+    "readiness_reason": "scanner ระบุว่า known-family signal ยังไม่พอ จึงไม่ควรถือว่าพร้อมตรวจต่ออัตโนมัติ",
+    "top_families": [
+      {
+        "family": "nextjs",
+        "score": -0.084027,
+        "positive_signals": 1,
+        "negative_signals": 0,
+        "specific_positive_signals": 0
+      },
+      {
+        "family": "flask",
+        "score": -0.618987,
+        "positive_signals": 1,
+        "negative_signals": 0,
+        "specific_positive_signals": 0
+      },
+      {
+        "family": "jenkins",
+        "score": -0.618987,
+        "positive_signals": 1,
+        "negative_signals": 0,
+        "specific_positive_signals": 0
+      },
+      {
+        "family": "nexus",
+        "score": -0.618987,
+        "positive_signals": 1,
+        "negative_signals": 0,
+        "specific_positive_signals": 0
+      },
+      {
+        "family": "struts2",
+        "score": -0.618987,
+        "positive_signals": 1,
+        "negative_signals": 0,
+        "specific_positive_signals": 0
+      }
+    ]
+  },
+  "reason_features": [
+    "endpoint_reachable_count",
+    "has_positive_precondition_signal",
+    "is_http_target",
+    "login_path_found",
+    "service_port",
+    "unknown_family_signal_count",
+    "unknown_product_detected",
+    "upload_path_found",
+    "whatweb_tech_detected",
+    "wordpress_detected"
+  ],
+  "schema_warnings": [
+    "derived unknown_product_detected from unknown product fingerprint",
+    "unknown_product_detected present; known-family ranking requires extra guard",
+    "unknown_product_detected forced unknown_family_triage"
+  ],
+  "allowed_actions": [
+    "summarize_unknown_family_signals",
+    "recommend_fingerprint_enrichment",
+    "recommend_new_family_research",
+    "quarantine_from_known_family_autorun"
+  ],
+  "global_rules": [
+    "Do not use score alone to choose an exploit path.",
+    "Read final_decision before ranker.top_families.",
+    "Do not run exploit automatically from ML output.",
+    "Treat CISA KEV, EPSS, and NVD as enrichment context, not scanner evidence.",
+    "If schema_warnings is non-empty, mention it in the operator-facing explanation.",
+    "If ranker.family_readiness.ready is false, do not claim the family is ready.",
+    "If ranker.confidence.level is low_margin, ask for more evidence or manual triage."
+  ]
+}

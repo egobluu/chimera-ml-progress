@@ -2,43 +2,64 @@
   "target_id": "example_unknown_wordpress_plugin",
   "gate": {
     "model": "gate_precondition_only",
-    "score": 0.874851,
+    "score": 0.884658,
     "threshold": 0.15,
     "decision": "likely_exploitable"
   },
   "ranker": {
     "model": "family_ranker",
     "decision": "unknown_family",
+    "confidence": {
+      "level": "clear_margin",
+      "top_score": -0.084027,
+      "runner_up_score": -0.618987,
+      "margin": 0.53496,
+      "min_ready_margin": 0.25,
+      "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
+    },
+    "family_readiness": {
+      "ready": false,
+      "specific_positive_signals": [],
+      "blocking_negative_signals": [],
+      "missing_specific_positive_features": [],
+      "min_ready_specific_positive_signals": 1,
+      "reason": "scanner ระบุว่า known-family signal ยังไม่พอ จึงไม่ควรถือว่าพร้อมตรวจต่ออัตโนมัติ"
+    },
     "top_families": [
       {
         "family": "nextjs",
-        "score": -0.231897,
+        "score": -0.084027,
         "positive_signals": 1,
-        "negative_signals": 0
+        "negative_signals": 0,
+        "specific_positive_signals": 0
       },
       {
         "family": "flask",
-        "score": -0.554627,
+        "score": -0.618987,
         "positive_signals": 1,
-        "negative_signals": 0
+        "negative_signals": 0,
+        "specific_positive_signals": 0
       },
       {
         "family": "jenkins",
-        "score": -0.554627,
+        "score": -0.618987,
         "positive_signals": 1,
-        "negative_signals": 0
+        "negative_signals": 0,
+        "specific_positive_signals": 0
       },
       {
         "family": "nexus",
-        "score": -0.554627,
+        "score": -0.618987,
         "positive_signals": 1,
-        "negative_signals": 0
+        "negative_signals": 0,
+        "specific_positive_signals": 0
       },
       {
         "family": "struts2",
-        "score": -0.554627,
+        "score": -0.618987,
         "positive_signals": 1,
-        "negative_signals": 0
+        "negative_signals": 0,
+        "specific_positive_signals": 0
       }
     ]
   },
@@ -50,8 +71,16 @@
     "is_http_target",
     "login_path_found",
     "service_port",
+    "unknown_family_signal_count",
+    "unknown_product_detected",
     "upload_path_found",
-    "whatweb_tech_detected"
+    "whatweb_tech_detected",
+    "wordpress_detected"
+  ],
+  "schema_warnings": [
+    "derived unknown_product_detected from unknown product fingerprint",
+    "unknown_product_detected present; known-family ranking requires extra guard",
+    "unknown_product_detected forced unknown_family_triage"
   ],
   "safety_note_th": "ยังไม่ยิง exploit อัตโนมัติ ต้องใช้ Metasploit check/manual PoC หลังผู้ใช้ยืนยัน"
 }

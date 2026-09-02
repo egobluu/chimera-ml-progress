@@ -319,8 +319,13 @@ def family_decision(
     return "known_family_but_blocked_or_low_confidence"
 
 
-def should_force_unknown_family(features: dict[str, object]) -> bool:
+def should_force_unknown_family(
+    features: dict[str, object],
+    readiness: dict[str, object] | None = None,
+) -> bool:
     if as_float(features, "unknown_product_detected") <= 0:
+        return False
+    if readiness is not None and readiness.get("specific_positive_signals"):
         return False
     unknown_count = as_float(features, "unknown_family_signal_count")
     known_count = as_float(features, "known_family_signal_count")
@@ -417,7 +422,7 @@ def main() -> None:
         confidence,
         readiness,
     )
-    if should_force_unknown_family(features):
+    if should_force_unknown_family(features, readiness):
         decision = "unknown_family"
         schema_warnings.append("unknown_product_detected forced unknown_family_triage")
     result["ranker"] = {

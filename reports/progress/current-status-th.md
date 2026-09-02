@@ -831,3 +831,227 @@ Ranker guard รุ่นล่าสุดกัน unknown-family และ we
 ```text
 reports/evaluations/ranker-guard-unknown-validation-v01/RANKER-GUARD-UNKNOWN-CODEX-REVIEW-TH.md
 ```
+
+## Scanner Batch Ingestion + Runtime Regression
+
+Codex เพิ่มตัวรับ batch จากเครื่องสแกน:
+
+```text
+scripts/import_scan_batch.py
+```
+
+หน้าที่คือรับ output จาก scanner box แล้วทำ:
+
+```text
+copy top-level files
+normalize JSONL
+map family aliases
+join CISA KEV / EPSS / NVD enrichment
+สร้าง runtime-targets.jsonl
+เขียน import-audit.json / IMPORT-AUDIT-TH.md
+```
+
+และเพิ่ม regression runner:
+
+```text
+scripts/run_runtime_regression.py
+```
+
+ผลรัน baseline ล่าสุด:
+
+| Suite | Gate FP/FN | Ranker Top-1 | Unknown Reject | Safety | Strict |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `ranker_guard_unknown_v01` | 0/0 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| `multifamily_unseen_v01` | 0/0 | 1.0000 | n/a | 1.0000 | 1.0000 |
+| `unseen_solr_schema_v01` | 0/0 | 1.0000 | n/a | 1.0000 | 1.0000 |
+
+การตีความ:
+
+```text
+ตอนนี้ ML repo พร้อมรับ batch ใหม่จากอีกเครื่องแบบผ่าน audit/evaluate ก่อน และมี regression baseline ไว้กัน runtime ถอยก่อน train/promote
+```
+
+## ML Runtime Integration Contract v01
+
+Codex เพิ่ม contract สำหรับเชื่อม scanner -> ML runtime -> LLM:
+
+```text
+docs/11-ml-runtime-integration-contract-th.md
+runtime/llm-action-policy.json
+```
+
+เพิ่มตัวอย่าง input/output ที่สร้างจาก runtime จริง:
+
+| Case | Input | Output |
+| --- | --- | --- |
+| Redis positive | `examples/input/redis_likely_exploitable_features.json` | `examples/output/redis_likely_exploitable_prediction.json` |
+| Redis weak | `examples/input/redis_weak_features.json` | `examples/output/redis_weak_prediction.json` |
+| Grafana blocked | `examples/input/grafana_blocked_features.json` | `examples/output/grafana_blocked_prediction.json` |
+| Unknown WordPress | `examples/input/unknown_wordpress_features.json` | `examples/output/unknown_wordpress_prediction.json` |
+| Negative control | `examples/input/negative_control_features.json` | `examples/output/negative_control_prediction.json` |
+
+ผลตรวจ:
+
+```text
+JSON examples/policy valid = 11 files
+Runtime regression = 3/3 suites passed
+```
+
+การตีความ:
+
+```text
+ตอนนี้ฝั่ง scanner มี input contract ชัดขึ้น และฝั่ง LLM มี action policy ที่อ่าน final_decision เป็นหลัก ไม่ต้องเดาจาก score อย่างเดียว
+```
+
+## LLM Decision Explainer v01
+
+Codex เพิ่มสคริปต์:
+
+```text
+scripts/explain_runtime_decision.py
+```
+
+หน้าที่คือเอา runtime prediction JSON ไปจับกับ policy:
+
+```text
+runtime/llm-action-policy.json
+```
+
+แล้วออกเป็น markdown/json explanation สำหรับ LLM/operator
+
+ตัวอย่างที่สร้างแล้ว:
+
+```text
+examples/output/redis_likely_exploitable_explanation.md
+examples/output/redis_weak_explanation.md
+examples/output/grafana_blocked_explanation.md
+examples/output/unknown_wordpress_explanation.md
+examples/output/negative_control_explanation.md
+```
+
+การตีความ:
+
+```text
+ตอนนี้ฝั่ง LLM ไม่ต้องตีความ output ดิบเองแล้ว มีชั้น explainer ที่บังคับให้อ่าน final_decision และ policy ก่อนเสมอ
+```
+
+## Shared Validation Runtime v01
+
+นำ baseline จาก shared folder เข้ามาที่:
+
+```text
+reports/evaluations/shared-validation-runtime-v01/baseline-opencode/
+```
+
+แล้วสร้าง input สำหรับ runtime ปัจจุบัน:
+
+```text
+reports/evaluations/shared-validation-runtime-v01/current-runtime-inputs/features.jsonl
+reports/evaluations/shared-validation-runtime-v01/current-runtime-inputs/targets.jsonl
+```
+
+ผลหลังรัน `scripts/evaluate_runtime_predictions.py` ด้วย `runtime/models/prototype`:
+
+| Metric | Result |
+| --- | ---: |
+| Total targets | 56 |
+| Gate TP/FP/TN/FN | 28 / 0 / 28 / 0 |
+| Gate precision/recall/F1 | 1.0000 / 1.0000 / 1.0000 |
+| Known-positive Ranker Top-1 | 19/19 |
+| Known-positive Ranker Top-3 | 19/19 |
+| Unknown-family rejected | 9/9 |
+| Safety flow | 56/56 |
+| Strict flow | 56/56 |
+
+แก้ runtime/evaluator เพิ่ม:
+
+```text
+scripts/evaluate_runtime_predictions.py
+scripts/predict_prototype.py
+scripts/prepare_shared_runtime_evaluation.py
+```
+
+รายละเอียด:
+
+```text
+reports/evaluations/shared-validation-runtime-v01/SHARED-VALIDATION-CURRENT-RUNTIME-TH.md
+reports/evaluations/shared-validation-runtime-v01/current-runtime/CORRECTED-RUNTIME-EVALUATION-TH.md
+```
+
+การตีความ:
+
+```text
+shared validation 56 targets ผ่าน current runtime เป็น sanity/regression baseline แล้ว แต่ยังไม่ใช่ production accuracy 100%
+```
+
+## Machine 2 Priority Workflow
+
+ปรับทิศทางตาม setup จริง:
+
+```text
+เครื่อง 2
+├── Host Windows: Codex คุม repo/runtime/report
+└── Kali VM: OpenCode ใช้ Linux/security tools ผ่าน shared folder
+```
+
+Codex host ทำงานต่อได้โดยไม่ต้องรอเครื่องอื่น:
+
+```text
+runtime prediction -> resolver mapping -> priority report
+```
+
+เพิ่มไฟล์:
+
+```text
+runtime/resolver/family-cve-module-map.json
+scripts/generate_priority_report.py
+docs/13-machine2-runtime-workflow-th.md
+```
+
+ผล priority report จาก 56 targets:
+
+| Queue | Count |
+| --- | ---: |
+| ready_for_safe_verification | 17 |
+| manual_triage_before_exploit | 2 |
+| unknown_family_triage | 9 |
+| needs_more_evidence | 6 |
+| do_not_exploit_now | 22 |
+
+รายงาน:
+
+```text
+reports/evaluations/shared-validation-runtime-v01/priority-current/PRIORITY-REPORT-TH.md
+reports/evaluations/shared-validation-runtime-v01/priority-current/priority-review.csv
+```
+
+## Safe Verification Plan v01
+
+สร้างแผน top 5 จากคิว `ready_for_safe_verification` แล้ว:
+
+| Priority | Target | Family | CVE |
+| ---: | --- | --- | --- |
+| 1 | redis_positive_unseen_01 | redis | CVE-2022-0543 |
+| 2 | grafana_positive_unseen_01 | grafana | CVE-2021-43798 |
+| 3 | tomcat_put_positive_unseen_01 | tomcat_put | CVE-2017-12615 |
+| 4 | tomcat_ajp_positive_unseen_01 | tomcat_ajp | CVE-2020-1938 |
+| 5 | couchdb_positive_unseen_01 | couchdb_auth | CVE-2017-12635 |
+
+กติกา:
+
+```text
+read-only/safe check เท่านั้น
+ห้าม run exploit
+ห้ามเอา shell
+ห้ามเขียนไฟล์ลง target
+ห้าม brute force
+ต้องมี human approval ก่อน safe verification
+```
+
+ไฟล์ส่งต่อให้ Kali VM OpenCode:
+
+```text
+reports/evaluations/shared-validation-runtime-v01/verification-plan-v01/verification-plan.jsonl
+reports/evaluations/shared-validation-runtime-v01/verification-plan-v01/verification-plan.csv
+reports/evaluations/shared-validation-runtime-v01/verification-plan-v01/SAFE-VERIFICATION-PLAN-TH.md
+```

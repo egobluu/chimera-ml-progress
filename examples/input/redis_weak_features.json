@@ -1,0 +1,15 @@
+{
+  "target_id": "example_redis_weak",
+  "service_port": 6379,
+  "is_http_target": 0,
+  "is_non_http_service": 1,
+  "redis_detected": 1,
+  "redis_info_accessible": 1,
+  "lua_available": 0,
+  "no_auth_required": 1,
+  "auth_required": 0,
+  "version_in_vulnerable_range": 1,
+  "version_in_vulnerable_range_true": 1,
+  "known_family_signal_count": 0,
+  "unknown_family_signal_count": 0
+}

@@ -1,0 +1,24 @@
+{
+  "target_id": "example_negative_control",
+  "gate": {
+    "model": "gate_precondition_only",
+    "score": 0.059168,
+    "threshold": 0.15,
+    "decision": "no_exploit"
+  },
+  "ranker": null,
+  "final_decision": "do_not_exploit_now",
+  "recommended_next_action": "stop_or_collect_more_evidence",
+  "reason_features": [
+    "auth_required",
+    "endpoint_reachable_count",
+    "has_negative_precondition_signal",
+    "has_positive_precondition_signal",
+    "is_http_target",
+    "service_port",
+    "version_in_vulnerable_range_false",
+    "version_patched"
+  ],
+  "schema_warnings": [],
+  "safety_note_th": "ยังไม่ยิง exploit อัตโนมัติ ต้องใช้ Metasploit check/manual PoC หลังผู้ใช้ยืนยัน"
+}

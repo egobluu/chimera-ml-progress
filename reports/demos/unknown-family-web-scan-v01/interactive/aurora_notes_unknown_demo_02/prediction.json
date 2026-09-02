@@ -1,0 +1,110 @@
+{
+  "target_id": "aurora_notes_unknown_demo_02",
+  "gate": {
+    "model": "gate_precondition_only",
+    "score": 0.933099,
+    "threshold": 0.15,
+    "decision": "likely_exploitable"
+  },
+  "ranker": {
+    "model": "family_ranker",
+    "decision": "unknown_family",
+    "confidence": {
+      "level": "clear_margin",
+      "top_score": 0.737769,
+      "runner_up_score": 0.238025,
+      "margin": 0.499744,
+      "min_ready_margin": 0.25,
+      "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
+    },
+    "family_readiness": {
+      "ready": false,
+      "specific_positive_signals": [],
+      "blocking_negative_signals": [],
+      "missing_specific_positive_features": [
+        "lua_available",
+        "redis_detected",
+        "redis_info_accessible"
+      ],
+      "min_ready_specific_positive_signals": 1,
+      "reason": "scanner ระบุว่า known-family signal ยังไม่พอ จึงไม่ควรถือว่าพร้อมตรวจต่ออัตโนมัติ"
+    },
+    "top_families": [
+      {
+        "family": "redis",
+        "score": 0.737769,
+        "positive_signals": 2,
+        "negative_signals": 0,
+        "specific_positive_signals": 0
+      },
+      {
+        "family": "joomla",
+        "score": 0.238025,
+        "positive_signals": 2,
+        "negative_signals": 0,
+        "specific_positive_signals": 0
+      },
+      {
+        "family": "nextjs",
+        "score": -0.313506,
+        "positive_signals": 2,
+        "negative_signals": 0,
+        "specific_positive_signals": 0
+      },
+      {
+        "family": "jenkins",
+        "score": -0.415275,
+        "positive_signals": 2,
+        "negative_signals": 0,
+        "specific_positive_signals": 0
+      },
+      {
+        "family": "nexus",
+        "score": -0.415275,
+        "positive_signals": 2,
+        "negative_signals": 0,
+        "specific_positive_signals": 0
+      },
+      {
+        "family": "struts2",
+        "score": -0.415275,
+        "positive_signals": 2,
+        "negative_signals": 0,
+        "specific_positive_signals": 0
+      },
+      {
+        "family": "couchdb_auth",
+        "score": -0.522171,
+        "positive_signals": 1,
+        "negative_signals": 0,
+        "specific_positive_signals": 0
+      },
+      {
+        "family": "flask",
+        "score": -0.735973,
+        "positive_signals": 1,
+        "negative_signals": 0,
+        "specific_positive_signals": 0
+      }
+    ]
+  },
+  "final_decision": "unknown_family_triage",
+  "recommended_next_action": "unknown_family_scan_more_or_manual_triage",
+  "reason_features": [
+    "endpoint_reachable_count",
+    "has_positive_precondition_signal",
+    "is_http_target",
+    "no_auth_required",
+    "service_port",
+    "unknown_family_signal_count",
+    "unknown_product_detected",
+    "version_in_vulnerable_range",
+    "version_in_vulnerable_range_true",
+    "whatweb_tech_detected"
+  ],
+  "schema_warnings": [
+    "unknown_product_detected present; known-family ranking requires extra guard",
+    "unknown_product_detected forced unknown_family_triage"
+  ],
+  "safety_note_th": "ยังไม่ยิง exploit อัตโนมัติ ต้องใช้ Metasploit check/manual PoC หลังผู้ใช้ยืนยัน"
+}

@@ -1,0 +1,15 @@
+{
+  "target_id": "example_negative_control",
+  "service_port": 8080,
+  "is_http_target": 1,
+  "is_non_http_service": 0,
+  "version_patched": 1,
+  "version_in_vulnerable_range": 0,
+  "version_in_vulnerable_range_true": 0,
+  "auth_required": 1,
+  "no_auth_required": 0,
+  "endpoint_reachable_count": 1,
+  "endpoint_missing_count": 0,
+  "known_family_signal_count": 0,
+  "unknown_family_signal_count": 0
+}

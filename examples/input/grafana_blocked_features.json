@@ -1,0 +1,17 @@
+{
+  "target_id": "example_grafana_blocked",
+  "service_port": 3000,
+  "is_http_target": 1,
+  "is_non_http_service": 0,
+  "grafana_detected": 1,
+  "plugin_path_candidate_found": 1,
+  "public_plugin_path_accessible": 0,
+  "path_traversal_candidate_found": 1,
+  "path_traversal_blocked": 1,
+  "no_auth_required": 1,
+  "auth_required": 0,
+  "version_in_vulnerable_range": 1,
+  "version_in_vulnerable_range_true": 1,
+  "known_family_signal_count": 0,
+  "unknown_family_signal_count": 0
+}

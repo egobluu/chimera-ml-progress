@@ -199,6 +199,23 @@ reports/evaluations เก่าทุกอัน ถ้าอีกฝ่า�
 
 ส่วน train/test code เอาไว้ให้ทีม ML retrain หรือ verify รอบหลัง ไม่ใช่สิ่งที่ LLM ต้องเรียกทุกครั้ง
 
+## Integration contract
+
+ถ้าจะต่อ scanner/LLM จริง ให้อ่าน contract นี้:
+
+```text
+docs/11-ml-runtime-integration-contract-th.md
+docs/12-llm-decision-explainer-th.md
+runtime/llm-action-policy.json
+```
+
+ภาษาคน:
+
+```text
+contract บอกว่า scanner ต้องส่ง field อะไร runtime จะคืนอะไร และ LLM ควรทำอะไรกับ final_decision แต่ละแบบ
+decision explainer แปลง JSON prediction เป็น report ที่คนอ่านเข้าใจได้
+```
+
 ## ข้อจำกัด
 
 - ยังเป็น prototype ไม่ใช่ production

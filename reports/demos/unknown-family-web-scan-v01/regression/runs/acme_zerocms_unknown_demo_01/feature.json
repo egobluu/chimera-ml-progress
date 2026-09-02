@@ -1,0 +1,21 @@
+{
+  "target_id": "acme_zerocms_unknown_demo_01",
+  "service_port": 18080,
+  "is_http_target": 1,
+  "is_non_http_service": 0,
+  "endpoint_reachable_count": 1,
+  "endpoint_missing_count": 0,
+  "version_in_vulnerable_range": 1,
+  "version_in_vulnerable_range_true": 1,
+  "version_in_vulnerable_range_false": 0,
+  "auth_required": 0,
+  "no_auth_required": 1,
+  "unknown_product_detected": 1,
+  "unknown_family_signal_count": 2,
+  "known_family_signal_count": 0,
+  "whatweb_tech_detected": 1,
+  "login_path_found": 0,
+  "upload_path_found": 0,
+  "cve": "CVE-2099-0001",
+  "demo_target_url": "http://127.0.0.1:18080"
+}

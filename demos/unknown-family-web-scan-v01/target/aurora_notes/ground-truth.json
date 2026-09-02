@@ -1,0 +1,13 @@
+{
+  "target_id": "aurora_notes_unknown_demo_02",
+  "product": "Aurora Notes Portal",
+  "family": "aurora_notes",
+  "runtime_family_known_to_model": false,
+  "expected_runtime_category": "unknown_family",
+  "expected_exploitable": true,
+  "expected_gate_decision": "likely_exploitable",
+  "expected_final_decision": "unknown_family_triage",
+  "expected_ranker_behavior": "do_not_trust_known_family_ranking",
+  "demo_cve": "CVE-2099-0002",
+  "notes": "Local synthetic lab target. It is intentionally unknown to the current Family Ranker."
+}

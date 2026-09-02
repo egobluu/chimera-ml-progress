@@ -1,0 +1,29 @@
+{
+  "target_id": "example_grafana_blocked",
+  "gate": {
+    "model": "gate_precondition_only",
+    "score": 0.890081,
+    "threshold": 0.15,
+    "decision": "low_confidence"
+  },
+  "ranker": null,
+  "final_decision": "needs_more_evidence",
+  "recommended_next_action": "stop_or_collect_more_evidence",
+  "reason_features": [
+    "grafana_detected",
+    "has_negative_precondition_signal",
+    "has_positive_precondition_signal",
+    "is_http_target",
+    "no_auth_required",
+    "path_traversal_blocked",
+    "path_traversal_candidate_found",
+    "plugin_path_candidate_found",
+    "service_port",
+    "version_in_vulnerable_range",
+    "version_in_vulnerable_range_true"
+  ],
+  "schema_warnings": [
+    "blocking negative evidence downgraded likely_exploitable to low_confidence"
+  ],
+  "safety_note_th": "ยังไม่ยิง exploit อัตโนมัติ ต้องใช้ Metasploit check/manual PoC หลังผู้ใช้ยืนยัน"
+}

@@ -1,0 +1,27 @@
+{
+  "gate": {
+    "tp": 19,
+    "fp": 4,
+    "tn": 24,
+    "fn": 0,
+    "accuracy": 0.9149,
+    "precision": 0.8261,
+    "recall": 1.0,
+    "f1": 0.9048
+  },
+  "family_ranker": {
+    "total_known_positive": 19,
+    "top1_accuracy": 1.0,
+    "top3_accuracy": 1.0
+  },
+  "unknown_family_guard": {
+    "total": 9,
+    "blocked": 9,
+    "leaked": 0
+  },
+  "weak_noisy_guard": {
+    "total": 28,
+    "blocked": 27,
+    "leaked": 1
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "target_id": "redis_positive_unseen_01",
+  "validation_status": "validated_positive",
+  "safe_to_merge": true,
+  "evidence_summary": "Redis 7.0.15 with Lua available, no auth required. Redis info accessible.",
+  "positive_validation": {
+    "redis_detected": true,
+    "redis_info_accessible": true,
+    "lua_available": true,
+    "no_auth_required": true
+  }
+}
+{
+  "target_id": "redis_negative_unseen_01",
+  "validation_status": "validated_negative",
+  "safe_to_merge": true,
+  "evidence_summary": "Redis 7.0.15 with auth required. Redis info not accessible. Lua not available.",
+  "negative_validation": {
+    "redis_detected": true,
+    "auth_required": true,
+    "lua_available": false
+  }
+}
+{
+  "target_id": "grafana_positive_unseen_01",
+  "validation_status": "validated_positive",
+  "safe_to_merge": true,
+  "evidence_summary": "Grafana 9.0.0 with plugin path accessible. Path traversal candidate found. Version in vulnerable range.",
+  "positive_validation": {
+    "grafana_detected": true,
+    "plugin_path_candidate_found": true,
+    "public_plugin_path_accessible": true,
+    "path_traversal_candidate_found": true
+  }
+}
+{
+  "target_id": "grafana_negative_unseen_01",
+  "validation_status": "validated_negative",
+  "safe_to_merge": true,
+  "evidence_summary": "Grafana latest (patched). Path traversal blocked. Plugin path not accessible. Auth required.",
+  "negative_validation": {
+    "grafana_detected": true,
+    "path_traversal_blocked": true,
+    "public_plugin_path_accessible": false,
+    "auth_required": true
+  }
+}
+{
+  "target_id": "tomcat_put_positive_unseen_01",
+  "validation_status": "validated_positive",
+  "safe_to_merge": true,
+  "evidence_summary": "Tomcat 8.5.19 with PUT method allowed. JSP upload candidate found. Version in vulnerable range.",
+  "positive_validation": {
+    "tomcat_detected": true,
+    "method_put_allowed": true,
+    "jsp_upload_candidate": true
+  }
+}
+{
+  "target_id": "tomcat_put_negative_unseen_01",
+  "validation_status": "validated_negative",
+  "safe_to_merge": true,
+  "evidence_summary": "Tomcat 9.0.97 with PUT method rejected. JSP upload blocked. Version patched.",
+  "negative_validation": {
+    "tomcat_detected": true,
+    "method_put_rejected": true,
+    "upload_blocked": true,
+    "version_patched": true
+  }
+}
+{
+  "target_id": "tomcat_ajp_positive_unseen_01",
+  "validation_status": "validated_positive",
+  "safe_to_merge": true,
+  "evidence_summary": "Tomcat 8.5.19 with AJP port open (8009). Version in vulnerable range.",
+  "positive_validation": {
+    "tomcat_detected": true,
+    "ajp_port_open": true,
+    "version_in_vulnerable_range": true
+  }
+}
+{
+  "target_id": "tomcat_ajp_negative_unseen_01",
+  "validation_status": "validated_negative",
+  "safe_to_merge": true,
+  "evidence_summary": "Tomcat 9.0.97 with AJP port closed (Connection refused). Version patched.",
+  "negative_validation": {
+    "tomcat_detected": true,
+    "ajp_port_closed": true,
+    "ajp_not_exposed": true,
+    "version_patched": true
+  }
+}
+{
+  "target_id": "couchdb_positive_unseen_01",
+  "validation_status": "validated_positive",
+  "safe_to_merge": true,
+  "evidence_summary": "CouchDB 1.6.0 with admin party enabled. Config accessible. Users DB accessible. No auth required.",
+  "positive_validation": {
+    "couchdb_detected": true,
+    "admin_party_enabled": true,
+    "config_accessible": true,
+    "users_db_accessible": true,
+    "no_auth_required": true
+  }
+}
+{
+  "target_id": "couchdb_negative_unseen_01",
+  "validation_status": "validated_negative",
+  "safe_to_merge": true,
+  "evidence_summary": "CouchDB 2.1.0 with auth required. Admin party disabled. Config blocked (unauthorized). Users DB not found.",
+  "negative_validation": {
+    "couchdb_detected": true,
+    "admin_party_enabled": false,
+    "config_blocked": true,
+    "auth_required": true
+  }
+}
