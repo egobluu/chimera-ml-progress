@@ -1,0 +1,5 @@
+solr_velocity_positive_v04_fix
+solr_velocity_positive_alt
+solr_negative_v04_1
+solr_negative_v04_2
+solr_velocity_negative_disabled

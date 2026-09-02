@@ -580,3 +580,60 @@ rerun honest v04 ด้วย model รุ่นทดลองแล้วย�
 | Strict flow accuracy | 0.9167 |
 
 สรุป: Solr negative data พร้อมใช้แล้ว แต่ failure หลักยังอยู่ที่ feature extractor ของ Solr positive ต้องส่ง `velocity_enabled/config_api_accessible` ให้ถูกตั้งแต่แรก และต้อง tune Gate เพื่อลด FP ก่อน promote
+
+## Solr Schema Fix v01 Result
+
+ผล `dec-solr-schema-fix-2026-09-02`:
+
+| รายการ | จำนวน |
+| --- | ---: |
+| total targets | 5 |
+| safe_to_merge | 5 |
+| validated_positive | 2 |
+| validated_negative | 3 |
+| quarantined | 0 |
+
+รอบนี้แก้ Solr probe/schema แล้ว ทุก target มี feature หลักชุดเดียวกัน เช่น:
+
+- `solr_detected`
+- `solr_core_found`
+- `velocity_enabled`
+- `velocity_disabled`
+- `velocity_template_accessible`
+- `config_api_accessible`
+- `config_api_blocked`
+
+Codex merge เข้า dataset รุ่นทดลอง 72 targets:
+
+```text
+reports/evaluations/solr-schema-fix-v01/target-exploitability-with-solr-schema-fix-v01.csv
+```
+
+ผล train runtime รุ่นทดลอง:
+
+| Metric | Result |
+| --- | ---: |
+| Gate LOO accuracy | 0.9444 |
+| Gate FP | 4 |
+| Gate FN | 0 |
+| Ranker LOO Top-1 | 0.9000 |
+
+rerun honest v04 ด้วย model รุ่นทดลอง:
+
+| Metric | Result |
+| --- | ---: |
+| Gate accuracy | 0.9167 |
+| Gate FP | 0 |
+| Gate FN | 1 |
+| Known-positive Ranker Top-1 | 0.7500 |
+| Unknown rejection rate | 1.0000 |
+| Safety flow accuracy | 0.9167 |
+| Strict flow accuracy | 0.9167 |
+
+การตัดสินใจ:
+
+```text
+ยังไม่ promote runtime รุ่น Solr schema fix เพราะ Gate FP สูงกว่า default runtime เดิม
+```
+
+แต่ schema/probe รอบนี้ควรใช้เป็น canonical Solr feature extractor ต่อไป

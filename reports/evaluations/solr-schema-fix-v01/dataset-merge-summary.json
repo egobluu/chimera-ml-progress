@@ -1,0 +1,26 @@
+{
+  "base_dataset": "reports\\evaluations\\ranker-schema-backfill-redis-grafana-v01\\target-exploitability-family-ranking-backfill-plus-redis-grafana.csv",
+  "backfill_jsonl": "reports\\evaluations\\solr-schema-fix-v01\\merged-solr-schema-fixed-features.jsonl",
+  "base_rows": 67,
+  "output_rows": 72,
+  "safe_records": 5,
+  "skipped_records": [],
+  "appended_targets": [
+    "solr_negative_v04_1",
+    "solr_negative_v04_2",
+    "solr_velocity_negative_disabled",
+    "solr_velocity_positive_alt",
+    "solr_velocity_positive_v04_fix"
+  ],
+  "replaced_targets": [],
+  "new_columns": [
+    "config_api_blocked",
+    "known_family_signal_count",
+    "unknown_family_signal_count",
+    "unknown_product_detected",
+    "velocity_endpoint_found",
+    "velocity_rce_candidate",
+    "velocity_template_accessible"
+  ],
+  "note_th": "ถ้า target จาก unseen validation ถูกนำเข้า train แล้ว ห้ามใช้ target เดิมนั้น เป็นหลักฐาน unseen evaluation รอบถัดไป"
+}

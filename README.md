@@ -212,3 +212,27 @@ v04 ใช้ target ใหม่ 12 ตัวและ corrected evaluation ล
 | Ranker LOO Top-1 | 0.9000 |
 
 ยังไม่ promote เป็น default runtime เพราะ Gate FP เพิ่มจาก runtime เดิม จุดที่ต้องแก้ต่อคือ Solr feature extractor/probe ให้ส่ง `velocity_enabled`, `velocity_disabled`, `config_api_accessible` ให้ถูกตั้งแต่แรก
+
+## Solr Schema Fix
+
+รอบ `dec-solr-schema-fix-2026-09-02` แก้ Solr feature schema แล้ว rerun Solr-only validation ได้ 5/5 safe-to-merge:
+
+- positive 2 targets
+- negative 3 targets
+- quarantine 0 targets
+
+รายงานหลัก:
+
+- [reports/evaluations/solr-schema-fix-v01/SOLR-SCHEMA-FIX-CODEX-REVIEW-TH.md](reports/evaluations/solr-schema-fix-v01/SOLR-SCHEMA-FIX-CODEX-REVIEW-TH.md)
+- [reports/evaluations/solr-schema-fix-v01/target-exploitability-with-solr-schema-fix-v01.csv](reports/evaluations/solr-schema-fix-v01/target-exploitability-with-solr-schema-fix-v01.csv)
+
+ผล train รุ่นทดลอง:
+
+| Metric | Result |
+| --- | ---: |
+| Gate LOO accuracy | 0.9444 |
+| Gate FP/FN | 4 / 0 |
+| Ranker LOO Top-1 | 0.9000 |
+| Honest v04 safety | 0.9167 |
+
+ยังไม่ promote เป็น default runtime เพราะ Gate FP เพิ่มจาก runtime เดิม แม้ Ranker ดีขึ้นเล็กน้อย
