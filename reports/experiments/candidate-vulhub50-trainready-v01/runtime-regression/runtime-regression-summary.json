@@ -1,0 +1,122 @@
+{
+  "total_suites": 5,
+  "passed": 5,
+  "failed": 0,
+  "results": [
+    {
+      "suite": "ranker_guard_unknown_v01",
+      "status": "pass",
+      "metrics": {
+        "total_targets": 24,
+        "gate_fp": 0,
+        "gate_fn": 0,
+        "known_positive_top1_accuracy": 1.0,
+        "unknown_rejection_rate": 1.0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "checks": {
+        "total_targets": 24,
+        "gate_fp": 0,
+        "gate_fn": 0,
+        "known_positive_top1_accuracy": 1.0,
+        "unknown_rejection_rate": 1.0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "failures": [],
+      "metrics_path": "reports\\experiments\\candidate-vulhub50-trainready-v01\\runtime-regression\\ranker_guard_unknown_v01\\corrected-runtime-evaluation.json"
+    },
+    {
+      "suite": "multifamily_unseen_v01",
+      "status": "pass",
+      "metrics": {
+        "total_targets": 10,
+        "gate_fp": 0,
+        "gate_fn": 0,
+        "known_positive_top1_accuracy": 1.0,
+        "unknown_rejection_rate": 0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "checks": {
+        "total_targets": 10,
+        "gate_fp": 0,
+        "gate_fn": 0,
+        "known_positive_top1_accuracy": 1.0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "failures": [],
+      "metrics_path": "reports\\experiments\\candidate-vulhub50-trainready-v01\\runtime-regression\\multifamily_unseen_v01\\corrected-runtime-evaluation.json"
+    },
+    {
+      "suite": "unseen_solr_schema_v01",
+      "status": "pass",
+      "metrics": {
+        "total_targets": 4,
+        "gate_fp": 0,
+        "gate_fn": 0,
+        "known_positive_top1_accuracy": 1.0,
+        "unknown_rejection_rate": 0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "checks": {
+        "total_targets": 4,
+        "gate_fp": 0,
+        "gate_fn": 0,
+        "known_positive_top1_accuracy": 1.0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "failures": [],
+      "metrics_path": "reports\\experiments\\candidate-vulhub50-trainready-v01\\runtime-regression\\unseen_solr_schema_v01\\corrected-runtime-evaluation.json"
+    },
+    {
+      "suite": "runtime_stress_v01",
+      "status": "pass",
+      "metrics": {
+        "total_targets": 6,
+        "gate_fp": 0,
+        "gate_fn": 0,
+        "known_positive_top1_accuracy": 1.0,
+        "unknown_rejection_rate": 1.0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "checks": {
+        "total_targets": 6,
+        "known_positive_top1_accuracy": 1.0,
+        "unknown_rejection_rate": 1.0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "failures": [],
+      "metrics_path": "reports\\experiments\\candidate-vulhub50-trainready-v01\\runtime-regression\\runtime_stress_v01\\corrected-runtime-evaluation.json"
+    },
+    {
+      "suite": "vulhub_50_scan_v01",
+      "status": "pass",
+      "metrics": {
+        "total_targets": 51,
+        "gate_fp": 2,
+        "gate_fn": 0,
+        "known_positive_top1_accuracy": 1.0,
+        "unknown_rejection_rate": 1.0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "checks": {
+        "total_targets": 51,
+        "gate_fn": 0,
+        "known_positive_top1_accuracy": 1.0,
+        "unknown_rejection_rate": 1.0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "failures": [],
+      "metrics_path": "reports\\experiments\\candidate-vulhub50-trainready-v01\\runtime-regression\\vulhub_50_scan_v01\\corrected-runtime-evaluation.json"
+    }
+  ]
+}

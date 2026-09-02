@@ -1,0 +1,293 @@
+{
+  "total_targets": 10,
+  "gate_metrics": {
+    "tp": 5,
+    "fp": 0,
+    "tn": 5,
+    "fn": 0,
+    "accuracy": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  "ranker_metrics": {
+    "known_positive_top1_correct": 5,
+    "known_positive_top1_total": 5,
+    "known_positive_top1_accuracy": 1.0,
+    "known_positive_top3_correct": 5,
+    "known_positive_top3_total": 5,
+    "known_positive_top3_accuracy": 1.0
+  },
+  "unknown_guard_metrics": {
+    "unknown_rejected": 0,
+    "unknown_total": 0,
+    "unknown_rejection_rate": 0
+  },
+  "ranker_safety_metrics": {
+    "low_margin_count": 0,
+    "family_not_ready_count": 0
+  },
+  "final_flow_metrics": {
+    "safety_correct": 10,
+    "safety_total": 10,
+    "safety_accuracy": 1.0,
+    "strict_correct": 10,
+    "strict_total": 10,
+    "strict_accuracy": 1.0
+  },
+  "per_target_results": [
+    {
+      "target_id": "redis_positive_unseen_01",
+      "category": "known_positive",
+      "expected_family": "redis",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "redis",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": {
+        "level": "clear_margin",
+        "top_score": 3.191503,
+        "runner_up_score": 0.548838,
+        "margin": 2.642665,
+        "min_ready_margin": 0.25,
+        "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
+      },
+      "family_readiness": {
+        "ready": true,
+        "specific_positive_signals": [
+          "lua_available",
+          "redis_detected",
+          "redis_info_accessible"
+        ],
+        "blocking_negative_signals": [],
+        "missing_specific_positive_features": [],
+        "min_ready_specific_positive_signals": 1,
+        "reason": "มีหลักฐานเฉพาะ family เพียงพอ และไม่พบตัวบล็อกของ family นี้"
+      },
+      "schema_warnings": []
+    },
+    {
+      "target_id": "redis_negative_unseen_01",
+      "category": "negative_control",
+      "expected_family": "none",
+      "gate_decision": "low_confidence",
+      "final_decision": "needs_more_evidence",
+      "predicted_top_family": null,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": null,
+      "family_readiness": null,
+      "schema_warnings": [
+        "blocking negative evidence downgraded likely_exploitable to low_confidence"
+      ]
+    },
+    {
+      "target_id": "grafana_positive_unseen_01",
+      "category": "known_positive",
+      "expected_family": "grafana",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "grafana",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": {
+        "level": "clear_margin",
+        "top_score": 3.537628,
+        "runner_up_score": -1.504078,
+        "margin": 5.041706,
+        "min_ready_margin": 0.25,
+        "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
+      },
+      "family_readiness": {
+        "ready": true,
+        "specific_positive_signals": [
+          "grafana_detected",
+          "path_traversal_candidate_found",
+          "plugin_path_candidate_found",
+          "public_plugin_path_accessible"
+        ],
+        "blocking_negative_signals": [],
+        "missing_specific_positive_features": [],
+        "min_ready_specific_positive_signals": 1,
+        "reason": "มีหลักฐานเฉพาะ family เพียงพอ และไม่พบตัวบล็อกของ family นี้"
+      },
+      "schema_warnings": []
+    },
+    {
+      "target_id": "grafana_negative_unseen_01",
+      "category": "negative_control",
+      "expected_family": "none",
+      "gate_decision": "no_exploit",
+      "final_decision": "do_not_exploit_now",
+      "predicted_top_family": null,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": null,
+      "family_readiness": null,
+      "schema_warnings": []
+    },
+    {
+      "target_id": "tomcat_put_positive_unseen_01",
+      "category": "known_positive",
+      "expected_family": "tomcat_put",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "tomcat_put",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": {
+        "level": "clear_margin",
+        "top_score": 3.523933,
+        "runner_up_score": -2.01201,
+        "margin": 5.535943,
+        "min_ready_margin": 0.25,
+        "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
+      },
+      "family_readiness": {
+        "ready": true,
+        "specific_positive_signals": [
+          "jsp_upload_candidate",
+          "method_put_allowed"
+        ],
+        "blocking_negative_signals": [],
+        "missing_specific_positive_features": [],
+        "min_ready_specific_positive_signals": 1,
+        "reason": "มีหลักฐานเฉพาะ family เพียงพอ และไม่พบตัวบล็อกของ family นี้"
+      },
+      "schema_warnings": []
+    },
+    {
+      "target_id": "tomcat_put_negative_unseen_01",
+      "category": "negative_control",
+      "expected_family": "none",
+      "gate_decision": "no_exploit",
+      "final_decision": "do_not_exploit_now",
+      "predicted_top_family": null,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": null,
+      "family_readiness": null,
+      "schema_warnings": []
+    },
+    {
+      "target_id": "tomcat_ajp_positive_unseen_01",
+      "category": "known_positive",
+      "expected_family": "tomcat_ajp",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "tomcat_ajp",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": {
+        "level": "clear_margin",
+        "top_score": 1.80004,
+        "runner_up_score": -1.939354,
+        "margin": 3.739394,
+        "min_ready_margin": 0.25,
+        "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
+      },
+      "family_readiness": {
+        "ready": true,
+        "specific_positive_signals": [
+          "ajp_port_open"
+        ],
+        "blocking_negative_signals": [],
+        "missing_specific_positive_features": [],
+        "min_ready_specific_positive_signals": 1,
+        "reason": "มีหลักฐานเฉพาะ family เพียงพอ และไม่พบตัวบล็อกของ family นี้"
+      },
+      "schema_warnings": []
+    },
+    {
+      "target_id": "tomcat_ajp_negative_unseen_01",
+      "category": "negative_control",
+      "expected_family": "none",
+      "gate_decision": "no_exploit",
+      "final_decision": "do_not_exploit_now",
+      "predicted_top_family": null,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": null,
+      "family_readiness": null,
+      "schema_warnings": []
+    },
+    {
+      "target_id": "couchdb_positive_unseen_01",
+      "category": "known_positive",
+      "expected_family": "couchdb_auth",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "couchdb_auth",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": {
+        "level": "clear_margin",
+        "top_score": 3.420595,
+        "runner_up_score": 0.826957,
+        "margin": 2.593638,
+        "min_ready_margin": 0.25,
+        "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
+      },
+      "family_readiness": {
+        "ready": true,
+        "specific_positive_signals": [
+          "admin_party_enabled",
+          "config_accessible",
+          "couchdb_detected",
+          "users_db_accessible"
+        ],
+        "blocking_negative_signals": [],
+        "missing_specific_positive_features": [],
+        "min_ready_specific_positive_signals": 1,
+        "reason": "มีหลักฐานเฉพาะ family เพียงพอ และไม่พบตัวบล็อกของ family นี้"
+      },
+      "schema_warnings": []
+    },
+    {
+      "target_id": "couchdb_negative_unseen_01",
+      "category": "negative_control",
+      "expected_family": "none",
+      "gate_decision": "low_confidence",
+      "final_decision": "needs_more_evidence",
+      "predicted_top_family": null,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": null,
+      "family_readiness": null,
+      "schema_warnings": [
+        "blocking negative evidence downgraded likely_exploitable to low_confidence"
+      ]
+    }
+  ]
+}

@@ -24,9 +24,11 @@ script เหล่านี้อ้าง path แบบ Kali report output �
 | `rank_target_two_stage.py` | ใช้ model ที่ train แล้ว inference target ใหม่แบบ exploit/no_exploit |
 | `audit_gate_features.py` | ตรวจ feature leak และแยก feature เป็น precheck/postcheck ก่อนเชื่อคะแนน model |
 | `train_runtime_models.py` | train ชุด model runtime prototype ที่ใช้ส่งต่อให้ฝั่ง LLM/agentic |
+| `merge_train_ready_runtime_dataset.py` | รวม train-ready JSONL จาก runtime curation เข้า CSV dataset สำหรับ candidate retrain |
 | `predict_prototype.py` | entrypoint ใช้งานจริงระดับ prototype รับ feature JSON แล้วคืนผล Gate + Ranker + Unknown Guard |
 | `evaluate_unknown_family.py` | ทดสอบว่า Ranker จะทำอย่างไรเมื่อเจอ target นอก family ที่รู้จัก |
 | `evaluate_runtime_predictions.py` | rerun runtime prediction จาก feature JSONL แล้วคำนวณ corrected metrics แยก safety กับ ranking |
+| `compare_runtime_models.py` | เทียบ baseline runtime กับ candidate runtime จาก regression summaries ก่อนตัดสิน promote |
 | `curate_imported_scan_batch.py` | แยก imported scanner batch เป็น train-ready, validation-only และ needs-recheck ก่อน retrain |
 | `validate_target_manifest.py` | ตรวจ target manifest ก่อนส่งให้ scanner/OpenCode ว่า JSONL, field, category และ target_id ถูกต้อง |
 

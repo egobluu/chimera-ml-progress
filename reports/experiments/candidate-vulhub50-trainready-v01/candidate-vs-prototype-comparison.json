@@ -1,0 +1,139 @@
+{
+  "baseline_training": {
+    "train_targets": 67,
+    "positive_train_targets": 28,
+    "gate_loo_metrics": {
+      "threshold": 0.15,
+      "accuracy": 0.9701,
+      "precision": 0.9333,
+      "recall": 1.0,
+      "f1": 0.9655,
+      "tp": 28,
+      "fp": 2,
+      "tn": 37,
+      "fn": 0
+    },
+    "candidate_families": 16
+  },
+  "candidate_training": {
+    "train_targets": 81,
+    "positive_train_targets": 35,
+    "gate_loo_metrics": {
+      "threshold": 0.15,
+      "accuracy": 0.9753,
+      "precision": 0.9459,
+      "recall": 1.0,
+      "f1": 0.9722,
+      "tp": 35,
+      "fp": 2,
+      "tn": 44,
+      "fn": 0
+    },
+    "candidate_families": 16
+  },
+  "suite_comparison": [
+    {
+      "suite": "multifamily_unseen_v01",
+      "baseline": {
+        "gate_fp": 0,
+        "gate_fn": 0,
+        "known_positive_top1_accuracy": 1.0,
+        "unknown_rejection_rate": 0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "candidate": {
+        "gate_fp": 0,
+        "gate_fn": 0,
+        "known_positive_top1_accuracy": 1.0,
+        "unknown_rejection_rate": 0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "candidate_status": "pass"
+    },
+    {
+      "suite": "ranker_guard_unknown_v01",
+      "baseline": {
+        "gate_fp": 0,
+        "gate_fn": 0,
+        "known_positive_top1_accuracy": 1.0,
+        "unknown_rejection_rate": 1.0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "candidate": {
+        "gate_fp": 0,
+        "gate_fn": 0,
+        "known_positive_top1_accuracy": 1.0,
+        "unknown_rejection_rate": 1.0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "candidate_status": "pass"
+    },
+    {
+      "suite": "runtime_stress_v01",
+      "baseline": {
+        "gate_fp": 0,
+        "gate_fn": 0,
+        "known_positive_top1_accuracy": 1.0,
+        "unknown_rejection_rate": 1.0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "candidate": {
+        "gate_fp": 0,
+        "gate_fn": 0,
+        "known_positive_top1_accuracy": 1.0,
+        "unknown_rejection_rate": 1.0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "candidate_status": "pass"
+    },
+    {
+      "suite": "unseen_solr_schema_v01",
+      "baseline": {
+        "gate_fp": 0,
+        "gate_fn": 0,
+        "known_positive_top1_accuracy": 1.0,
+        "unknown_rejection_rate": 0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "candidate": {
+        "gate_fp": 0,
+        "gate_fn": 0,
+        "known_positive_top1_accuracy": 1.0,
+        "unknown_rejection_rate": 0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "candidate_status": "pass"
+    },
+    {
+      "suite": "vulhub_50_scan_v01",
+      "baseline": {
+        "gate_fp": 2,
+        "gate_fn": 0,
+        "known_positive_top1_accuracy": 1.0,
+        "unknown_rejection_rate": 1.0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "candidate": {
+        "gate_fp": 2,
+        "gate_fn": 0,
+        "known_positive_top1_accuracy": 1.0,
+        "unknown_rejection_rate": 1.0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "candidate_status": "pass"
+    }
+  ],
+  "failures": [],
+  "promotion_gate_passed": true,
+  "decision_th": "Candidate ผ่าน gate promotion ขั้นต้น: regression ทุก suite ผ่าน, Gate FN เป็น 0, และ safety ไม่ถอยหลัง แต่ยังควร promote เป็น candidate/staging ก่อน ไม่ใช่ production ถาวร เพราะข้อมูลเพิ่มมี strict raw evidence เพียง 14 rows"
+}
