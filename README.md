@@ -162,3 +162,19 @@ v03 เป็นรอบที่มีประโยชน์เพราะ�
 หลังแก้ runtime guard แล้ว corrected evaluation บน v03 ผ่านครบ 11/11 แต่ต้องตีความว่าเป็น post-hoc fix ไม่ใช่ production accuracy
 
 งานถัดไปคือ v04 target ใหม่ เพื่อพิสูจน์ว่า guard/schema ใหม่ generalize ได้จริง
+
+## Honest Unseen Validation v04
+
+v04 ใช้ target ใหม่ 12 ตัวและ corrected evaluation ล่าสุดได้:
+
+| Metric | Corrected Result |
+| --- | ---: |
+| Gate accuracy | 0.9167 |
+| Gate FP | 0 |
+| Gate FN | 1 |
+| Known-positive Ranker Top-1 | 0.7500 |
+| Unknown rejection rate | 1.0000 |
+| Safety flow accuracy | 0.9167 |
+| Strict flow accuracy | 0.9167 |
+
+สรุป: unknown guard ดีขึ้นจริง แต่ยังไม่ 100% เพราะ Solr positive ขาด Velocity evidence ที่ runtime ต้องใช้ จึงต้องทำ Solr feature backfill ต่อ

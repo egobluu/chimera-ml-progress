@@ -1,0 +1,29 @@
+{
+  "tool_applicability": {
+    "naabu": {
+      "applicable": true,
+      "targets": ["redis_lua_new_01", "tomcat_put_new_02", "solr_velocity_new_01", "grafana_path_new_01", "redis_auth_neg_v04", "grafana_patched_neg_v04", "solr_no_velocity_neg_v04", "tomcat_standard_neg_v04", "laravel_unknown_v04", "jboss_unknown_v04", "jetty_unknown_v04", "thinkphp_unknown_v04"],
+      "notes": "Port scanning for all targets"
+    },
+    "httpx": {
+      "applicable": true,
+      "targets": ["tomcat_put_new_02", "solr_velocity_new_01", "grafana_path_new_01", "grafana_patched_neg_v04", "solr_no_velocity_neg_v04", "tomcat_standard_neg_v04", "laravel_unknown_v04", "jboss_unknown_v04", "jetty_unknown_v04", "thinkphp_unknown_v04"],
+      "notes": "HTTP probing for HTTP targets"
+    },
+    "nuclei": {
+      "applicable": true,
+      "targets": ["grafana_path_new_01", "grafana_patched_neg_v04", "laravel_unknown_v04", "jboss_unknown_v04", "jetty_unknown_v04", "thinkphp_unknown_v04"],
+      "notes": "Vulnerability scanning for known CVEs"
+    },
+    "redis-cli": {
+      "applicable": true,
+      "targets": ["redis_lua_new_01", "redis_auth_neg_v04"],
+      "notes": "Redis-specific probing"
+    },
+    "curl": {
+      "applicable": true,
+      "targets": ["tomcat_put_new_02", "solr_velocity_new_01", "grafana_path_new_01", "grafana_patched_neg_v04", "solr_no_velocity_neg_v04", "tomcat_standard_neg_v04", "laravel_unknown_v04", "jboss_unknown_v04", "jetty_unknown_v04", "thinkphp_unknown_v04"],
+      "notes": "HTTP method testing and path traversal"
+    }
+  }
+}

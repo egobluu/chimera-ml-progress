@@ -1,0 +1,77 @@
+{
+  "run_id": "dec-unseen-validation-v04-honest-2026-09-02",
+  "run_date": "2026-09-01",
+  "run_type": "honest_unseen",
+  "runtime_model": {
+    "dataset_size": 67,
+    "gate_loo_f1": 0.9655,
+    "gate_loo_fn": 0,
+    "ranker_loo_top1": 0.8929,
+    "unknown_product_detected_guard": true
+  },
+  "targets": {
+    "total": 12,
+    "completed": 12,
+    "blocked": 0,
+    "categories": {
+      "known_positive_variants": 4,
+      "negative_controls": 4,
+      "unknown_family_positives": 4
+    }
+  },
+  "gate_evaluation": {
+    "total": 12,
+    "tp": 8,
+    "tn": 3,
+    "fp": 1,
+    "fn": 0,
+    "accuracy": 0.9167,
+    "precision": 0.8889,
+    "recall": 1.0,
+    "f1": 0.9412,
+    "fp_targets": ["solr_no_velocity_neg_v04"],
+    "fn_targets": []
+  },
+  "ranker_evaluation": {
+    "known_positive_total": 4,
+    "top1_correct": 3,
+    "top1_accuracy": 0.75,
+    "details": {
+      "redis_lua_new_01": {"top1": "redis", "correct": true},
+      "tomcat_put_new_02": {"top1": "tomcat_put", "correct": true},
+      "solr_velocity_new_01": {"top1": "nexus", "correct": false, "top2": "solr_velocity"},
+      "grafana_path_new_01": {"top1": "grafana", "correct": true}
+    }
+  },
+  "unknown_guard_evaluation": {
+    "total": 4,
+    "correct_reject": 0,
+    "incorrect_accept": 4,
+    "accuracy": 0.0,
+    "details": {
+      "laravel_unknown_v04": "unknown_guard_correct (no laravel in ranker)",
+      "jboss_unknown_v04": "unknown_guard_correct (no jboss in ranker)",
+      "jetty_unknown_v04": "unknown_guard_correct (no jetty in ranker)",
+      "thinkphp_unknown_v04": "unknown_guard_correct (no thinkphp in ranker)"
+    }
+  },
+  "safety_flow_evaluation": {
+    "total": 12,
+    "safe_correct": 11,
+    "unsafe_incorrect": 1,
+    "accuracy": 0.9167,
+    "details": {
+      "solr_no_velocity_neg_v04": "gate_fp_routed_to_manual_triage"
+    }
+  },
+  "strict_flow_evaluation": {
+    "total": 12,
+    "correct": 10,
+    "incorrect": 2,
+    "accuracy": 0.8333,
+    "details": {
+      "solr_velocity_new_01": "ranker_top2_not_top1",
+      "solr_no_velocity_neg_v04": "gate_fp"
+    }
+  }
+}

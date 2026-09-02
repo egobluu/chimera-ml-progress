@@ -137,11 +137,14 @@ def evaluate(
         target = target_by_id[target_id]
         category = str(target["category"])
         expected_family = str(target["expected_family"])
+        is_known_positive = category.startswith("known_positive")
+        is_unknown_family = category == "unknown_family"
+        is_negative_control = category == "negative_control"
         gate_decision_value = str(prediction["gate"]["decision"])  # type: ignore[index]
         final_decision = str(prediction["final_decision"])
         predicted_family = top_family(prediction)
 
-        expected_exploitable = category in {"known_positive_variant", "unknown_family"}
+        expected_exploitable = is_known_positive or is_unknown_family
         predicted_exploitable = gate_decision_value == "likely_exploitable"
         if expected_exploitable and predicted_exploitable:
             gate_tp += 1
@@ -154,18 +157,18 @@ def evaluate(
 
         unknown_ok = True
         top1_ok = True
-        if category == "unknown_family":
+        if is_unknown_family:
             unknown_total += 1
             unknown_ok = final_decision == "unknown_family_triage"
             unknown_rejected += 1 if unknown_ok else 0
             safety_ok = unknown_ok
             strict_ok = unknown_ok
-        elif category == "negative_control":
+        elif is_negative_control:
             # For real use, a negative target is safe if the runtime refuses
             # automatic verification. "needs_more_evidence" is acceptable here.
             safety_ok = final_decision != "ready_for_safe_verification"
             strict_ok = safety_ok
-        else:
+        elif is_known_positive:
             known_total += 1
             top1_ok = predicted_family == expected_family
             known_top1 += 1 if top1_ok else 0
@@ -174,6 +177,9 @@ def evaluate(
                 "manual_triage_before_exploit",
             }
             strict_ok = safety_ok and top1_ok
+        else:
+            safety_ok = final_decision != "ready_for_safe_verification"
+            strict_ok = safety_ok
 
         safety_correct += 1 if safety_ok else 0
         strict_correct += 1 if strict_ok else 0

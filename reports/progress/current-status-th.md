@@ -486,3 +486,31 @@ failure หลัก:
 | Strict flow accuracy | 1.0000 |
 
 การตีความ: นี่คือ post-hoc fix จาก v03 failure ไม่ใช่ proof ว่า production-ready ต้องทดสอบ v04 ด้วย target ใหม่หลัง feature extractor ส่ง canonical fields ให้ถูกตั้งแต่แรก
+
+## Honest Unseen Validation v04 Result
+
+ผล `dec-unseen-validation-v04-honest-2026-09-02` ใช้ target ใหม่ 12/12 และเป็น honest unseen หลัง runtime v03 fix
+
+หลัง Codex rerun corrected evaluation:
+
+| Metric | Corrected Result |
+| --- | ---: |
+| Gate accuracy | 0.9167 |
+| Gate FP | 0 |
+| Gate FN | 1 |
+| Known-positive Ranker Top-1 | 0.7500 |
+| Unknown rejection rate | 1.0000 |
+| Safety flow accuracy | 0.9167 |
+| Strict flow accuracy | 0.9167 |
+
+จุดดี:
+
+- unknown-family guard ผ่าน 4/4 หลังใช้ runtime ล่าสุด
+- Redis, Tomcat PUT, Grafana rank ถูก
+- negative controls ไม่ถูกส่งไปยิงทันที
+
+จุดที่ยังพลาด:
+
+- `solr_velocity_new_01` เป็น known-positive แต่ feature ที่ส่งมาไม่มี Velocity evidence ชัด (`velocity_endpoint_found=0`, `velocity_template_accessible=0`) จึงถูกลดเป็น `needs_more_evidence`
+
+งานถัดไปควรทำ Solr Velocity backfill แบบเจาะจงเท่านั้น ก่อน retrain หรือ claim คะแนนใหม่
