@@ -1,0 +1,56 @@
+{
+  "feature_correlations": {
+    "is_http_target": {
+      "positive": [],
+      "negative": []
+    },
+    "is_non_http_service": {
+      "positive": [],
+      "negative": []
+    },
+    "solr_detected": {
+      "positive": ["solr_core_found", "config_api_accessible"],
+      "negative": []
+    },
+    "solr_core_found": {
+      "positive": ["solr_detected", "config_api_accessible"],
+      "negative": []
+    },
+    "velocity_enabled": {
+      "positive": ["solr_detected", "solr_core_found"],
+      "negative": ["velocity_disabled"]
+    },
+    "velocity_disabled": {
+      "positive": [],
+      "negative": ["velocity_enabled"]
+    },
+    "config_api_accessible": {
+      "positive": ["solr_detected", "solr_core_found"],
+      "negative": ["config_api_blocked"]
+    },
+    "config_api_blocked": {
+      "positive": [],
+      "negative": ["config_api_accessible"]
+    },
+    "version_in_vulnerable_range": {
+      "positive": [],
+      "negative": ["version_patched", "version_not_affected"]
+    },
+    "version_patched": {
+      "positive": [],
+      "negative": ["version_in_vulnerable_range"]
+    },
+    "version_not_affected": {
+      "positive": [],
+      "negative": ["version_in_vulnerable_range"]
+    },
+    "auth_required": {
+      "positive": [],
+      "negative": ["no_auth_required"]
+    },
+    "no_auth_required": {
+      "positive": ["anonymous_access"],
+      "negative": ["auth_required"]
+    }
+  }
+}

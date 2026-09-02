@@ -1,0 +1,15 @@
+{
+  "base_dataset": "reports\\evaluations\\solr-negative-backfill-v01\\target-exploitability-with-solr-positive-backfill.csv",
+  "backfill_jsonl": "reports\\evaluations\\solr-negative-backfill-v01\\merged-solr-negative-features.jsonl",
+  "base_rows": 70,
+  "output_rows": 72,
+  "safe_records": 2,
+  "skipped_records": [],
+  "appended_targets": [
+    "solr_negative_v04_1",
+    "solr_negative_v04_2"
+  ],
+  "replaced_targets": [],
+  "new_columns": [],
+  "note_th": "ถ้า target จาก unseen validation ถูกนำเข้า train แล้ว ห้ามใช้ target เดิมนั้น เป็นหลักฐาน unseen evaluation รอบถัดไป"
+}

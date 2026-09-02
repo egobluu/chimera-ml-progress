@@ -1,0 +1,32 @@
+{
+  "features": [
+    "is_http_target",
+    "is_non_http_service",
+    "open_port_count",
+    "http_port_count",
+    "service_count",
+    "endpoint_reachable_count",
+    "endpoint_missing_count",
+    "solr_detected",
+    "solr_core_found",
+    "velocity_enabled",
+    "velocity_disabled",
+    "velocity_endpoint_found",
+    "velocity_template_accessible",
+    "velocity_rce_candidate",
+    "config_api_accessible",
+    "config_api_blocked",
+    "version_in_vulnerable_range",
+    "version_in_vulnerable_range_true",
+    "version_in_vulnerable_range_false",
+    "version_patched",
+    "version_not_affected",
+    "auth_required",
+    "no_auth_required",
+    "anonymous_access",
+    "known_family_signal_count",
+    "unknown_family_signal_count",
+    "unknown_product_detected"
+  ],
+  "count": 27
+}

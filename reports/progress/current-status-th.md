@@ -538,3 +538,45 @@ quarantine:
 - `solr_velocity_negative_patched_or_blocked` เพราะ Velocity เปิดอยู่จริง ไม่ใช่ negative control
 
 ยังไม่ควร retrain ทันที เพราะ Solr negative clean มีแค่ 1 ตัว ควรหา Solr negative เพิ่มอีก 1-2 ตัวก่อน
+
+## Solr Negative Backfill v01 Result
+
+ผล `dec-solr-negative-backfill-2026-09-02` เติม Solr negative control ได้ 2 targets:
+
+| Target | Source | Status | Safe |
+| --- | --- | --- | --- |
+| `solr_negative_v04_1` | `solr:9.7.0` | validated_negative | true |
+| `solr_negative_v04_2` | `vulhub/solr:8.2.0` | validated_negative | true |
+
+ทั้งสองตัวมี core จริง แต่ Velocity ใช้งานไม่ได้ จึงเหมาะเป็น negative control สำหรับ Solr Velocity
+
+Codex merge Solr backfill แล้วเป็น dataset รุ่นทดลอง 72 targets:
+
+```text
+reports/evaluations/solr-negative-backfill-v01/target-exploitability-with-solr-backfill-v01.csv
+```
+
+ผล train runtime รุ่นทดลอง:
+
+| Metric | Result |
+| --- | ---: |
+| Gate LOO accuracy | 0.9444 |
+| Gate FP | 4 |
+| Gate FN | 0 |
+| Ranker LOO Top-1 | 0.9000 |
+
+เทียบกับ runtime เดิม Gate แย่ลงเพราะ FP เพิ่ม แม้ Ranker ดีขึ้นเล็กน้อย จึงยังไม่ promote เป็น default runtime
+
+rerun honest v04 ด้วย model รุ่นทดลองแล้วยังได้:
+
+| Metric | Result |
+| --- | ---: |
+| Gate accuracy | 0.9167 |
+| Gate FP | 0 |
+| Gate FN | 1 |
+| Known-positive Ranker Top-1 | 0.7500 |
+| Unknown rejection rate | 1.0000 |
+| Safety flow accuracy | 0.9167 |
+| Strict flow accuracy | 0.9167 |
+
+สรุป: Solr negative data พร้อมใช้แล้ว แต่ failure หลักยังอยู่ที่ feature extractor ของ Solr positive ต้องส่ง `velocity_enabled/config_api_accessible` ให้ถูกตั้งแต่แรก และต้อง tune Gate เพื่อลด FP ก่อน promote

@@ -190,3 +190,25 @@ v04 ใช้ target ใหม่ 12 ตัวและ corrected evaluation ล
 | inconclusive/quarantined | 1 |
 
 ยังไม่ retrain ทันที เพราะ Solr negative ที่สะอาดมีแค่ 1 ตัว ต้องหา negative เพิ่มอีกอย่างน้อย 1 ตัวก่อน
+
+## Solr Negative Backfill
+
+รอบ `dec-solr-negative-backfill-2026-09-02` เติม Solr negative control เพิ่ม 2 targets และ safe-to-merge ทั้งคู่:
+
+- `solr_negative_v04_1`
+- `solr_negative_v04_2`
+
+หลังรวมกับ Solr positive backfill เดิม ได้ dataset รุ่นทดลอง 72 targets:
+
+- [reports/evaluations/solr-negative-backfill-v01/target-exploitability-with-solr-backfill-v01.csv](reports/evaluations/solr-negative-backfill-v01/target-exploitability-with-solr-backfill-v01.csv)
+- [reports/evaluations/solr-negative-backfill-v01/SOLR-NEGATIVE-BACKFILL-CODEX-REVIEW-TH.md](reports/evaluations/solr-negative-backfill-v01/SOLR-NEGATIVE-BACKFILL-CODEX-REVIEW-TH.md)
+
+ผล train รุ่นทดลอง:
+
+| Metric | Result |
+| --- | ---: |
+| Gate LOO accuracy | 0.9444 |
+| Gate FP/FN | 4 / 0 |
+| Ranker LOO Top-1 | 0.9000 |
+
+ยังไม่ promote เป็น default runtime เพราะ Gate FP เพิ่มจาก runtime เดิม จุดที่ต้องแก้ต่อคือ Solr feature extractor/probe ให้ส่ง `velocity_enabled`, `velocity_disabled`, `config_api_accessible` ให้ถูกตั้งแต่แรก
