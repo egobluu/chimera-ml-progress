@@ -774,3 +774,60 @@ Codex เพิ่ม guard ใน runtime โดยยังไม่ retrain m
 ```text
 reports/plans/opencode-unknown-family-validation-v01/OPENCODE-PROMPT-TH.md
 ```
+
+## Ranker Guard Unknown Validation v01 Result
+
+ผล `dec-ranker-guard-unknown-validation-2026-09-02` จาก OpenCode/Kali:
+
+| กลุ่ม | จำนวน | ผลจาก OpenCode |
+| --- | ---: | --- |
+| Known family | 12 | 12/12 safe_to_merge |
+| Unknown family | 6 | 6/6 safe_to_merge |
+| Weak/noisy | 6 | 6/6 safe_to_merge |
+| รวม | 24 | quarantined 0 |
+
+Codex นำไฟล์ top-level เข้ามาและ normalize เป็น runtime labels โดยไม่ copy raw evidence folders
+
+การ map สำคัญ:
+
+- `redis_lua` -> `redis`
+- `grafana_path_traversal` -> `grafana`
+- `solr_velocity_rce` -> `solr_velocity`
+- `couchdb_rce` -> `couchdb_auth`
+- Drupal/Laravel/Jetty/WordPress/PHP-CGI/JBoss -> `unknown_family`
+
+runtime evaluation รอบแรกเจอ failure จริง:
+
+```text
+redis_weak_guard_01 ถูกปล่อยเป็น ready_for_safe_verification ทั้งที่ lua_available=0 และ known_family_signal_count=0
+```
+
+Codex จึงปรับ runtime guard เพิ่ม:
+
+- Redis ที่ไม่มี Lua และ known-family signal ยังเป็น 0 จะถูก downgrade
+- Grafana ที่ path traversal ถูก block และ public plugin path เข้าไม่ได้จะถูก downgrade
+- ถ้า `known_family_signal_count=0` จะทำให้ `family_readiness.ready=false`
+
+ผลหลังแก้:
+
+| Metric | Result |
+| --- | ---: |
+| Total targets | 24 |
+| Gate TP / FP / TN / FN | 12 / 0 / 12 / 0 |
+| Gate accuracy | 1.0000 |
+| Known-positive Ranker Top-1 | 6/6 |
+| Unknown-family rejected | 6/6 |
+| Safety flow accuracy | 1.0000 |
+| Strict flow accuracy | 1.0000 |
+
+การตีความ:
+
+```text
+Ranker guard รุ่นล่าสุดกัน unknown-family และ weak/noisy cases ในชุด validation นี้ได้ครบ แต่ยังเป็น prototype validation ไม่ใช่ production accuracy
+```
+
+รายงานหลัก:
+
+```text
+reports/evaluations/ranker-guard-unknown-validation-v01/RANKER-GUARD-UNKNOWN-CODEX-REVIEW-TH.md
+```

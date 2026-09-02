@@ -148,3 +148,38 @@ Codex rerun runtime evaluation บน default runtime:
 
 ยังไม่ควร promote เป็น production เพราะนี่เป็น guard runtime รอบแรก
 
+## Validation ต่อจาก OpenCode
+
+หลังจากได้ชุด `dec-ranker-guard-unknown-validation-2026-09-02` แล้ว Codex นำมาวิ่ง runtime evaluation จริงอีกครั้ง
+
+ชุดนี้มี 24 targets:
+
+| กลุ่ม | จำนวน |
+| --- | ---: |
+| Known family positive/negative | 12 |
+| Unknown family positive | 6 |
+| Weak/noisy no-exploit | 6 |
+
+รอบแรกพบว่า `redis_weak_guard_01` ยังเสี่ยง เพราะมี Redis signal บางส่วนแต่ไม่มี Lua evidence และ `known_family_signal_count=0` ระบบกลับยังปล่อยเป็น `ready_for_safe_verification`
+
+จึงเพิ่ม guard เฉพาะ weak evidence:
+
+- Redis ไม่มี `lua_available` และไม่มี known-family signal จะถูก downgrade
+- Grafana ที่ `path_traversal_blocked=1` และเข้า public plugin path ไม่ได้จะถูก downgrade
+- `known_family_signal_count=0` ทำให้ `family_readiness.ready=false`
+
+ผลหลังแก้:
+
+| Metric | Result |
+| --- | ---: |
+| Gate FP/FN | 0 / 0 |
+| Known-positive Ranker Top-1 | 1.0000 |
+| Unknown-family rejected | 1.0000 |
+| Safety flow | 1.0000 |
+| Strict flow | 1.0000 |
+
+รายงานละเอียด:
+
+```text
+reports/evaluations/ranker-guard-unknown-validation-v01/RANKER-GUARD-UNKNOWN-CODEX-REVIEW-TH.md
+```

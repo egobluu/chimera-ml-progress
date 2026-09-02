@@ -317,3 +317,33 @@ Regression ด้วย default runtime ยังไม่ถอยบนชุ�
 
 - [reports/evaluations/ranker-safety-guard-v01/RANKER-SAFETY-GUARD-CODEX-REVIEW-TH.md](reports/evaluations/ranker-safety-guard-v01/RANKER-SAFETY-GUARD-CODEX-REVIEW-TH.md)
 - [reports/plans/opencode-unknown-family-validation-v01/OPENCODE-PROMPT-TH.md](reports/plans/opencode-unknown-family-validation-v01/OPENCODE-PROMPT-TH.md)
+
+## Ranker Guard Unknown Validation
+
+รอบ `dec-ranker-guard-unknown-validation-2026-09-02` ทดสอบ guard จริงกับ 24 targets:
+
+| กลุ่ม | จำนวน | ผล |
+| --- | ---: | --- |
+| Known family | 12 | 12/12 safe |
+| Unknown family | 6 | 6/6 ถูกส่งไป unknown triage |
+| Weak/noisy | 6 | 6/6 ไม่ถูกปล่อยเป็น exploit |
+
+ตอน runtime แรกเจอ failure สำคัญ 1 จุด: `redis_weak_guard_01` มี Redis signal บางส่วนแต่ `lua_available=0` และ `known_family_signal_count=0` ยังถูกปล่อยเป็น `ready_for_safe_verification`
+
+จึงเพิ่ม guard ให้ Redis/Grafana weak evidence ถูกลดเป็น `low_confidence` และให้ `known_family_signal_count=0` ทำให้ `family_readiness.ready=false`
+
+ผลหลังแก้:
+
+| Metric | Result |
+| --- | ---: |
+| Gate FP/FN | 0 / 0 |
+| Known-positive Ranker Top-1 | 1.0000 |
+| Unknown-family rejected | 1.0000 |
+| Safety flow | 1.0000 |
+| Strict flow | 1.0000 |
+
+รายงานหลัก:
+
+- [reports/evaluations/ranker-guard-unknown-validation-v01/RANKER-GUARD-UNKNOWN-CODEX-REVIEW-TH.md](reports/evaluations/ranker-guard-unknown-validation-v01/RANKER-GUARD-UNKNOWN-CODEX-REVIEW-TH.md)
+
+ข้อควรระวัง: ชุดนี้ควรเก็บเป็น validation/regression set ก่อน ยังไม่ควรเอาไป train ทับทันที และยังไม่ควร claim production-ready 100%

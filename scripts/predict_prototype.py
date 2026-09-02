@@ -35,6 +35,7 @@ UNKNOWN_PRODUCT_FEATURES = {
 SCHEMA_ALIASES = {
     "admin_party": "admin_party_enabled",
     "config_endpoint_accessible": "config_accessible",
+    "template_accessible": "velocity_template_accessible",
     "velocity_template_accessible": "velocity_enabled",
 }
 
@@ -156,6 +157,20 @@ def gate_decision(score: float, threshold: float) -> str:
 
 def should_downgrade_for_blocking_evidence(features: dict[str, object]) -> bool:
     if (
+        as_float(features, "redis_detected") > 0
+        and as_float(features, "lua_available") <= 0
+        and as_float(features, "known_family_signal_count") <= 0
+    ):
+        return True
+
+    if (
+        as_float(features, "grafana_detected") > 0
+        and as_float(features, "path_traversal_blocked") > 0
+        and as_float(features, "public_plugin_path_accessible") <= 0
+    ):
+        return True
+
+    if (
         as_float(features, "solr_detected") > 0
         and as_float(features, "velocity_disabled") > 0
         and as_float(features, "velocity_enabled") <= 0
@@ -258,14 +273,21 @@ def family_readiness(features: dict[str, object], family: str) -> dict[str, obje
         for name in spec["positive"]
         if name not in GENERIC_RANKER_FEATURES and name not in features
     )
+    known_signal_missing = (
+        "known_family_signal_count" in features
+        and as_float(features, "known_family_signal_count") <= 0
+    )
     ready = (
         len(specific_positive) >= MIN_READY_SPECIFIC_POSITIVE_SIGNALS
         and not blocking_negative
+        and not known_signal_missing
     )
     if ready:
         reason = "มีหลักฐานเฉพาะ family เพียงพอ และไม่พบตัวบล็อกของ family นี้"
     elif blocking_negative:
         reason = "พบตัวบล็อกของ family นี้ จึงไม่ควรถือว่าพร้อมตรวจต่ออัตโนมัติ"
+    elif known_signal_missing:
+        reason = "scanner ระบุว่า known-family signal ยังไม่พอ จึงไม่ควรถือว่าพร้อมตรวจต่ออัตโนมัติ"
     else:
         reason = "หลักฐานเฉพาะ family ยังบางเกินไป ควรเก็บ evidence เพิ่มก่อน"
     return {
