@@ -48,6 +48,17 @@ SUITES: dict[str, dict[str, Any]] = {
             "strict_accuracy": 1.0,
         },
     },
+    "runtime_stress_v01": {
+        "features": "reports/evaluations/runtime-stress-validation-v01/features.jsonl",
+        "targets": "reports/evaluations/runtime-stress-validation-v01/runtime-targets.jsonl",
+        "checks": {
+            "total_targets": 6,
+            "known_positive_top1_accuracy": 1.0,
+            "unknown_rejection_rate": 1.0,
+            "safety_accuracy": 1.0,
+            "strict_accuracy": 1.0,
+        },
+    },
 }
 
 

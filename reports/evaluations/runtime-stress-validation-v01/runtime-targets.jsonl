@@ -1,0 +1,6 @@
+{"target_id":"unknown_generic_web_stress_01","category":"unknown_family","expected_family":"none","expected_family_raw":"unknown","expected_status_raw":"validated_positive_unknown_family"}
+{"target_id":"redis_banner_only_stress_01","category":"negative_control","expected_family":"none","expected_family_raw":"none","expected_status_raw":"weak_no_exploit"}
+{"target_id":"grafana_version_only_stress_01","category":"negative_control","expected_family":"none","expected_family_raw":"none","expected_status_raw":"weak_no_exploit"}
+{"target_id":"tomcat_conflicting_put_stress_01","category":"negative_control","expected_family":"none","expected_family_raw":"none","expected_status_raw":"weak_conflicting_evidence"}
+{"target_id":"solr_core_no_velocity_stress_01","category":"negative_control","expected_family":"none","expected_family_raw":"none","expected_status_raw":"weak_no_exploit"}
+{"target_id":"redis_clear_positive_stress_01","category":"known_positive","expected_family":"redis","expected_family_raw":"redis_lua","expected_status_raw":"validated_positive"}

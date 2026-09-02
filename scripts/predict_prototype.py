@@ -179,7 +179,18 @@ def should_downgrade_for_blocking_evidence(features: dict[str, object]) -> bool:
 
     negative = sum(1 for name in BLOCKING_NEGATIVE_FEATURES if as_float(features, name) > 0)
     strong_positive = sum(1 for name in STRONG_POSITIVE_PRECONDITIONS if as_float(features, name) > 0)
-    return negative > 0 and strong_positive == 0
+    if (
+        as_float(features, "known_family_signal_count") <= 0
+        and as_float(features, "unknown_product_detected") <= 0
+        and strong_positive == 0
+        and (
+            as_float(features, "version_in_vulnerable_range") > 0
+            or as_float(features, "anonymous_access") > 0
+            or as_float(features, "no_auth_required") > 0
+        )
+    ):
+        return True
+    return negative > 0 and strong_positive <= negative
 
 
 def signal_counts(features: dict[str, object], family: str) -> tuple[int, int]:

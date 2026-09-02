@@ -1,6 +1,6 @@
 {
-  "total_suites": 3,
-  "passed": 3,
+  "total_suites": 4,
+  "passed": 4,
   "failed": 0,
   "results": [
     {
@@ -72,6 +72,28 @@
       },
       "failures": [],
       "metrics_path": "reports\\regression\\runtime-current\\unseen_solr_schema_v01\\corrected-runtime-evaluation.json"
+    },
+    {
+      "suite": "runtime_stress_v01",
+      "status": "pass",
+      "metrics": {
+        "total_targets": 6,
+        "gate_fp": 0,
+        "gate_fn": 0,
+        "known_positive_top1_accuracy": 1.0,
+        "unknown_rejection_rate": 1.0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "checks": {
+        "total_targets": 6,
+        "known_positive_top1_accuracy": 1.0,
+        "unknown_rejection_rate": 1.0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "failures": [],
+      "metrics_path": "reports\\regression\\runtime-current\\runtime_stress_v01\\corrected-runtime-evaluation.json"
     }
   ]
 }

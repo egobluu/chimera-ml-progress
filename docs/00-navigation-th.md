@@ -32,6 +32,7 @@
 | `docs/10-ml-from-zero-th.md` | คู่มือสอนจากศูนย์ว่า ML ในงานนี้คืออะไร train ยังไง metric แปลว่าอะไร และต่อ LLM ยังไง |
 | `docs/11-ml-runtime-integration-contract-th.md` | contract ระหว่าง scanner, ML runtime และ LLM พร้อม input/output examples และ checklist ก่อน train/promote |
 | `docs/12-llm-decision-explainer-th.md` | วิธีใช้สคริปต์แปลง prediction JSON เป็นคำอธิบาย/next action สำหรับ LLM/operator |
+| `docs/14-runtime-hardening-next-th.md` | เกณฑ์ hardening ที่ต้องผ่านก่อนเริ่มใช้กับ target จริง |
 
 ## หมวด runtime
 
@@ -69,6 +70,8 @@
 | `scripts/train_runtime_models.py` | train model runtime prototype ที่ส่งต่อให้ LLM |
 | `scripts/predict_prototype.py` | entrypoint ใช้จริง รับ feature JSON แล้วคืน Gate + Ranker + Unknown Guard |
 | `scripts/evaluate_unknown_family.py` | ทดสอบ unknown-family behavior ของ Ranker |
+| `scripts/evaluate_runtime_predictions.py` | ประเมิน runtime prediction และแยก metric ด้าน safety/ranking |
+| `scripts/run_runtime_regression.py` | รัน regression หลาย suite รวม stress validation |
 
 ## สถานะข้อมูลที่ควรจำ
 
