@@ -178,3 +178,15 @@ v04 ใช้ target ใหม่ 12 ตัวและ corrected evaluation ล
 | Strict flow accuracy | 0.9167 |
 
 สรุป: unknown guard ดีขึ้นจริง แต่ยังไม่ 100% เพราะ Solr positive ขาด Velocity evidence ที่ runtime ต้องใช้ จึงต้องทำ Solr feature backfill ต่อ
+
+## Solr Velocity Backfill
+
+รอบ `dec-solr-velocity-backfill-2026-09-02` ได้ Solr evidence เพิ่ม:
+
+| Result | Count |
+| --- | ---: |
+| clean positive | 2 |
+| clean negative | 1 |
+| inconclusive/quarantined | 1 |
+
+ยังไม่ retrain ทันที เพราะ Solr negative ที่สะอาดมีแค่ 1 ตัว ต้องหา negative เพิ่มอีกอย่างน้อย 1 ตัวก่อน

@@ -1,0 +1,4 @@
+# safe-to-merge-targets.txt
+solr_velocity_positive_v04_fix
+solr_velocity_positive_alt
+solr_velocity_negative_disabled

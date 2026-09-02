@@ -1,0 +1,2 @@
+# quarantined-targets.txt
+solr_velocity_negative_patched_or_blocked

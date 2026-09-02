@@ -514,3 +514,27 @@ failure หลัก:
 - `solr_velocity_new_01` เป็น known-positive แต่ feature ที่ส่งมาไม่มี Velocity evidence ชัด (`velocity_endpoint_found=0`, `velocity_template_accessible=0`) จึงถูกลดเป็น `needs_more_evidence`
 
 งานถัดไปควรทำ Solr Velocity backfill แบบเจาะจงเท่านั้น ก่อน retrain หรือ claim คะแนนใหม่
+
+## Solr Velocity Backfill v01 Result
+
+ผล `dec-solr-velocity-backfill-2026-09-02`:
+
+| รายการ | จำนวน |
+| --- | ---: |
+| tested | 4 |
+| safe_to_merge | 3 |
+| validated_positive | 2 |
+| validated_negative | 1 |
+| inconclusive | 1 |
+
+safe to merge:
+
+- `solr_velocity_positive_v04_fix`
+- `solr_velocity_positive_alt`
+- `solr_velocity_negative_disabled`
+
+quarantine:
+
+- `solr_velocity_negative_patched_or_blocked` เพราะ Velocity เปิดอยู่จริง ไม่ใช่ negative control
+
+ยังไม่ควร retrain ทันที เพราะ Solr negative clean มีแค่ 1 ตัว ควรหา Solr negative เพิ่มอีก 1-2 ตัวก่อน

@@ -1,0 +1,19 @@
+{
+  "tool_applicability": {
+    "curl": {
+      "applicable": true,
+      "targets": ["solr_velocity_positive_v04_fix", "solr_velocity_positive_alt", "solr_velocity_negative_disabled", "solr_velocity_negative_patched_or_blocked"],
+      "notes": "HTTP probing for Solr endpoints"
+    },
+    "naabu": {
+      "applicable": true,
+      "targets": ["solr_velocity_positive_v04_fix", "solr_velocity_positive_alt", "solr_velocity_negative_disabled", "solr_velocity_negative_patched_or_blocked"],
+      "notes": "Port scanning for Solr"
+    },
+    "httpx": {
+      "applicable": true,
+      "targets": ["solr_velocity_positive_v04_fix", "solr_velocity_positive_alt", "solr_velocity_negative_disabled", "solr_velocity_negative_patched_or_blocked"],
+      "notes": "HTTP probing for Solr"
+    }
+  }
+}
