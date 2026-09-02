@@ -248,3 +248,25 @@ v04 ใช้ target ใหม่ 12 ตัวและ corrected evaluation ล
 | Safety flow | 1.0000 |
 
 ตัวเลขนี้เป็น Solr-only sanity check ไม่ใช่ production accuracy
+
+## Unseen Solr Schema Validation
+
+รอบ `dec-unseen-solr-schema-validation-2026-09-02` ทดสอบ Solr target ใหม่ 4 ตัวหลังแก้ extractor แล้ว โดยยังไม่เอาเข้า train ก่อน:
+
+- positive 2/2
+- negative 2/2
+- quarantine 0
+
+ผล runtime evaluation ทั้ง default runtime และ Solr schema-fix model:
+
+| Metric | Result |
+| --- | ---: |
+| Gate FP/FN | 0 / 0 |
+| Ranker Top-1 | 1.0000 |
+| Safety flow | 1.0000 |
+
+รายงานหลัก:
+
+- [reports/evaluations/unseen-solr-schema-validation-v01/UNSEEN-SOLR-SCHEMA-CODEX-REVIEW-TH.md](reports/evaluations/unseen-solr-schema-validation-v01/UNSEEN-SOLR-SCHEMA-CODEX-REVIEW-TH.md)
+
+ข้อควรระวัง: นี่เป็น Solr-only unseen validation 4 targets ไม่ใช่คะแนน production ของทั้งระบบ

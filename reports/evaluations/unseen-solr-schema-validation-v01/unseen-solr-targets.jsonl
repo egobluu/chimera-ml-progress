@@ -1,0 +1,4 @@
+{"target_id":"solr_positive_unseen_01","category":"positive","source":"vulhub/solr:8.1.1","expected_family":"solr_velocity","expected_status":"validated_positive"}
+{"target_id":"solr_positive_unseen_02","category":"positive","source":"vulhub/solr:8.2.0","expected_family":"solr_velocity","expected_status":"validated_positive"}
+{"target_id":"solr_negative_unseen_01","category":"negative","source":"vulhub/solr:8.2.0","expected_family":"none","expected_status":"validated_negative"}
+{"target_id":"solr_negative_unseen_02","category":"negative","source":"vulhub/solr:8.1.1","expected_family":"none","expected_status":"validated_negative"}

@@ -1,0 +1,4 @@
+{"target_id":"solr_positive_unseen_01","category":"known_positive","expected_family":"solr_velocity"}
+{"target_id":"solr_positive_unseen_02","category":"known_positive","expected_family":"solr_velocity"}
+{"target_id":"solr_negative_unseen_01","category":"negative_control","expected_family":"none"}
+{"target_id":"solr_negative_unseen_02","category":"negative_control","expected_family":"none"}

@@ -1,0 +1,4 @@
+{"target_id":"solr_positive_unseen_01","expected_status":"validated_positive","actual_status":"validated_positive","consistent":true,"safe_to_merge":true}
+{"target_id":"solr_positive_unseen_02","expected_status":"validated_positive","actual_status":"validated_positive","consistent":true,"safe_to_merge":true}
+{"target_id":"solr_negative_unseen_01","expected_status":"validated_negative","actual_status":"validated_negative","consistent":true,"safe_to_merge":true}
+{"target_id":"solr_negative_unseen_02","expected_status":"validated_negative","actual_status":"validated_negative","consistent":true,"safe_to_merge":true}

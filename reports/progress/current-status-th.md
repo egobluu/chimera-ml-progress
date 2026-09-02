@@ -675,3 +675,32 @@ velocity_enabled = 0
 | Strict flow accuracy | 1.0000 |
 
 การตีความ: runtime guard กัน Solr negative ไม่ให้ถูกส่งไปยิงได้แล้ว แต่ยังต้องทดสอบ unseen Solr positive ใหม่ด้วย extractor ที่แก้แล้วก่อน promote model
+
+## Unseen Solr Schema Validation v01 Result
+
+ผล `dec-unseen-solr-schema-validation-2026-09-02`:
+
+| รายการ | จำนวน |
+| --- | ---: |
+| total targets | 4 |
+| validated_positive | 2 |
+| validated_negative | 2 |
+| safe_to_merge | 4 |
+| quarantined | 0 |
+
+Codex ยังไม่ merge เข้า train ก่อน แต่ใช้เป็น honest Solr-only validation
+
+ผล runtime evaluation:
+
+| Runtime | Gate FP/FN | Ranker Top-1 | Safety flow |
+| --- | ---: | ---: | ---: |
+| default runtime + Solr guard | 0 / 0 | 1.0000 | 1.0000 |
+| Solr schema-fix experimental model | 0 / 0 | 1.0000 | 1.0000 |
+
+การตีความ:
+
+```text
+Solr extractor/probe schema ใหม่แก้ปัญหา Solr positive/negative ได้ใน scope Solr
+```
+
+ยังไม่ควร claim ว่าระบบแม่น 100% เพราะเป็น Solr-only 4 targets งานถัดไปควรทำ unseen validation แบบเดียวกันกับ family อื่น เช่น Tomcat, Redis, Grafana, CouchDB
