@@ -1,0 +1,62 @@
+{
+  "dataset": "reports\\evaluations\\solr-schema-fix-v01\\target-exploitability-with-solr-schema-fix-v01.csv",
+  "predictions": "reports\\evaluations\\solr-schema-fix-v01\\gate-profile-audit-solr-schema-fix-v01\\precondition_only-predictions.csv",
+  "false_positive_count": 4,
+  "false_positives": [
+    {
+      "target_id": "solr_non_vulnerable",
+      "probability": 0.5879,
+      "threshold": 0.1,
+      "active_focus_features": {
+        "version_in_vulnerable_range_true": "1",
+        "version_patched": "1",
+        "velocity_disabled": "1",
+        "solr_core_found": "1"
+      },
+      "likely_reason_th": "Solr Velocity is disabled but generic Solr/access signals pushed the score up"
+    },
+    {
+      "target_id": "solr_velocity_negative",
+      "probability": 0.623,
+      "threshold": 0.1,
+      "active_focus_features": {
+        "velocity_disabled": "1",
+        "solr_core_found": "1"
+      },
+      "likely_reason_th": "Solr Velocity is disabled but generic Solr/access signals pushed the score up"
+    },
+    {
+      "target_id": "solr_negative_v04_1",
+      "probability": 0.8085,
+      "threshold": 0.1,
+      "active_focus_features": {
+        "version_not_affected": "1",
+        "version_patched": "1",
+        "no_auth_required": "1",
+        "anonymous_access": "1",
+        "velocity_disabled": "1",
+        "config_api_accessible": "1",
+        "solr_detected": "1",
+        "solr_core_found": "1"
+      },
+      "likely_reason_th": "Solr Velocity is disabled but generic Solr/access signals pushed the score up"
+    },
+    {
+      "target_id": "solr_negative_v04_2",
+      "probability": 0.8389,
+      "threshold": 0.1,
+      "active_focus_features": {
+        "version_in_vulnerable_range": "1",
+        "version_not_affected": "1",
+        "no_auth_required": "1",
+        "anonymous_access": "1",
+        "velocity_disabled": "1",
+        "config_api_accessible": "1",
+        "solr_detected": "1",
+        "solr_core_found": "1"
+      },
+      "likely_reason_th": "Solr Velocity is disabled but generic Solr/access signals pushed the score up"
+    }
+  ],
+  "recommendation_th": "แก้ runtime/feature policy ให้ Solr ที่ velocity_disabled=1 และ velocity_enabled=0 ถูกลดเป็น low_confidence/no_exploit ก่อนส่งเข้า exploit verification"
+}

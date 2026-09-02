@@ -1,0 +1,220 @@
+{
+  "total_targets": 12,
+  "gate_metrics": {
+    "tp": 7,
+    "fp": 0,
+    "tn": 4,
+    "fn": 1,
+    "accuracy": 0.9167
+  },
+  "ranker_metrics": {
+    "known_positive_top1_correct": 3,
+    "known_positive_top1_total": 4,
+    "known_positive_top1_accuracy": 0.75
+  },
+  "unknown_guard_metrics": {
+    "unknown_rejected": 4,
+    "unknown_total": 4,
+    "unknown_rejection_rate": 1.0
+  },
+  "final_flow_metrics": {
+    "safety_correct": 11,
+    "safety_total": 12,
+    "safety_accuracy": 0.9167,
+    "strict_correct": 11,
+    "strict_total": 12,
+    "strict_accuracy": 0.9167
+  },
+  "per_target_results": [
+    {
+      "target_id": "redis_lua_new_01",
+      "category": "known_positive",
+      "expected_family": "redis",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "redis",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": []
+    },
+    {
+      "target_id": "tomcat_put_new_02",
+      "category": "known_positive",
+      "expected_family": "tomcat_put",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "tomcat_put",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": []
+    },
+    {
+      "target_id": "solr_velocity_new_01",
+      "category": "known_positive",
+      "expected_family": "solr_velocity",
+      "gate_decision": "low_confidence",
+      "final_decision": "needs_more_evidence",
+      "predicted_top_family": null,
+      "gate_correct": false,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": false,
+      "safety_correct": false,
+      "strict_flow_correct": false,
+      "schema_warnings": [
+        "normalized alias: velocity_template_accessible -> velocity_enabled",
+        "derived velocity_disabled from Solr velocity probe fields",
+        "blocking negative evidence downgraded likely_exploitable to low_confidence"
+      ]
+    },
+    {
+      "target_id": "grafana_path_new_01",
+      "category": "known_positive",
+      "expected_family": "grafana",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "grafana",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": []
+    },
+    {
+      "target_id": "redis_auth_neg_v04",
+      "category": "negative_control",
+      "expected_family": "none",
+      "gate_decision": "no_exploit",
+      "final_decision": "do_not_exploit_now",
+      "predicted_top_family": null,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": []
+    },
+    {
+      "target_id": "grafana_patched_neg_v04",
+      "category": "negative_control",
+      "expected_family": "none",
+      "gate_decision": "no_exploit",
+      "final_decision": "do_not_exploit_now",
+      "predicted_top_family": null,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": []
+    },
+    {
+      "target_id": "solr_no_velocity_neg_v04",
+      "category": "negative_control",
+      "expected_family": "none",
+      "gate_decision": "no_exploit",
+      "final_decision": "do_not_exploit_now",
+      "predicted_top_family": null,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": [
+        "normalized alias: velocity_template_accessible -> velocity_enabled",
+        "derived velocity_disabled from Solr velocity probe fields"
+      ]
+    },
+    {
+      "target_id": "tomcat_standard_neg_v04",
+      "category": "negative_control",
+      "expected_family": "none",
+      "gate_decision": "no_exploit",
+      "final_decision": "do_not_exploit_now",
+      "predicted_top_family": null,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": []
+    },
+    {
+      "target_id": "laravel_unknown_v04",
+      "category": "unknown_family",
+      "expected_family": "unknown",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "unknown_family_triage",
+      "predicted_top_family": "nexus",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": [
+        "derived unknown_product_detected from unknown product fingerprint",
+        "unknown_product_detected present; known-family ranking requires extra guard",
+        "unknown_product_detected forced unknown_family_triage"
+      ]
+    },
+    {
+      "target_id": "jboss_unknown_v04",
+      "category": "unknown_family",
+      "expected_family": "unknown",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "unknown_family_triage",
+      "predicted_top_family": "nexus",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": [
+        "derived unknown_product_detected from unknown product fingerprint",
+        "unknown_product_detected present; known-family ranking requires extra guard",
+        "unknown_product_detected forced unknown_family_triage"
+      ]
+    },
+    {
+      "target_id": "jetty_unknown_v04",
+      "category": "unknown_family",
+      "expected_family": "unknown",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "unknown_family_triage",
+      "predicted_top_family": "nexus",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": [
+        "derived unknown_product_detected from unknown product fingerprint",
+        "unknown_product_detected present; known-family ranking requires extra guard",
+        "unknown_product_detected forced unknown_family_triage"
+      ]
+    },
+    {
+      "target_id": "thinkphp_unknown_v04",
+      "category": "unknown_family",
+      "expected_family": "unknown",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "unknown_family_triage",
+      "predicted_top_family": "thinkphp_rce",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": [
+        "unknown_product_detected present; known-family ranking requires extra guard",
+        "unknown_product_detected forced unknown_family_triage"
+      ]
+    }
+  ]
+}

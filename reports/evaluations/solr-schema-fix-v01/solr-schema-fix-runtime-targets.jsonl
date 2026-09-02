@@ -1,0 +1,5 @@
+{"target_id":"solr_velocity_positive_v04_fix","category":"known_positive","expected_family":"solr_velocity"}
+{"target_id":"solr_velocity_positive_alt","category":"known_positive","expected_family":"solr_velocity"}
+{"target_id":"solr_negative_v04_1","category":"negative_control","expected_family":"none"}
+{"target_id":"solr_negative_v04_2","category":"negative_control","expected_family":"none"}
+{"target_id":"solr_velocity_negative_disabled","category":"negative_control","expected_family":"none"}

@@ -152,6 +152,13 @@ def gate_decision(score: float, threshold: float) -> str:
 
 
 def should_downgrade_for_blocking_evidence(features: dict[str, object]) -> bool:
+    if (
+        as_float(features, "solr_detected") > 0
+        and as_float(features, "velocity_disabled") > 0
+        and as_float(features, "velocity_enabled") <= 0
+    ):
+        return True
+
     negative = sum(1 for name in BLOCKING_NEGATIVE_FEATURES if as_float(features, name) > 0)
     strong_positive = sum(1 for name in STRONG_POSITIVE_PRECONDITIONS if as_float(features, name) > 0)
     return negative > 0 and strong_positive == 0

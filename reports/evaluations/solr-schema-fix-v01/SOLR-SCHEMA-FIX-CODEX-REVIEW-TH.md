@@ -137,6 +137,55 @@ rerun `dec-unseen-validation-v04-honest-2026-09-02` ด้วย model รุ่
 
 ดังนั้น schema fix รอบนี้ช่วยสร้างข้อมูลที่ถูกสำหรับ train รอบถัดไป แต่ยังไม่ได้แก้ historical v04 feature ที่เก็บผิดไปแล้ว
 
+## False Positive Investigation
+
+Codex เพิ่ม `scripts/analyze_gate_false_positives.py` เพื่อ join prediction CSV กลับไปที่ dataset แล้วดูว่า target ไหนเป็น FP และ active feature คืออะไร
+
+ผลจาก `precondition_only-predictions.csv` พบ FP 4 targets:
+
+| Target | Probability | สาเหตุ |
+| --- | ---: | --- |
+| `solr_non_vulnerable` | 0.5879 | มี `velocity_disabled=1` แต่มี Solr/core/version signal ที่ทำให้คะแนนสูง |
+| `solr_velocity_negative` | 0.6230 | มี `velocity_disabled=1` แต่ model ยังให้คะแนนสูง |
+| `solr_negative_v04_1` | 0.8085 | เป็น Solr/core/config accessible แต่ Velocity disabled |
+| `solr_negative_v04_2` | 0.8389 | เป็น hard negative: version ดูเสี่ยง แต่ Velocity disabled |
+
+ข้อสรุป:
+
+```text
+threshold อย่างเดียวแก้ไม่ดีพอ เพราะถ้าดัน threshold สูงเพื่อฆ่า Solr FP จะเริ่มทำให้ positive บางตัวกลายเป็น FN
+```
+
+ดังนั้นแก้ที่ runtime safety policy เพิ่ม:
+
+```text
+ถ้า solr_detected=1 และ velocity_disabled=1 และ velocity_enabled=0
+ให้ downgrade จาก likely_exploitable เป็น low_confidence
+```
+
+นี่ไม่ใช่การบอกว่า target ไม่เสี่ยงแบบมั่ว ๆ แต่เป็นการกันไม่ให้ระบบส่ง target ไป exploit verification ทั้งที่ precondition หลักของ Solr Velocity ไม่ผ่าน
+
+## Runtime Evaluation เฉพาะ Solr Schema-Fixed Targets
+
+หลังเพิ่ม Solr blocker runtime guard แล้ว ทดสอบกับ Solr schema-fixed 5 targets:
+
+| Metric | Result |
+| --- | ---: |
+| Gate accuracy | 1.0000 |
+| Gate FP | 0 |
+| Gate FN | 0 |
+| Ranker Top-1 | 1.0000 |
+| Safety flow accuracy | 1.0000 |
+| Strict flow accuracy | 1.0000 |
+
+คำอธิบาย:
+
+- Solr positive 2 ตัวไปถึง `ready_for_safe_verification` และ rank เป็น `solr_velocity`
+- Solr negative 2 ตัวที่ Velocity disabled ถูกลดเป็น `needs_more_evidence`
+- Solr negative ที่ config blocked ถูกหยุดเป็น `do_not_exploit_now`
+
+ยังต้องไม่ตีความว่านี่คือ 100% production accuracy เพราะเป็นการทดสอบเฉพาะ Solr schema-fixed 5 targets เท่านั้น
+
 ## สถานะ
 
 ```text
@@ -150,4 +199,3 @@ Solr schema fix สำเร็จในเชิง dataset quality แต่�
 3. tune Gate threshold หรือ negative blocking policy เพื่อลด FP จาก 4
 4. train runtime ใหม่อีกครั้ง
 5. promote เฉพาะถ้า Gate ไม่แย่กว่า default และ honest unseen ดีขึ้นจริง
-

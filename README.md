@@ -236,3 +236,15 @@ v04 ใช้ target ใหม่ 12 ตัวและ corrected evaluation ล
 | Honest v04 safety | 0.9167 |
 
 ยังไม่ promote เป็น default runtime เพราะ Gate FP เพิ่มจาก runtime เดิม แม้ Ranker ดีขึ้นเล็กน้อย
+
+หลังทำ FP investigation พบว่า FP 4 ตัวเป็น Solr negative ที่มี `velocity_disabled=1` แต่ยังมี generic Solr/core/access signal สูง จึงเพิ่ม runtime guard ให้ Solr ที่ `velocity_disabled=1` และ `velocity_enabled=0` ถูกลดเป็น `low_confidence` ก่อนส่งไป exploit verification
+
+ผลทดสอบเฉพาะ Solr schema-fixed 5 targets หลัง guard:
+
+| Metric | Result |
+| --- | ---: |
+| Gate FP/FN | 0 / 0 |
+| Ranker Top-1 | 1.0000 |
+| Safety flow | 1.0000 |
+
+ตัวเลขนี้เป็น Solr-only sanity check ไม่ใช่ production accuracy

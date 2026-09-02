@@ -1,0 +1,108 @@
+{
+  "total_targets": 5,
+  "gate_metrics": {
+    "tp": 2,
+    "fp": 0,
+    "tn": 3,
+    "fn": 0,
+    "accuracy": 1.0
+  },
+  "ranker_metrics": {
+    "known_positive_top1_correct": 2,
+    "known_positive_top1_total": 2,
+    "known_positive_top1_accuracy": 1.0
+  },
+  "unknown_guard_metrics": {
+    "unknown_rejected": 0,
+    "unknown_total": 0,
+    "unknown_rejection_rate": 0
+  },
+  "final_flow_metrics": {
+    "safety_correct": 5,
+    "safety_total": 5,
+    "safety_accuracy": 1.0,
+    "strict_correct": 5,
+    "strict_total": 5,
+    "strict_accuracy": 1.0
+  },
+  "per_target_results": [
+    {
+      "target_id": "solr_velocity_positive_v04_fix",
+      "category": "known_positive",
+      "expected_family": "solr_velocity",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "solr_velocity",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": []
+    },
+    {
+      "target_id": "solr_velocity_positive_alt",
+      "category": "known_positive",
+      "expected_family": "solr_velocity",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "solr_velocity",
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": []
+    },
+    {
+      "target_id": "solr_negative_v04_1",
+      "category": "negative_control",
+      "expected_family": "none",
+      "gate_decision": "low_confidence",
+      "final_decision": "needs_more_evidence",
+      "predicted_top_family": null,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": [
+        "derived velocity_disabled from Solr velocity probe fields",
+        "blocking negative evidence downgraded likely_exploitable to low_confidence"
+      ]
+    },
+    {
+      "target_id": "solr_negative_v04_2",
+      "category": "negative_control",
+      "expected_family": "none",
+      "gate_decision": "low_confidence",
+      "final_decision": "needs_more_evidence",
+      "predicted_top_family": null,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": [
+        "derived velocity_disabled from Solr velocity probe fields",
+        "blocking negative evidence downgraded likely_exploitable to low_confidence"
+      ]
+    },
+    {
+      "target_id": "solr_velocity_negative_disabled",
+      "category": "negative_control",
+      "expected_family": "none",
+      "gate_decision": "no_exploit",
+      "final_decision": "do_not_exploit_now",
+      "predicted_top_family": null,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "schema_warnings": [
+        "derived velocity_disabled from Solr velocity probe fields"
+      ]
+    }
+  ]
+}

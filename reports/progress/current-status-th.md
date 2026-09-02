@@ -637,3 +637,41 @@ rerun honest v04 ด้วย model รุ่นทดลอง:
 ```
 
 แต่ schema/probe รอบนี้ควรใช้เป็น canonical Solr feature extractor ต่อไป
+
+## Gate FP Investigation After Solr Schema Fix
+
+Codex ตรวจ `precondition_only-predictions.csv` แล้วพบ 4 FP:
+
+- `solr_non_vulnerable`
+- `solr_velocity_negative`
+- `solr_negative_v04_1`
+- `solr_negative_v04_2`
+
+สาเหตุร่วมคือ target เป็น Solr จริงและมี signal บวกบางอย่าง เช่น core/config/no_auth แต่มี blocker สำคัญ:
+
+```text
+velocity_disabled = 1
+velocity_enabled = 0
+```
+
+ลองดู threshold แล้วไม่ควรแก้ด้วย threshold อย่างเดียว เพราะถ้าดัน threshold สูงพอให้ FP หาย จะเริ่มทำให้ positive กลายเป็น FN
+
+จึงแก้ runtime guard ใน `scripts/predict_prototype.py`:
+
+```text
+ถ้า solr_detected=1 และ velocity_disabled=1 และ velocity_enabled=0
+ให้ downgrade เป็น low_confidence
+```
+
+ผลทดสอบเฉพาะ Solr schema-fixed 5 targets หลัง guard:
+
+| Metric | Result |
+| --- | ---: |
+| Gate accuracy | 1.0000 |
+| Gate FP | 0 |
+| Gate FN | 0 |
+| Ranker Top-1 | 1.0000 |
+| Safety flow accuracy | 1.0000 |
+| Strict flow accuracy | 1.0000 |
+
+การตีความ: runtime guard กัน Solr negative ไม่ให้ถูกส่งไปยิงได้แล้ว แต่ยังต้องทดสอบ unseen Solr positive ใหม่ด้วย extractor ที่แก้แล้วก่อน promote model
