@@ -1,0 +1,110 @@
+{
+  "total_targets": 51,
+  "feature_rows": 51,
+  "validation_rows": 51,
+  "enrichment_rows": 22,
+  "safe_to_merge_count": 51,
+  "quarantined_count": 0,
+  "runtime_categories": {
+    "known_positive": 15,
+    "negative_control": 28,
+    "unknown_family": 8
+  },
+  "source_families": {
+    "couchdb_auth": 1,
+    "drupal_rce": 1,
+    "elasticsearch": 1,
+    "flask": 1,
+    "grafana": 1,
+    "jboss_rce": 1,
+    "jenkins": 1,
+    "jetty_rce": 1,
+    "joomla": 1,
+    "laravel_rce": 1,
+    "nacos": 1,
+    "nextjs": 1,
+    "nexus": 1,
+    "none": 28,
+    "php_cgi_rce": 1,
+    "redis": 1,
+    "shiro_key": 1,
+    "solr_velocity": 1,
+    "spring_rce": 1,
+    "struts2": 1,
+    "thinkphp_rce": 1,
+    "tomcat_ajp": 1,
+    "tomcat_put": 1,
+    "wordpress_rce": 1
+  },
+  "candidate_families": [
+    "couchdb_auth",
+    "elasticsearch",
+    "flask",
+    "grafana",
+    "jenkins",
+    "joomla",
+    "nextjs",
+    "nexus",
+    "nginx",
+    "redis",
+    "shiro_key",
+    "solr_velocity",
+    "struts2",
+    "thinkphp_rce",
+    "tomcat_ajp",
+    "tomcat_put"
+  ],
+  "issues": [
+    {
+      "target_id": "drupal_positive_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "drupal_rce"
+    },
+    {
+      "target_id": "jboss_positive_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "jboss_rce"
+    },
+    {
+      "target_id": "jetty_positive_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "jetty_rce"
+    },
+    {
+      "target_id": "laravel_positive_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "laravel_rce"
+    },
+    {
+      "target_id": "wordpress_positive_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "wordpress_rce"
+    },
+    {
+      "target_id": "php_cgi_positive_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "php_cgi_rce"
+    },
+    {
+      "target_id": "nacos_positive_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "nacos"
+    },
+    {
+      "target_id": "spring_positive_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "spring_rce"
+    }
+  ],
+  "issue_counts": {
+    "mapped_to_unknown_family": 8
+  }
+}

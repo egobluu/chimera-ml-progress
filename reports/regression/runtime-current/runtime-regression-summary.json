@@ -1,6 +1,6 @@
 {
-  "total_suites": 4,
-  "passed": 4,
+  "total_suites": 5,
+  "passed": 5,
   "failed": 0,
   "results": [
     {
@@ -94,6 +94,29 @@
       },
       "failures": [],
       "metrics_path": "reports\\regression\\runtime-current\\runtime_stress_v01\\corrected-runtime-evaluation.json"
+    },
+    {
+      "suite": "vulhub_50_scan_v01",
+      "status": "pass",
+      "metrics": {
+        "total_targets": 51,
+        "gate_fp": 2,
+        "gate_fn": 0,
+        "known_positive_top1_accuracy": 1.0,
+        "unknown_rejection_rate": 1.0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "checks": {
+        "total_targets": 51,
+        "gate_fn": 0,
+        "known_positive_top1_accuracy": 1.0,
+        "unknown_rejection_rate": 1.0,
+        "safety_accuracy": 1.0,
+        "strict_accuracy": 1.0
+      },
+      "failures": [],
+      "metrics_path": "reports\\regression\\runtime-current\\vulhub_50_scan_v01\\corrected-runtime-evaluation.json"
     }
   ]
 }

@@ -6,6 +6,7 @@
 | multifamily_unseen_v01 | pass | 0/0 | 1.0 | 0 | 1.0 | 1.0 |
 | unseen_solr_schema_v01 | pass | 0/0 | 1.0 | 0 | 1.0 | 1.0 |
 | runtime_stress_v01 | pass | 0/0 | 1.0 | 1.0 | 1.0 | 1.0 |
+| vulhub_50_scan_v01 | pass | 2/0 | 1.0 | 1.0 | 1.0 | 1.0 |
 
 ## Failures
 

@@ -93,7 +93,7 @@ def predict(features: dict[str, object], model_dir: Path, top_k: int) -> dict[st
         confidence,
         readiness,
     )
-    if should_force_unknown_family(features, readiness):
+    if should_force_unknown_family(features, ranked[0], readiness):
         decision = "unknown_family"
         schema_warnings.append("unknown_product_detected forced unknown_family_triage")
 

@@ -211,8 +211,8 @@
       "ranker_confidence": {
         "level": "clear_margin",
         "top_score": 3.408491,
-        "runner_up_score": -1.377769,
-        "margin": 4.78626,
+        "runner_up_score": -2.161952,
+        "margin": 5.570443,
         "min_ready_margin": 0.25,
         "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
       },
@@ -260,8 +260,8 @@
       "ranker_confidence": {
         "level": "clear_margin",
         "top_score": 1.714746,
-        "runner_up_score": -1.377769,
-        "margin": 3.092515,
+        "runner_up_score": -1.906453,
+        "margin": 3.621199,
         "min_ready_margin": 0.25,
         "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
       },

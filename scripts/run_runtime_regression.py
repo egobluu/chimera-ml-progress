@@ -59,6 +59,18 @@ SUITES: dict[str, dict[str, Any]] = {
             "strict_accuracy": 1.0,
         },
     },
+    "vulhub_50_scan_v01": {
+        "features": "reports/evaluations/vulhub-50-target-scan-v01/features.enriched.jsonl",
+        "targets": "reports/evaluations/vulhub-50-target-scan-v01/runtime-targets.jsonl",
+        "checks": {
+            "total_targets": 51,
+            "gate_fn": 0,
+            "known_positive_top1_accuracy": 1.0,
+            "unknown_rejection_rate": 1.0,
+            "safety_accuracy": 1.0,
+            "strict_accuracy": 1.0,
+        },
+    },
 }
 
 

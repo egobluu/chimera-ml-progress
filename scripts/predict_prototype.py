@@ -29,12 +29,16 @@ UNKNOWN_PRODUCT_FEATURES = {
     "laravel_detected",
     "php_cgi_detected",
     "php_detected",
+    "spring_detected",
     "wordpress_detected",
 }
 
 SCHEMA_ALIASES = {
     "admin_party": "admin_party_enabled",
     "config_endpoint_accessible": "config_accessible",
+    "default_key_detected": "default_key_likely",
+    "remember_me_cookie_found": "rememberme_deleteMe_seen",
+    "endpoint_missing": "endpoint_missing_count",
     "template_accessible": "velocity_template_accessible",
     "velocity_template_accessible": "velocity_enabled",
 }
@@ -82,6 +86,25 @@ GENERIC_RANKER_FEATURES = {
     "endpoint_reachable_count",
     "no_auth_required",
     "version_in_vulnerable_range",
+}
+
+PRODUCT_DETECTION_FEATURES = {
+    "couchdb_auth": {"couchdb_detected"},
+    "elasticsearch": {"elasticsearch_detected"},
+    "flask": {"flask_detected"},
+    "grafana": {"grafana_detected"},
+    "jenkins": {"jenkins_detected"},
+    "joomla": {"joomla_detected"},
+    "nexus": {"nexus_detected"},
+    "nginx": {"nginx_detected"},
+    "nextjs": {"nextjs_detected"},
+    "redis": {"redis_detected"},
+    "shiro_key": {"shiro_detected"},
+    "solr_velocity": {"solr_detected"},
+    "struts2": {"struts2_detected"},
+    "thinkphp_rce": {"thinkphp_detected"},
+    "tomcat_ajp": {"tomcat_detected"},
+    "tomcat_put": {"tomcat_detected"},
 }
 
 MIN_READY_RANKER_MARGIN = 0.25
@@ -134,6 +157,50 @@ def normalize_feature_schema(features: dict[str, object]) -> list[str]:
     if as_float(features, "unknown_product_detected") > 0:
         warnings.append("unknown_product_detected present; known-family ranking requires extra guard")
 
+    if as_float(features, "jenkins_detected") > 0:
+        if "script_console_accessible" in features and "cli_endpoint_reachable" not in features:
+            features["cli_endpoint_reachable"] = features["script_console_accessible"]
+            warnings.append("normalized Jenkins signal: script_console_accessible -> cli_endpoint_reachable")
+        if "api_accessible" in features and "endpoint_reachable_count" not in features:
+            features["endpoint_reachable_count"] = features["api_accessible"]
+            warnings.append("normalized Jenkins signal: api_accessible -> endpoint_reachable_count")
+
+    if as_float(features, "nexus_detected") > 0:
+        if "default_credentials" in features and "anonymous_access" not in features:
+            features["anonymous_access"] = features["default_credentials"]
+            warnings.append("normalized Nexus signal: default_credentials -> anonymous_access")
+        if "api_accessible" in features and "endpoint_reachable_count" not in features:
+            features["endpoint_reachable_count"] = features["api_accessible"]
+            warnings.append("normalized Nexus signal: api_accessible -> endpoint_reachable_count")
+
+    if as_float(features, "struts2_detected") > 0:
+        if "rce_endpoint_accessible" in features and "upload_endpoint_reachable" not in features:
+            features["upload_endpoint_reachable"] = features["rce_endpoint_accessible"]
+            warnings.append("normalized Struts2 signal: rce_endpoint_accessible -> upload_endpoint_reachable")
+
+    if as_float(features, "flask_detected") > 0:
+        if "ssti_endpoint_accessible" in features and "rce_endpoint_candidate_found" not in features:
+            features["rce_endpoint_candidate_found"] = features["ssti_endpoint_accessible"]
+            warnings.append("normalized Flask signal: ssti_endpoint_accessible -> rce_endpoint_candidate_found")
+
+    if as_float(features, "joomla_detected") > 0:
+        if "sql_injection_endpoint" in features and "api_path_found" not in features:
+            features["api_path_found"] = features["sql_injection_endpoint"]
+            warnings.append("normalized Joomla signal: sql_injection_endpoint -> api_path_found")
+
+    if as_float(features, "nextjs_detected") > 0:
+        if "ssrf_endpoint_accessible" in features and "endpoint_reachable_count" not in features:
+            features["endpoint_reachable_count"] = features["ssrf_endpoint_accessible"]
+            warnings.append("normalized Next.js signal: ssrf_endpoint_accessible -> endpoint_reachable_count")
+
+    if as_float(features, "elasticsearch_detected") > 0:
+        if "cluster_settings_accessible" in features and "script_engine_enabled" not in features:
+            features["script_engine_enabled"] = features["cluster_settings_accessible"]
+            warnings.append("normalized Elasticsearch signal: cluster_settings_accessible -> script_engine_enabled")
+        if "nodes_accessible" in features and "endpoint_reachable_count" not in features:
+            features["endpoint_reachable_count"] = features["nodes_accessible"]
+            warnings.append("normalized Elasticsearch signal: nodes_accessible -> endpoint_reachable_count")
+
     return warnings
 
 
@@ -177,6 +244,13 @@ def should_downgrade_for_blocking_evidence(features: dict[str, object]) -> bool:
     ):
         return True
 
+    if (
+        as_float(features, "nexus_detected") > 0
+        and as_float(features, "anonymous_access") > 0
+        and as_float(features, "endpoint_reachable_count") > 0
+    ):
+        return False
+
     negative = sum(1 for name in BLOCKING_NEGATIVE_FEATURES if as_float(features, name) > 0)
     strong_positive = sum(1 for name in STRONG_POSITIVE_PRECONDITIONS if as_float(features, name) > 0)
     if (
@@ -209,6 +283,10 @@ def specific_positive_signal_count(features: dict[str, object], family: str) -> 
     )
 
 
+def product_hint_signal_count(features: dict[str, object], family: str) -> int:
+    return sum(1 for name in PRODUCT_DETECTION_FEATURES.get(family, set()) if as_float(features, name) > 0)
+
+
 def rank_families(features: dict[str, object], families: list[str], model: XGBRanker) -> list[dict[str, object]]:
     row = {name: str(value) for name, value in features.items()}
     X = np.array([candidate_vector(row, family, families) for family in families])
@@ -218,6 +296,7 @@ def rank_families(features: dict[str, object], families: list[str], model: XGBRa
     for family, score in ranked:
         positive, negative = signal_counts(features, family)
         specific_positive = specific_positive_signal_count(features, family)
+        product_hint = product_hint_signal_count(features, family)
         output.append(
             {
                 "family": family,
@@ -225,9 +304,20 @@ def rank_families(features: dict[str, object], families: list[str], model: XGBRa
                 "positive_signals": positive,
                 "negative_signals": negative,
                 "specific_positive_signals": specific_positive,
+                "product_hint_signals": product_hint,
             }
         )
-    if any(int(row["specific_positive_signals"]) > 0 for row in output):
+    if any(int(row["product_hint_signals"]) > 0 for row in output):
+        output = sorted(
+            output,
+            key=lambda row: (
+                int(row["product_hint_signals"]),
+                int(row["specific_positive_signals"]),
+                float(row["score"]),
+            ),
+            reverse=True,
+        )
+    elif any(int(row["specific_positive_signals"]) > 0 for row in output):
         output = sorted(
             output,
             key=lambda row: (
@@ -320,6 +410,10 @@ def family_decision(
     positive = int(top_family["positive_signals"])
     negative = int(top_family["negative_signals"])
     if positive < threshold:
+        if readiness is not None and readiness.get("specific_positive_signals"):
+            return "known_family_but_blocked_or_low_confidence"
+        if int(top_family.get("product_hint_signals", 0)) > 0:
+            return "known_family_but_blocked_or_low_confidence"
         return "unknown_family"
     if readiness is not None and not bool(readiness["ready"]):
         return "known_family_but_blocked_or_low_confidence"
@@ -332,15 +426,21 @@ def family_decision(
 
 def should_force_unknown_family(
     features: dict[str, object],
+    top_family: dict[str, object] | None = None,
     readiness: dict[str, object] | None = None,
 ) -> bool:
     if as_float(features, "unknown_product_detected") <= 0:
         return False
-    if readiness is not None and readiness.get("specific_positive_signals"):
+    if (
+        readiness is not None
+        and readiness.get("specific_positive_signals")
+        and top_family is not None
+        and int(top_family.get("product_hint_signals", 0)) > 0
+    ):
         return False
     unknown_count = as_float(features, "unknown_family_signal_count")
     known_count = as_float(features, "known_family_signal_count")
-    return unknown_count >= 1 and known_count <= unknown_count
+    return known_count <= unknown_count or known_count <= 0
 
 
 def final_decision_from(gate_status: str, ranker_decision: str | None) -> str:
@@ -433,7 +533,7 @@ def main() -> None:
         confidence,
         readiness,
     )
-    if should_force_unknown_family(features, readiness):
+    if should_force_unknown_family(features, top, readiness):
         decision = "unknown_family"
         schema_warnings.append("unknown_product_detected forced unknown_family_triage")
     result["ranker"] = {
