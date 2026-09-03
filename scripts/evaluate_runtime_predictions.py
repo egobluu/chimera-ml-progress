@@ -31,6 +31,7 @@ from predict_prototype import (
     should_downgrade_for_blocking_evidence,
     should_force_unknown_family,
 )
+from rank_cve_candidates import DEFAULT_RULES as DEFAULT_CVE_RULES, rank_cves_for_family, read_jsonl as read_enrichment_jsonl
 
 
 def read_jsonl(path: Path) -> list[dict[str, object]]:
@@ -45,7 +46,13 @@ def read_jsonl(path: Path) -> list[dict[str, object]]:
     return rows
 
 
-def predict(features: dict[str, object], model_dir: Path, top_k: int) -> dict[str, object]:
+def predict(
+    features: dict[str, object],
+    model_dir: Path,
+    top_k: int,
+    resolver_rules: dict[str, object],
+    enrichment_rows: list[dict[str, object]],
+) -> dict[str, object]:
     manifest = load_json(model_dir / "prototype_manifest.json")
     features = dict(features)
     target_id = str(features.get("target_id") or "unknown_target")
@@ -72,6 +79,7 @@ def predict(features: dict[str, object], model_dir: Path, top_k: int) -> dict[st
             "decision": gate_status,
         },
         "ranker": None,
+        "resolver": None,
         "final_decision": final_decision_from(gate_status, None),
         "recommended_next_action": "stop_or_collect_more_evidence",
         "reason_features": active_reason_features(features),
@@ -105,6 +113,13 @@ def predict(features: dict[str, object], model_dir: Path, top_k: int) -> dict[st
         "top_families": ranked[:top_k],
     }
     result["final_decision"] = final_decision_from(gate_status, decision)
+    if result["final_decision"] in {"ready_for_safe_verification", "manual_triage_before_exploit"}:
+        result["resolver"] = rank_cves_for_family(
+            str(ranked[0]["family"]),
+            features,
+            resolver_rules,
+            enrichment_rows,
+        )
     if decision == "known_family_ready":
         result["recommended_next_action"] = "run_safe_metasploit_check_or_manual_probe"
     elif decision == "known_family_but_blocked_or_low_confidence":
@@ -142,6 +157,20 @@ def top_families(prediction: dict[str, object], limit: int) -> list[str]:
     return output
 
 
+def top_resolver_cves(prediction: dict[str, object], limit: int) -> list[str]:
+    resolver = prediction.get("resolver")
+    if not isinstance(resolver, dict):
+        return []
+    top_cves = resolver.get("top_cves")
+    if not isinstance(top_cves, list):
+        return []
+    output: list[str] = []
+    for row in top_cves[:limit]:
+        if isinstance(row, dict) and row.get("cve") is not None:
+            output.append(str(row["cve"]).upper())
+    return output
+
+
 def evaluate(
     targets: list[dict[str, object]],
     predictions: list[dict[str, object]],
@@ -155,6 +184,8 @@ def evaluate(
     strict_correct = 0
     low_margin_count = 0
     not_ready_count = 0
+    cve_total = cve_top1 = cve_top3 = cve_top5 = 0
+    cve_coverage = 0
 
     for prediction in predictions:
         target_id = str(prediction["target_id"])
@@ -167,6 +198,7 @@ def evaluate(
         gate_decision_value = str(prediction["gate"]["decision"])  # type: ignore[index]
         final_decision = str(prediction["final_decision"])
         predicted_family = top_family(prediction)
+        expected_cve = str(target.get("cve") or "").upper()
         ranker = prediction.get("ranker")
         confidence = ranker.get("confidence") if isinstance(ranker, dict) else None
         readiness = ranker.get("family_readiness") if isinstance(ranker, dict) else None
@@ -205,6 +237,13 @@ def evaluate(
             top3_ok = expected_family in top_families(prediction, 3)
             known_top1 += 1 if top1_ok else 0
             known_top3 += 1 if top3_ok else 0
+            if expected_cve:
+                cve_total += 1
+                cves_top5 = top_resolver_cves(prediction, 5)
+                cve_coverage += 1 if cves_top5 else 0
+                cve_top1 += 1 if expected_cve in cves_top5[:1] else 0
+                cve_top3 += 1 if expected_cve in cves_top5[:3] else 0
+                cve_top5 += 1 if expected_cve in cves_top5 else 0
             safety_ok = final_decision in {
                 "ready_for_safe_verification",
                 "manual_triage_before_exploit",
@@ -221,9 +260,13 @@ def evaluate(
                 "target_id": target_id,
                 "category": category,
                 "expected_family": expected_family,
+                "expected_cve": expected_cve,
                 "gate_decision": gate_decision_value,
                 "final_decision": final_decision,
                 "predicted_top_family": predicted_family,
+                "resolver_top_cves": top_resolver_cves(prediction, 5),
+                "resolver_top1_correct": bool(expected_cve and expected_cve in top_resolver_cves(prediction, 1)),
+                "resolver_top3_correct": bool(expected_cve and expected_cve in top_resolver_cves(prediction, 3)),
                 "gate_correct": expected_exploitable == predicted_exploitable,
                 "unknown_guard_correct": unknown_ok,
                 "ranker_top1_correct": top1_ok,
@@ -268,6 +311,25 @@ def evaluate(
             if known_total
             else 0,
         },
+        "cve_resolver_metrics": {
+            "known_positive_cve_total": cve_total,
+            "known_positive_cve_coverage": cve_coverage,
+            "known_positive_cve_coverage_rate": round(cve_coverage / cve_total, 4)
+            if cve_total
+            else 0,
+            "known_positive_cve_top1_correct": cve_top1,
+            "known_positive_cve_top1_accuracy": round(cve_top1 / cve_total, 4)
+            if cve_total
+            else 0,
+            "known_positive_cve_top3_correct": cve_top3,
+            "known_positive_cve_top3_accuracy": round(cve_top3 / cve_total, 4)
+            if cve_total
+            else 0,
+            "known_positive_cve_top5_correct": cve_top5,
+            "known_positive_cve_top5_accuracy": round(cve_top5 / cve_total, 4)
+            if cve_total
+            else 0,
+        },
         "unknown_guard_metrics": {
             "unknown_rejected": unknown_rejected,
             "unknown_total": unknown_total,
@@ -294,6 +356,7 @@ def evaluate(
 def write_report(metrics: dict[str, object], output_path: Path) -> None:
     gate = metrics["gate_metrics"]  # type: ignore[index]
     ranker = metrics["ranker_metrics"]  # type: ignore[index]
+    resolver = metrics["cve_resolver_metrics"]  # type: ignore[index]
     unknown = metrics["unknown_guard_metrics"]  # type: ignore[index]
     ranker_safety = metrics["ranker_safety_metrics"]  # type: ignore[index]
     final = metrics["final_flow_metrics"]  # type: ignore[index]
@@ -318,6 +381,10 @@ def write_report(metrics: dict[str, object], output_path: Path) -> None:
 | Gate F1 | {gate["f1"]} |
 | Known-positive Ranker Top-1 | {ranker["known_positive_top1_accuracy"]} |
 | Known-positive Ranker Top-3 | {ranker["known_positive_top3_accuracy"]} |
+| Known-positive CVE Resolver coverage | {resolver["known_positive_cve_coverage_rate"]} |
+| Known-positive CVE Resolver Top-1 | {resolver["known_positive_cve_top1_accuracy"]} |
+| Known-positive CVE Resolver Top-3 | {resolver["known_positive_cve_top3_accuracy"]} |
+| Known-positive CVE Resolver Top-5 | {resolver["known_positive_cve_top5_accuracy"]} |
 | Ranker low-margin count | {ranker_safety["low_margin_count"]} |
 | Family not-ready count | {ranker_safety["family_not_ready_count"]} |
 | Unknown rejection rate | {unknown["unknown_rejection_rate"]} |
@@ -330,6 +397,8 @@ def write_report(metrics: dict[str, object], output_path: Path) -> None:
 
 `Strict flow accuracy` คือเข้มกว่า: known-positive ต้องจัด family ถูกด้วย จึงจะนับว่าถูก
 
+`CVE Resolver Top-3` คือหลัง Ranker เลือก family แล้ว CVE เฉลยอยู่ใน 3 อันดับแรกของ resolver ไหม
+
 ดังนั้นถ้า safety สูงแต่ strict ต่ำ แปลว่า flow ยังปลอดภัย แต่ Ranker ยังต้องปรับ feature/ranking ต่อ
 """
     output_path.write_text(text, encoding="utf-8")
@@ -341,12 +410,16 @@ def main() -> None:
     parser.add_argument("--targets-jsonl", required=True, type=Path)
     parser.add_argument("--model-dir", default=DEFAULT_MODEL_DIR, type=Path)
     parser.add_argument("--out-dir", required=True, type=Path)
+    parser.add_argument("--resolver-rules", default=DEFAULT_CVE_RULES, type=Path)
+    parser.add_argument("--enrichment-jsonl", type=Path)
     parser.add_argument("--top-k", default=5, type=int)
     args = parser.parse_args()
 
     targets = read_jsonl(args.targets_jsonl)
     features = read_jsonl(args.features_jsonl)
-    predictions = [predict(row, args.model_dir, args.top_k) for row in features]
+    resolver_rules = load_json(args.resolver_rules)
+    enrichment_rows = read_enrichment_jsonl(args.enrichment_jsonl)
+    predictions = [predict(row, args.model_dir, args.top_k, resolver_rules, enrichment_rows) for row in features]
     metrics = evaluate(targets, predictions)
 
     args.out_dir.mkdir(parents=True, exist_ok=True)

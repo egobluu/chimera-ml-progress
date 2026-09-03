@@ -168,14 +168,20 @@ def normalize_enrichment_features(enrichment: dict[str, Any]) -> dict[str, Any]:
 
     if "in_cisa_kev" in enrichment:
         features["in_cisa_kev"] = 1 if bool(enrichment["in_cisa_kev"]) else 0
+    elif "kev" in enrichment:
+        features["in_cisa_kev"] = 1 if bool(enrichment["kev"]) else 0
     if "epss_score" in enrichment:
         features["epss_score"] = enrichment["epss_score"]
+    elif "epss" in enrichment:
+        features["epss_score"] = enrichment["epss"]
     if "epss_percentile" in enrichment:
         features["epss_percentile"] = enrichment["epss_percentile"]
     if "cvss_base_score" in enrichment:
         features["cvss_base_score"] = enrichment["cvss_base_score"]
+    elif "cvss" in enrichment:
+        features["cvss_base_score"] = enrichment["cvss"]
 
-    severity = str(enrichment.get("cvss_base_severity") or "").upper()
+    severity = str(enrichment.get("cvss_base_severity") or enrichment.get("severity") or "").upper()
     for name in CVSS_SEVERITIES.values():
         features[name] = 0
     if severity in CVSS_SEVERITIES:

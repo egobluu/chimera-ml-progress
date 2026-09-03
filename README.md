@@ -445,3 +445,29 @@ examples/output/negative_control_explanation.md
 - [scripts/build_safe_verification_plan.py](scripts/build_safe_verification_plan.py)
 - [reports/evaluations/shared-validation-runtime-v01/verification-plan-v01/SAFE-VERIFICATION-PLAN-TH.md](reports/evaluations/shared-validation-runtime-v01/verification-plan-v01/SAFE-VERIFICATION-PLAN-TH.md)
 - [reports/evaluations/shared-validation-runtime-v01/verification-plan-v01/verification-plan.jsonl](reports/evaluations/shared-validation-runtime-v01/verification-plan-v01/verification-plan.jsonl)
+
+## CVE Resolver Runtime v01
+
+เพิ่มชั้นที่ 3 ของ runtime แล้ว:
+
+```text
+Gate -> Family Ranker -> CVE/Module Resolver
+```
+
+Resolver ใช้ rule-scoring เพื่อจัดอันดับ CVE/module ภายใน family ที่ Ranker เลือก ไม่ให้ ML ทาย CVE ตรง ๆ ตั้งแต่แรก
+
+ไฟล์หลัก:
+
+- [runtime/resolver/cve-ranking-rules.json](runtime/resolver/cve-ranking-rules.json)
+- [scripts/rank_cve_candidates.py](scripts/rank_cve_candidates.py)
+- [reports/evaluations/vulhub-50-target-scan-v01/CVE-RESOLVER-RUNTIME-RESULT-TH.md](reports/evaluations/vulhub-50-target-scan-v01/CVE-RESOLVER-RUNTIME-RESULT-TH.md)
+
+ผลบน Vulhub 50 batch:
+
+| Metric | Result |
+| --- | ---: |
+| Known-positive CVE Resolver coverage | 14/14 |
+| Known-positive CVE Resolver Top-1 | 14/14 |
+| Regression suites | 5/5 pass |
+
+ข้อควรระวัง: CVE Resolver Top-1 1.0000 เป็นผลจาก lab mapping ที่มีเฉลยชัด ไม่ใช่ production accuracy โลกจริง

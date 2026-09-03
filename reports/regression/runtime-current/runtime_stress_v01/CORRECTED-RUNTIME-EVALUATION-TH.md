@@ -19,6 +19,10 @@
 | Gate F1 | 1.0 |
 | Known-positive Ranker Top-1 | 1.0 |
 | Known-positive Ranker Top-3 | 1.0 |
+| Known-positive CVE Resolver coverage | 0 |
+| Known-positive CVE Resolver Top-1 | 0 |
+| Known-positive CVE Resolver Top-3 | 0 |
+| Known-positive CVE Resolver Top-5 | 0 |
 | Ranker low-margin count | 0 |
 | Family not-ready count | 1 |
 | Unknown rejection rate | 1.0 |
@@ -30,5 +34,7 @@
 `Safety flow accuracy` คือระบบตัดสินทางปลอดภัยถูกไหม เช่น negative ต้องหยุด, unknown ต้อง triage, positive ต้องไม่ถูกหยุดผิด
 
 `Strict flow accuracy` คือเข้มกว่า: known-positive ต้องจัด family ถูกด้วย จึงจะนับว่าถูก
+
+`CVE Resolver Top-3` คือหลัง Ranker เลือก family แล้ว CVE เฉลยอยู่ใน 3 อันดับแรกของ resolver ไหม
 
 ดังนั้นถ้า safety สูงแต่ strict ต่ำ แปลว่า flow ยังปลอดภัย แต่ Ranker ยังต้องปรับ feature/ranking ต่อ

@@ -17,6 +17,7 @@ from xgboost import XGBClassifier, XGBRanker
 
 from train_family_ranker import FAMILY_FEATURES, candidate_vector
 from train_gate_profiles import NEGATIVE_PRECONDITION_FEATURES, POSITIVE_PRECONDITION_FEATURES
+from rank_cve_candidates import DEFAULT_RULES as DEFAULT_CVE_RULES, rank_cves_for_family
 
 
 DEFAULT_MODEL_DIR = Path("runtime/models/prototype")
@@ -470,6 +471,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--features", required=True, type=Path, help="Flat JSON feature object.")
     parser.add_argument("--model-dir", default=DEFAULT_MODEL_DIR, type=Path)
+    parser.add_argument("--resolver-rules", default=DEFAULT_CVE_RULES, type=Path)
     parser.add_argument("--top-k", default=5, type=int)
     parser.add_argument("--out", type=Path, help="Optional path to write the JSON result.")
     args = parser.parse_args()
@@ -505,6 +507,7 @@ def main() -> None:
             "decision": gate_status,
         },
         "ranker": None,
+        "resolver": None,
         "final_decision": final_decision_from(gate_status, None),
         "recommended_next_action": "stop_or_collect_more_evidence",
         "reason_features": active_reason_features(features),
@@ -544,6 +547,8 @@ def main() -> None:
         "top_families": ranked[: args.top_k],
     }
     result["final_decision"] = final_decision_from(gate_status, decision)
+    if result["final_decision"] in {"ready_for_safe_verification", "manual_triage_before_exploit"}:
+        result["resolver"] = rank_cves_for_family(str(top["family"]), features, load_json(args.resolver_rules))
     if decision == "known_family_ready":
         result["recommended_next_action"] = "run_safe_metasploit_check_or_manual_probe"
     elif decision == "known_family_but_blocked_or_low_confidence":

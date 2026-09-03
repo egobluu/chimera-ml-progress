@@ -25,9 +25,10 @@ script เหล่านี้อ้าง path แบบ Kali report output �
 | `audit_gate_features.py` | ตรวจ feature leak และแยก feature เป็น precheck/postcheck ก่อนเชื่อคะแนน model |
 | `train_runtime_models.py` | train ชุด model runtime prototype ที่ใช้ส่งต่อให้ฝั่ง LLM/agentic |
 | `merge_train_ready_runtime_dataset.py` | รวม train-ready JSONL จาก runtime curation เข้า CSV dataset สำหรับ candidate retrain |
-| `predict_prototype.py` | entrypoint ใช้งานจริงระดับ prototype รับ feature JSON แล้วคืนผล Gate + Ranker + Unknown Guard |
+| `predict_prototype.py` | entrypoint ใช้งานจริงระดับ prototype รับ feature JSON แล้วคืนผล Gate + Ranker + Unknown Guard + CVE Resolver |
+| `rank_cve_candidates.py` | จัดอันดับ CVE/module/manual-check candidate ภายใน family ที่ Ranker เลือก โดยใช้ rule + KEV/EPSS/CVSS enrichment |
 | `evaluate_unknown_family.py` | ทดสอบว่า Ranker จะทำอย่างไรเมื่อเจอ target นอก family ที่รู้จัก |
-| `evaluate_runtime_predictions.py` | rerun runtime prediction จาก feature JSONL แล้วคำนวณ corrected metrics แยก safety กับ ranking |
+| `evaluate_runtime_predictions.py` | rerun runtime prediction จาก feature JSONL แล้วคำนวณ corrected metrics แยก safety, ranking และ CVE resolver |
 | `compare_runtime_models.py` | เทียบ baseline runtime กับ candidate runtime จาก regression summaries ก่อนตัดสิน promote |
 | `curate_imported_scan_batch.py` | แยก imported scanner batch เป็น train-ready, validation-only และ needs-recheck ก่อน retrain |
 | `validate_target_manifest.py` | ตรวจ target manifest ก่อนส่งให้ scanner/OpenCode ว่า JSONL, field, category และ target_id ถูกต้อง |
@@ -45,6 +46,7 @@ python3 plan_precondition_probes.py --predictions derived/profile-audit/strict_p
 python3 rank_target_two_stage.py --evidence-dir raw-curated/tomcat_CVE-2020-1938 --json
 python3 audit_gate_features.py --dataset target-exploitability-dataset.csv --out-dir derived/audit
 python3 evaluate_runtime_predictions.py --features-jsonl reports/evaluations/unseen-validation-v02/unseen-v02-precheck-features.jsonl --targets-jsonl reports/evaluations/unseen-validation-v02/unseen-v02-targets.jsonl --out-dir reports/evaluations/unseen-validation-v02
+python3 rank_cve_candidates.py --features examples/input/redis_likely_exploitable_features.json --family redis --rules runtime/resolver/cve-ranking-rules.json
 ```
 
 ## หลักการสำคัญ

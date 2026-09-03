@@ -7,6 +7,8 @@
 ```text
 runtime/
 ├── README-TH.md
+├── resolver/
+│   └── cve-ranking-rules.json
 └── models/prototype/
     ├── gate_precondition_only.json
     ├── family_ranker.json
@@ -22,7 +24,7 @@ reports/evaluations/ranker-schema-backfill-redis-grafana-v01/RUNTIME-RETRAIN-RES
 สรุปสั้น:
 
 ```text
-ตัวใช้จริง = runtime/models/prototype + scripts/predict_prototype.py
+ตัวใช้จริง = runtime/models/prototype + runtime/resolver/cve-ranking-rules.json + scripts/predict_prototype.py
 ตัว train/test = scripts/train_*.py + reports/evaluations/*
 ตัวอธิบาย/หลักฐาน = docs/* + reports/*
 ```
@@ -57,6 +59,19 @@ output เป็น JSON เช่น:
         "score": 1.23,
         "positive_signals": 4,
         "negative_signals": 0
+      }
+    ]
+  },
+  "resolver": {
+    "model": "rule_cve_ranker_v01",
+    "family": "redis",
+    "candidate_count": 1,
+    "top_cves": [
+      {
+        "cve": "CVE-2022-0543",
+        "score": 0.87,
+        "recommendation": "safe_check_candidate",
+        "modules": ["exploit/linux/redis/redis_debian_sandbox_escape"]
       }
     ]
   },
@@ -161,6 +176,46 @@ output:
 known_family_ready
 known_family_but_blocked_or_low_confidence
 unknown_family
+```
+
+### 4. CVE/Module Resolver
+
+ไฟล์:
+
+```text
+runtime/resolver/cve-ranking-rules.json
+scripts/rank_cve_candidates.py
+```
+
+หน้าที่:
+
+```text
+หลัง Ranker เลือก family แล้ว resolver จะจัดอันดับ CVE/module/manual-check candidate ภายใน family นั้น
+```
+
+ตัวอย่าง:
+
+```text
+Family Ranker: solr_velocity
+CVE Resolver:
+1. CVE-2019-17558
+2. CVE-2017-12629
+```
+
+Resolver ไม่ใช่ ML model หลัก แต่เป็น rule-scoring layer ที่อ่าน:
+
+```text
+family ที่ Ranker ทาย
+feature ที่ scanner ส่งมา
+CVE enrichment เช่น in_cisa_kev, epss_score, cvss_base_score
+mapping table ใน runtime/resolver/cve-ranking-rules.json
+```
+
+เหตุผลที่ทำแบบนี้:
+
+```text
+ไม่ให้ ML ทาย CVE ตรง ๆ ตั้งแต่แรก เพราะ CVE เยอะกว่า target มาก และเสี่ยง overfit กับชื่อ/alias
+ให้ ML ทาย exploitability + family ก่อน แล้วค่อย map family -> CVE/module ด้วย resolver ที่ audit ได้
 ```
 
 ## แล้วต้องส่งอะไรให้ฝั่ง LLM

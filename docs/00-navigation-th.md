@@ -42,6 +42,7 @@
 | `runtime/models/prototype/gate_precondition_only.json` | XGBoost Gate model ที่ใช้จริงระดับ prototype |
 | `runtime/models/prototype/family_ranker.json` | XGBoost Family Ranker model ที่ใช้จริงระดับ prototype |
 | `runtime/models/prototype/prototype_manifest.json` | manifest บอก feature, threshold, candidate families และ entrypoint |
+| `runtime/resolver/cve-ranking-rules.json` | rule-scoring table สำหรับจัดอันดับ CVE/module ภายใน family หลัง Ranker เลือก family แล้ว |
 | `examples/input/` | ตัวอย่าง feature JSON ที่ส่งเข้า ML |
 | `examples/output/` | ตัวอย่าง JSON ที่ ML คืนให้ LLM |
 
@@ -68,9 +69,10 @@
 | `scripts/plan_precondition_probes.py` | สร้างแผน probe จาก false positive/false negative |
 | `scripts/rank_target_two_stage.py` | ใช้ model inference target ใหม่ |
 | `scripts/train_runtime_models.py` | train model runtime prototype ที่ส่งต่อให้ LLM |
-| `scripts/predict_prototype.py` | entrypoint ใช้จริง รับ feature JSON แล้วคืน Gate + Ranker + Unknown Guard |
+| `scripts/predict_prototype.py` | entrypoint ใช้จริง รับ feature JSON แล้วคืน Gate + Ranker + Unknown Guard + CVE Resolver |
+| `scripts/rank_cve_candidates.py` | จัดอันดับ CVE/module candidate ภายใน family ด้วย feature + KEV/EPSS/CVSS enrichment |
 | `scripts/evaluate_unknown_family.py` | ทดสอบ unknown-family behavior ของ Ranker |
-| `scripts/evaluate_runtime_predictions.py` | ประเมิน runtime prediction และแยก metric ด้าน safety/ranking |
+| `scripts/evaluate_runtime_predictions.py` | ประเมิน runtime prediction และแยก metric ด้าน safety/ranking/resolver |
 | `scripts/run_runtime_regression.py` | รัน regression หลาย suite รวม stress validation |
 
 ## สถานะข้อมูลที่ควรจำ
