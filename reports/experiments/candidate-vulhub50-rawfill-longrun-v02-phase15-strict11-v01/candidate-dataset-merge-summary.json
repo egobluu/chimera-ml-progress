@@ -1,0 +1,13 @@
+{
+  "base_dataset": "reports\\experiments\\candidate-vulhub50-rawfill-combined-v01\\candidate-training-dataset.csv",
+  "added_features": "reports\\evaluations\\vulhub-longrun-gate-ranker-cve-v02\\curation-post-phase15-guard-v02\\train_ready_strict-features.jsonl",
+  "added_targets": "reports\\evaluations\\vulhub-longrun-gate-ranker-cve-v02\\curation-post-phase15-guard-v02\\train_ready_strict-runtime-targets.jsonl",
+  "base_rows": 111,
+  "added_rows": 11,
+  "output_rows": 122,
+  "columns": 124,
+  "label_counts": {
+    "0": 68,
+    "1": 54
+  }
+}

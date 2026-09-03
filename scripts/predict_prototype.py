@@ -23,15 +23,71 @@ from rank_cve_candidates import DEFAULT_RULES as DEFAULT_CVE_RULES, rank_cves_fo
 DEFAULT_MODEL_DIR = Path("runtime/models/prototype")
 
 UNKNOWN_PRODUCT_FEATURES = {
+    "activemq_detected",
+    "adminer_detected",
     "coldfusion_detected",
+    "confluence_detected",
+    "dataease_detected",
     "drupal_detected",
+    "fastjson_detected",
+    "gitea_detected",
+    "gitlab_detected",
+    "gogs_detected",
+    "hadoop_detected",
+    "hugegraph_detected",
     "jboss_detected",
     "jetty_detected",
+    "jupyter_detected",
+    "kibana_detected",
     "laravel_detected",
+    "metabase_detected",
+    "minio_detected",
+    "mongo_express_detected",
+    "n8n_detected",
+    "openfire_detected",
     "php_cgi_detected",
     "php_detected",
+    "rocketchat_detected",
+    "saltstack_detected",
     "spring_detected",
+    "superset_detected",
+    "supervisor_detected",
+    "tikiwiki_detected",
+    "weblogic_detected",
     "wordpress_detected",
+    "zabbix_detected",
+}
+
+UNKNOWN_PRODUCT_TECH_HINTS = {
+    "activemq": "activemq_detected",
+    "adminer": "adminer_detected",
+    "atlassian confluence": "confluence_detected",
+    "confluence": "confluence_detected",
+    "dataease": "dataease_detected",
+    "drupal": "drupal_detected",
+    "fastjson": "fastjson_detected",
+    "gitea": "gitea_detected",
+    "gitlab": "gitlab_detected",
+    "gogs": "gogs_detected",
+    "hadoop": "hadoop_detected",
+    "hugegraph": "hugegraph_detected",
+    "jupyter": "jupyter_detected",
+    "kibana": "kibana_detected",
+    "metabase": "metabase_detected",
+    "minio": "minio_detected",
+    "mongo express": "mongo_express_detected",
+    "mongo-express": "mongo_express_detected",
+    "n8n": "n8n_detected",
+    "openfire": "openfire_detected",
+    "rocketchat": "rocketchat_detected",
+    "rocket.chat": "rocketchat_detected",
+    "saltstack": "saltstack_detected",
+    "superset": "superset_detected",
+    "supervisor": "supervisor_detected",
+    "tikiwiki": "tikiwiki_detected",
+    "weblogic": "weblogic_detected",
+    "wordpress": "wordpress_detected",
+    "zabbix": "zabbix_detected",
 }
 
 SCHEMA_ALIASES = {
@@ -111,6 +167,21 @@ PRODUCT_DETECTION_FEATURES = {
 MIN_READY_RANKER_MARGIN = 0.25
 MIN_READY_SPECIFIC_POSITIVE_SIGNALS = 1
 
+NEGATIVE_COUNTERPART_POSITIVES = {
+    "ajp_port_closed": {"ajp_port_open"},
+    "ajp_not_exposed": {"ajp_port_open"},
+    "method_put_rejected": {"method_put_allowed", "jsp_upload_candidate"},
+    "upload_blocked": {"jsp_upload_candidate"},
+    "velocity_disabled": {"velocity_enabled"},
+    "config_api_blocked": {"config_api_accessible"},
+    "config_blocked": {"config_accessible", "admin_party_enabled", "users_db_accessible"},
+    "default_key_unlikely": {"default_key_likely"},
+    "auth_required": {"no_auth_required", "anonymous_access"},
+    "path_traversal_blocked": {"path_traversal_candidate_found", "public_plugin_path_accessible"},
+    "endpoint_not_found": {"endpoint_reachable_count", "rce_endpoint_candidate_found"},
+    "invokefunction_not_found": {"invokefunction_reachable"},
+}
+
 
 def as_float(row: dict[str, object], name: str) -> float:
     try:
@@ -148,10 +219,19 @@ def normalize_feature_schema(features: dict[str, object]) -> list[str]:
         features.setdefault("version_in_vulnerable_range_true", vulnerable)
         features.setdefault("version_in_vulnerable_range_false", 0 if vulnerable else 1)
 
-    if (
-        any(as_float(features, name) > 0 for name in UNKNOWN_PRODUCT_FEATURES)
-        and as_float(features, "known_family_signal_count") <= 0
-    ):
+    tech_stack = str(features.get("tech_stack") or "").lower()
+    for hint, feature_name in UNKNOWN_PRODUCT_TECH_HINTS.items():
+        if hint in tech_stack and as_float(features, feature_name) <= 0:
+            features[feature_name] = 1
+            warnings.append(f"derived unknown product fingerprint from tech_stack: {feature_name}")
+
+    unknown_product_signal = any(as_float(features, name) > 0 for name in UNKNOWN_PRODUCT_FEATURES)
+    known_product_signal = any(
+        as_float(features, name) > 0
+        for product_features in PRODUCT_DETECTION_FEATURES.values()
+        for name in product_features
+    )
+    if unknown_product_signal and not known_product_signal:
         features["unknown_product_detected"] = 1
         warnings.append("derived unknown_product_detected from unknown product fingerprint")
 
@@ -252,7 +332,7 @@ def should_downgrade_for_blocking_evidence(features: dict[str, object]) -> bool:
     ):
         return False
 
-    negative = sum(1 for name in BLOCKING_NEGATIVE_FEATURES if as_float(features, name) > 0)
+    negative = len(relevant_blocking_negative_features(features))
     strong_positive = sum(1 for name in STRONG_POSITIVE_PRECONDITIONS if as_float(features, name) > 0)
     if (
         as_float(features, "known_family_signal_count") <= 0
@@ -265,22 +345,95 @@ def should_downgrade_for_blocking_evidence(features: dict[str, object]) -> bool:
         )
     ):
         return True
-    return negative > 0 and strong_positive <= negative
+    return negative > strong_positive
+
+
+def relevant_blocking_negative_features(features: dict[str, object]) -> list[str]:
+    """Return blocking signals that are relevant to the detected product path."""
+    blocking: list[str] = []
+
+    for name in ("version_in_vulnerable_range_false", "version_not_affected", "version_patched"):
+        if as_float(features, name) > 0:
+            blocking.append(name)
+
+    if as_float(features, "auth_blocks_exploit") > 0:
+        blocking.append("auth_blocks_exploit")
+    if as_float(features, "endpoint_not_found") > 0 and as_float(features, "endpoint_reachable_count") <= 0:
+        blocking.append("endpoint_not_found")
+    if as_float(features, "default_key_unlikely") > 0 and as_float(features, "default_key_likely") <= 0:
+        blocking.append("default_key_unlikely")
+    if as_float(features, "invokefunction_not_found") > 0 and as_float(features, "invokefunction_reachable") <= 0:
+        blocking.append("invokefunction_not_found")
+
+    if as_float(features, "tomcat_detected") > 0:
+        if as_float(features, "method_put_rejected") > 0 and as_float(features, "method_put_allowed") <= 0:
+            blocking.append("method_put_rejected")
+        if as_float(features, "ajp_port_closed") > 0 and as_float(features, "ajp_port_open") <= 0:
+            blocking.append("ajp_port_closed")
+
+    if as_float(features, "solr_detected") > 0:
+        if as_float(features, "velocity_disabled") > 0 and as_float(features, "velocity_enabled") <= 0:
+            blocking.append("velocity_disabled")
+        if (
+            as_float(features, "config_blocked") > 0
+            and as_float(features, "config_accessible") <= 0
+            and as_float(features, "config_api_accessible") <= 0
+        ):
+            blocking.append("config_blocked")
+
+    if as_float(features, "grafana_detected") > 0 or as_float(features, "joomla_detected") > 0:
+        if (
+            as_float(features, "path_traversal_blocked") > 0
+            and as_float(features, "path_traversal_candidate_found") <= 0
+            and as_float(features, "public_plugin_path_accessible") <= 0
+        ):
+            blocking.append("path_traversal_blocked")
+
+    if as_float(features, "couchdb_detected") > 0:
+        if (
+            as_float(features, "config_blocked") > 0
+            and as_float(features, "config_accessible") <= 0
+            and as_float(features, "admin_party_enabled") <= 0
+        ):
+            blocking.append("config_blocked")
+
+    if (
+        as_float(features, "auth_required") > 0
+        and as_float(features, "no_auth_required") <= 0
+        and as_float(features, "anonymous_access") <= 0
+    ):
+        blocking.append("auth_required")
+
+    return sorted(set(blocking))
+
+
+def negative_is_overridden(features: dict[str, object], negative_feature: str) -> bool:
+    return any(
+        as_float(features, positive_feature) > 0
+        for positive_feature in NEGATIVE_COUNTERPART_POSITIVES.get(negative_feature, set())
+    )
 
 
 def signal_counts(features: dict[str, object], family: str) -> tuple[int, int]:
     spec = FAMILY_FEATURES[family]
     positive = sum(1 for name in spec["positive"] if as_float(features, name) > 0)
-    negative = sum(1 for name in spec["negative"] if as_float(features, name) > 0)
+    negative = sum(
+        1
+        for name in spec["negative"]
+        if as_float(features, name) > 0 and not negative_is_overridden(features, name)
+    )
     return positive, negative
 
 
 def specific_positive_signal_count(features: dict[str, object], family: str) -> int:
     spec = FAMILY_FEATURES[family]
+    product_signals = PRODUCT_DETECTION_FEATURES.get(family, set())
     return sum(
         1
         for name in spec["positive"]
-        if name not in GENERIC_RANKER_FEATURES and as_float(features, name) > 0
+        if name not in GENERIC_RANKER_FEATURES
+        and name not in product_signals
+        and as_float(features, name) > 0
     )
 
 
@@ -364,12 +517,19 @@ def ranker_confidence(ranked: list[dict[str, object]]) -> dict[str, object]:
 
 def family_readiness(features: dict[str, object], family: str) -> dict[str, object]:
     spec = FAMILY_FEATURES[family]
+    product_signals = PRODUCT_DETECTION_FEATURES.get(family, set())
     specific_positive = sorted(
         name
         for name in spec["positive"]
-        if name not in GENERIC_RANKER_FEATURES and as_float(features, name) > 0
+        if name not in GENERIC_RANKER_FEATURES
+        and name not in product_signals
+        and as_float(features, name) > 0
     )
-    blocking_negative = sorted(name for name in spec["negative"] if as_float(features, name) > 0)
+    blocking_negative = sorted(
+        name
+        for name in spec["negative"]
+        if as_float(features, name) > 0 and not negative_is_overridden(features, name)
+    )
     missing_specific_positive = sorted(
         name
         for name in spec["positive"]
@@ -432,6 +592,8 @@ def should_force_unknown_family(
 ) -> bool:
     if as_float(features, "unknown_product_detected") <= 0:
         return False
+    if top_family is not None and int(top_family.get("product_hint_signals", 0)) <= 0:
+        return True
     if (
         readiness is not None
         and readiness.get("specific_positive_signals")

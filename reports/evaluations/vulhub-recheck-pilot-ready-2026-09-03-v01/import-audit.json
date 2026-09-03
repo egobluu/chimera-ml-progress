@@ -1,0 +1,446 @@
+{
+  "total_targets": 45,
+  "feature_rows": 45,
+  "validation_rows": 45,
+  "enrichment_rows": 6,
+  "safe_to_merge_count": 32,
+  "quarantined_count": 13,
+  "runtime_categories": {
+    "known_positive": 9,
+    "negative_control": 11,
+    "unknown_family": 25
+  },
+  "source_families": {
+    "adminer": 1,
+    "confluence": 1,
+    "couchdb_auth": 1,
+    "dataease": 1,
+    "drupal_rce": 1,
+    "gitea": 1,
+    "gitlab": 2,
+    "gogs": 1,
+    "hadoop": 1,
+    "hugegraph": 1,
+    "joomla": 3,
+    "jupyter": 1,
+    "kibana": 1,
+    "metabase": 1,
+    "minio": 1,
+    "mongo_express": 1,
+    "n8n": 1,
+    "nginx": 2,
+    "openfire": 1,
+    "redis": 2,
+    "rocketchat": 1,
+    "saltstack": 1,
+    "shiro_key": 3,
+    "solr_velocity": 3,
+    "spring": 1,
+    "spring_actuator": 1,
+    "superset": 1,
+    "supervisor": 1,
+    "tikiwiki": 1,
+    "tomcat_ajp": 1,
+    "tomcat_put": 2,
+    "unknown": 2,
+    "wordpress_rce": 1,
+    "zabbix": 1
+  },
+  "candidate_families": [
+    "couchdb_auth",
+    "elasticsearch",
+    "flask",
+    "grafana",
+    "jenkins",
+    "joomla",
+    "nextjs",
+    "nexus",
+    "nginx",
+    "redis",
+    "shiro_key",
+    "solr_velocity",
+    "struts2",
+    "thinkphp_rce",
+    "tomcat_ajp",
+    "tomcat_put"
+  ],
+  "issues": [
+    {
+      "target_id": "adminer_pos_001",
+      "severity": "warning",
+      "issue": "non_standard_status",
+      "status": "quarantined"
+    },
+    {
+      "target_id": "adminer_pos_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "adminer"
+    },
+    {
+      "target_id": "adminer_pos_001",
+      "severity": "warning",
+      "issue": "missing_cve_enrichment",
+      "cve": "CVE-2021-21311"
+    },
+    {
+      "target_id": "confluence_pos_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "confluence"
+    },
+    {
+      "target_id": "confluence_pos_001",
+      "severity": "warning",
+      "issue": "missing_cve_enrichment",
+      "cve": "CVE-2022-26134"
+    },
+    {
+      "target_id": "couchdb_positive_001",
+      "severity": "warning",
+      "issue": "missing_cve_enrichment",
+      "cve": "CVE-2017-12635"
+    },
+    {
+      "target_id": "dataease_pos_001",
+      "severity": "warning",
+      "issue": "non_standard_status",
+      "status": "quarantined"
+    },
+    {
+      "target_id": "dataease_pos_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "dataease"
+    },
+    {
+      "target_id": "dataease_pos_001",
+      "severity": "warning",
+      "issue": "missing_cve_enrichment",
+      "cve": "CVE-2024-56511"
+    },
+    {
+      "target_id": "drupal_pos_002",
+      "severity": "warning",
+      "issue": "non_standard_status",
+      "status": "quarantined"
+    },
+    {
+      "target_id": "drupal_pos_002",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "drupal_rce"
+    },
+    {
+      "target_id": "drupal_pos_002",
+      "severity": "warning",
+      "issue": "missing_cve_enrichment",
+      "cve": "CVE-2018-7600"
+    },
+    {
+      "target_id": "fastjson_positive_001",
+      "severity": "warning",
+      "issue": "non_standard_status",
+      "status": "quarantined"
+    },
+    {
+      "target_id": "fastjson_positive_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "unknown"
+    },
+    {
+      "target_id": "gitea_pos_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "gitea"
+    },
+    {
+      "target_id": "gitlab_pos_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "gitlab"
+    },
+    {
+      "target_id": "gitlab_pos_001",
+      "severity": "warning",
+      "issue": "missing_cve_enrichment",
+      "cve": "CVE-2021-22205"
+    },
+    {
+      "target_id": "gogs_pos_001",
+      "severity": "warning",
+      "issue": "non_standard_status",
+      "status": "quarantined"
+    },
+    {
+      "target_id": "gogs_pos_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "gogs"
+    },
+    {
+      "target_id": "gogs_pos_001",
+      "severity": "warning",
+      "issue": "missing_cve_enrichment",
+      "cve": "CVE-2018-18925"
+    },
+    {
+      "target_id": "hadoop_pos_001",
+      "severity": "warning",
+      "issue": "non_standard_status",
+      "status": "quarantined"
+    },
+    {
+      "target_id": "hadoop_pos_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "hadoop"
+    },
+    {
+      "target_id": "hugegraph_pos_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "hugegraph"
+    },
+    {
+      "target_id": "hugegraph_pos_001",
+      "severity": "warning",
+      "issue": "missing_cve_enrichment",
+      "cve": "CVE-2024-27348"
+    },
+    {
+      "target_id": "jupyter_pos_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "jupyter"
+    },
+    {
+      "target_id": "kibana_pos_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "kibana"
+    },
+    {
+      "target_id": "kibana_pos_001",
+      "severity": "warning",
+      "issue": "missing_cve_enrichment",
+      "cve": "CVE-2019-7609"
+    },
+    {
+      "target_id": "metabase_pos_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "metabase"
+    },
+    {
+      "target_id": "metabase_pos_001",
+      "severity": "warning",
+      "issue": "missing_cve_enrichment",
+      "cve": "CVE-2023-38646"
+    },
+    {
+      "target_id": "minio_pos_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "minio"
+    },
+    {
+      "target_id": "minio_pos_001",
+      "severity": "warning",
+      "issue": "missing_cve_enrichment",
+      "cve": "CVE-2023-28432"
+    },
+    {
+      "target_id": "mongo_express_pos_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "mongo_express"
+    },
+    {
+      "target_id": "mongo_express_pos_001",
+      "severity": "warning",
+      "issue": "missing_cve_enrichment",
+      "cve": "CVE-2019-10758"
+    },
+    {
+      "target_id": "n8n_pos_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "n8n"
+    },
+    {
+      "target_id": "n8n_pos_001",
+      "severity": "warning",
+      "issue": "missing_cve_enrichment",
+      "cve": "CVE-2025-68613"
+    },
+    {
+      "target_id": "openfire_pos_001",
+      "severity": "warning",
+      "issue": "non_standard_status",
+      "status": "quarantined"
+    },
+    {
+      "target_id": "openfire_pos_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "openfire"
+    },
+    {
+      "target_id": "openfire_pos_001",
+      "severity": "warning",
+      "issue": "missing_cve_enrichment",
+      "cve": "CVE-2023-32315"
+    },
+    {
+      "target_id": "rocketchat_pos_001",
+      "severity": "warning",
+      "issue": "non_standard_status",
+      "status": "quarantined"
+    },
+    {
+      "target_id": "rocketchat_pos_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "rocketchat"
+    },
+    {
+      "target_id": "rocketchat_pos_001",
+      "severity": "warning",
+      "issue": "missing_cve_enrichment",
+      "cve": "CVE-2021-22911"
+    },
+    {
+      "target_id": "saltstack_pos_001",
+      "severity": "warning",
+      "issue": "non_standard_status",
+      "status": "quarantined"
+    },
+    {
+      "target_id": "saltstack_pos_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "saltstack"
+    },
+    {
+      "target_id": "saltstack_pos_001",
+      "severity": "warning",
+      "issue": "missing_cve_enrichment",
+      "cve": "CVE-2020-11651"
+    },
+    {
+      "target_id": "spring_pos_001",
+      "severity": "warning",
+      "issue": "non_standard_status",
+      "status": "quarantined"
+    },
+    {
+      "target_id": "spring_pos_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "spring"
+    },
+    {
+      "target_id": "spring_pos_001",
+      "severity": "warning",
+      "issue": "missing_cve_enrichment",
+      "cve": "CVE-2022-22965"
+    },
+    {
+      "target_id": "superset_pos_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "superset"
+    },
+    {
+      "target_id": "superset_pos_001",
+      "severity": "warning",
+      "issue": "missing_cve_enrichment",
+      "cve": "CVE-2023-27524"
+    },
+    {
+      "target_id": "supervisor_pos_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "supervisor"
+    },
+    {
+      "target_id": "supervisor_pos_001",
+      "severity": "warning",
+      "issue": "missing_cve_enrichment",
+      "cve": "CVE-2017-11610"
+    },
+    {
+      "target_id": "tikiwiki_pos_001",
+      "severity": "warning",
+      "issue": "non_standard_status",
+      "status": "quarantined"
+    },
+    {
+      "target_id": "tikiwiki_pos_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "tikiwiki"
+    },
+    {
+      "target_id": "tikiwiki_pos_001",
+      "severity": "warning",
+      "issue": "missing_cve_enrichment",
+      "cve": "CVE-2020-15906"
+    },
+    {
+      "target_id": "wordpress_pos_002",
+      "severity": "warning",
+      "issue": "non_standard_status",
+      "status": "quarantined"
+    },
+    {
+      "target_id": "wordpress_pos_002",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "wordpress_rce"
+    },
+    {
+      "target_id": "zabbix_pos_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "zabbix"
+    },
+    {
+      "target_id": "zabbix_pos_001",
+      "severity": "warning",
+      "issue": "missing_cve_enrichment",
+      "cve": "CVE-2016-10134"
+    },
+    {
+      "target_id": "python_http_neg_001",
+      "severity": "warning",
+      "issue": "non_standard_status",
+      "status": "quarantined"
+    },
+    {
+      "target_id": "python_http_neg_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "unknown"
+    },
+    {
+      "target_id": "spring_neg_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "spring_actuator"
+    },
+    {
+      "target_id": "gitlab_neg_001",
+      "severity": "info",
+      "issue": "mapped_to_unknown_family",
+      "source_expected_family": "gitlab"
+    }
+  ],
+  "issue_counts": {
+    "mapped_to_unknown_family": 28,
+    "missing_cve_enrichment": 21,
+    "non_standard_status": 13
+  }
+}

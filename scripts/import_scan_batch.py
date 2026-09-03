@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import shutil
 from collections import Counter
 from pathlib import Path
@@ -37,6 +38,7 @@ TOP_LEVEL_COPY_NAMES = set(
     + (
         "safe-to-merge-targets.txt",
         "quarantined-targets.txt",
+        "cve-resolver-mapping.json",
     )
 )
 
@@ -86,6 +88,8 @@ CVSS_SEVERITIES = {
     "CRITICAL": "cvss_base_severity_critical",
 }
 
+CVE_PATTERN = re.compile(r"^CVE-\d{4}-\d{4,}$", re.IGNORECASE)
+
 
 def read_json_stream(path: Path) -> list[dict[str, Any]]:
     text = path.read_text(encoding="utf-8")
@@ -129,24 +133,36 @@ def normalize_family(source_family: str) -> str:
     return FAMILY_ALIASES.get(source_family, source_family)
 
 
+def source_family(row: dict[str, Any]) -> str:
+    return str(row.get("expected_family") or row.get("family") or "unknown")
+
+
+def validation_status(row: dict[str, Any]) -> str:
+    return str(row.get("expected_status") or row.get("validation_status") or row.get("status") or "")
+
+
+def normalized_cve(row: dict[str, Any]) -> str:
+    cve = str(row.get("cve") or row.get("cve_id") or "").upper()
+    return cve if CVE_PATTERN.match(cve) else ""
+
+
 def runtime_category(row: dict[str, Any], candidate_families: set[str]) -> str:
     category = str(row.get("category") or "")
-    source_family = str(row.get("expected_family") or "unknown")
-    status = str(row.get("expected_status") or row.get("validation_status") or "")
-    normalized = normalize_family(source_family)
+    source_family_value = source_family(row)
+    status = validation_status(row)
+    normalized = normalize_family(source_family_value)
 
-    if category in {"negative", "weak"} or status in NEGATIVE_STATUS or source_family == "none":
+    if category in {"negative", "weak", "validated_negative"} or status in NEGATIVE_STATUS or source_family_value == "none":
         return "negative_control"
     if category == "unknown_family":
         return "unknown_family"
-    if category == "positive" or status == "validated_positive":
+    if category in {"positive", "validated_positive"} or status == "validated_positive":
         return "known_positive" if normalized in candidate_families else "unknown_family"
     return "unknown_family"
 
 
 def runtime_family(row: dict[str, Any], candidate_families: set[str]) -> str:
-    source_family = str(row.get("expected_family") or "unknown")
-    normalized = normalize_family(source_family)
+    normalized = normalize_family(source_family(row))
     if normalized in candidate_families:
         return normalized
     return "unknown"
@@ -205,19 +221,31 @@ def import_top_level_files(src: Path, dst: Path) -> None:
 
 def build_runtime_targets(
     targets: list[dict[str, Any]],
+    validations: list[dict[str, Any]],
     candidate_families: set[str],
 ) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
+    validation_by_id = {str(row.get("target_id")): row for row in validations}
     for row in targets:
+        validation = validation_by_id.get(str(row.get("target_id")), {})
+        validation_status = (
+            row.get("expected_status")
+            or row.get("validation_status")
+            or validation.get("status")
+            or row.get("status")
+            or "unknown"
+        )
+        normalized_input = dict(row)
+        normalized_input["validation_status"] = validation_status
         rows.append(
             {
                 "target_id": row["target_id"],
-                "category": runtime_category(row, candidate_families),
-                "expected_family": runtime_family(row, candidate_families),
-                "source_expected_family": row.get("expected_family", "unknown"),
+                "category": runtime_category(normalized_input, candidate_families),
+                "expected_family": runtime_family(normalized_input, candidate_families),
+                "source_expected_family": source_family(row),
                 "source_image": row.get("source_image", row.get("source", "unknown")),
-                "cve": row.get("cve", ""),
-                "validation_status": row.get("expected_status", row.get("validation_status", "unknown")),
+                "cve": normalized_cve(row),
+                "validation_status": validation_status,
             }
         )
     return rows
@@ -229,14 +257,14 @@ def join_enrichment(
     enrichment_rows: list[dict[str, Any]],
 ) -> list[dict[str, Any]]:
     target_cve = {
-        str(row["target_id"]): str(row.get("cve") or "").upper()
+        str(row["target_id"]): normalized_cve(row)
         for row in targets
     }
     enrichment = enrichment_by_cve(enrichment_rows)
     output: list[dict[str, Any]] = []
     for row in features:
         merged = dict(row)
-        cve = str(merged.get("cve") or target_cve.get(str(merged.get("target_id")), "") or "").upper()
+        cve = normalized_cve(merged) or target_cve.get(str(merged.get("target_id")), "")
         if cve:
             merged["cve"] = cve
             merged.update(normalize_enrichment_features(enrichment.get(cve, {})))
@@ -257,16 +285,22 @@ def audit(
     feature_by_id = {str(row.get("target_id")): row for row in features}
     validation_by_id = {str(row.get("target_id")): row for row in validations}
     target_ids = [str(row.get("target_id")) for row in targets]
-    cve_enriched = {str(row.get("cve") or row.get("cve_id") or "").upper() for row in enrichment_rows}
+    cve_enriched = {normalized_cve(row) for row in enrichment_rows if normalized_cve(row)}
 
     issues: list[dict[str, Any]] = []
     for target in targets:
         target_id = str(target.get("target_id"))
-        source_family = str(target.get("expected_family") or "unknown")
-        status = str(target.get("expected_status") or target.get("validation_status") or "")
+        source_family_value = source_family(target)
         feature = feature_by_id.get(target_id)
         validation = validation_by_id.get(target_id)
-        normalized_family = normalize_family(source_family)
+        status = str(
+            target.get("expected_status")
+            or target.get("validation_status")
+            or (validation or {}).get("status")
+            or target.get("status")
+            or ""
+        )
+        normalized_family = normalize_family(source_family_value)
 
         if feature is None:
             issues.append({"target_id": target_id, "severity": "error", "issue": "missing_feature_row"})
@@ -285,21 +319,21 @@ def audit(
             )
         if status not in SAFE_STATUS:
             issues.append({"target_id": target_id, "severity": "warning", "issue": "non_standard_status", "status": status})
-        if source_family != "none" and normalized_family not in candidate_families:
+        if source_family_value != "none" and normalized_family not in candidate_families:
             issues.append(
                 {
                     "target_id": target_id,
                     "severity": "info",
                     "issue": "mapped_to_unknown_family",
-                    "source_expected_family": source_family,
+                    "source_expected_family": source_family_value,
                 }
             )
-        cve = str(target.get("cve") or feature.get("cve") or "").upper()
+        cve = normalized_cve(target) or normalized_cve(feature)
         if cve and cve not in cve_enriched:
             issues.append({"target_id": target_id, "severity": "warning", "issue": "missing_cve_enrichment", "cve": cve})
 
     runtime_categories = Counter(str(row["category"]) for row in runtime_targets)
-    source_families = Counter(str(row.get("expected_family") or "unknown") for row in targets)
+    source_families = Counter(source_family(row) for row in targets)
     return {
         "total_targets": len(targets),
         "feature_rows": len(features),
@@ -392,7 +426,7 @@ def main() -> None:
 
     candidate_families = load_candidate_families(args.model_dir)
     enriched_features = join_enrichment(features, targets, enrichment_rows)
-    runtime_targets = build_runtime_targets(targets, candidate_families)
+    runtime_targets = build_runtime_targets(targets, validations, candidate_families)
 
     write_jsonl(args.out_dir / "features.jsonl", enriched_features)
     write_jsonl(args.out_dir / "features.enriched.jsonl", enriched_features)

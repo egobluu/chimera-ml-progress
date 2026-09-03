@@ -84,6 +84,7 @@ def target_curation_reason(
 ) -> tuple[str, list[str]]:
     target_id = str(target["target_id"])
     reasons: list[str] = []
+    safe_listed = target_id in safe_ids
 
     if feature is None:
         reasons.append("missing feature row")
@@ -91,11 +92,12 @@ def target_curation_reason(
         reasons.append("missing validation row")
     if runtime is None:
         reasons.append("missing runtime evaluation row")
-    if target_id not in safe_ids:
+    if not safe_listed:
         reasons.append("not listed in safe-to-merge-targets.txt")
 
     status = str((validation or {}).get("status") or target.get("validation_status") or "")
-    if status and status not in STANDARD_SAFE_STATUSES:
+    status_is_standard = status in STANDARD_SAFE_STATUSES
+    if status and not status_is_standard:
         reasons.append(f"non-standard validation status: {status}")
 
     if runtime is not None and not bool(runtime.get("strict_flow_correct")):
@@ -112,6 +114,8 @@ def target_curation_reason(
         return "needs_recheck", reasons
     if runtime is not None and not bool(runtime.get("strict_flow_correct")):
         return "needs_recheck", reasons
+    if not safe_listed or not status_is_standard:
+        return "validation_only", reasons
     if not has_raw:
         return "validation_only", reasons
     return "train_ready_strict", reasons or ["raw evidence present and runtime strict flow passed"]
@@ -164,6 +168,11 @@ def main() -> None:
     parser.add_argument("--batch-dir", required=True, type=Path)
     parser.add_argument("--raw-dir", type=Path)
     parser.add_argument("--out-dir", type=Path)
+    parser.add_argument(
+        "--evaluation-dir",
+        type=Path,
+        help="Directory containing corrected-runtime-evaluation.json; defaults to batch-dir/runtime-evaluation-current",
+    )
     args = parser.parse_args()
 
     batch_dir = args.batch_dir
@@ -174,10 +183,14 @@ def main() -> None:
     source_targets = {str(row["target_id"]): row for row in read_jsonl(batch_dir / "targets.jsonl")}
     features = {str(row["target_id"]): row for row in read_jsonl(batch_dir / "features.enriched.jsonl")}
     validations = {str(row["target_id"]): row for row in read_jsonl(batch_dir / "validation-results.jsonl")}
-    runtime = runtime_results(batch_dir / "runtime-evaluation-current" / "corrected-runtime-evaluation.json")
+    evaluation_dir = args.evaluation_dir or batch_dir / "runtime-evaluation-current"
+    runtime = runtime_results(evaluation_dir / "corrected-runtime-evaluation.json")
     safe_ids = read_ids(batch_dir / "safe-to-merge-targets.txt")
     raw_ids = raw_target_ids(args.raw_dir)
-    report_has_missing_images = report_mentions_missing_images(batch_dir / "SCAN-REPORT-TH.md")
+    report_has_missing_images = any(
+        report_mentions_missing_images(batch_dir / name)
+        for name in ("SCAN-REPORT-TH.md", "RAW-FILL-REPORT-TH.md")
+    )
 
     curated: list[dict[str, Any]] = []
     split_rows: dict[str, list[dict[str, Any]]] = {

@@ -1,0 +1,79 @@
+# Imported Scan Batch Curation
+
+เอกสารนี้แยกข้อมูลหลัง import ว่า target ไหนพร้อมเข้า train จริง และ target ไหนควรใช้เป็น validation/recheck ก่อน
+
+## Summary
+
+| Item | Count |
+| --- | ---: |
+| Total rows | 45 |
+| train_ready_strict | 12 |
+| validation_only | 9 |
+| needs_recheck | 24 |
+| raw evidence folders | 39 |
+
+## Runtime Categories
+
+```json
+{
+  "known_positive": 9,
+  "negative_control": 11,
+  "unknown_family": 25
+}
+```
+
+## แปลแบบง่าย
+
+- `train_ready_strict`: มี raw evidence จริง, label ไม่พัง, runtime strict ผ่าน ใช้ train/validation ได้หลังคนตรวจ raw
+- `validation_only`: runtime ผ่าน แต่ raw evidence ยังไม่ครบ ใช้ทดสอบ regression ได้ก่อน อย่าเพิ่ง train
+- `needs_recheck`: ข้อมูลหายหรือ runtime ไม่ผ่าน ต้องกลับไปสแกน/แก้ label
+
+## Targets
+
+| Target | Split | Category | Runtime family | Reasons |
+| --- | --- | --- | --- | --- |
+| `adminer_pos_001` | `needs_recheck` | `unknown_family` | `unknown` | not listed in safe-to-merge-targets.txt; non-standard validation status: quarantined; runtime strict flow failed |
+| `confluence_pos_001` | `needs_recheck` | `unknown_family` | `unknown` | runtime strict flow failed |
+| `couchdb_positive_001` | `train_ready_strict` | `known_positive` | `couchdb_auth` | raw evidence present and runtime strict flow passed |
+| `dataease_pos_001` | `needs_recheck` | `unknown_family` | `unknown` | not listed in safe-to-merge-targets.txt; non-standard validation status: quarantined; runtime strict flow failed |
+| `drupal_pos_002` | `needs_recheck` | `unknown_family` | `unknown` | not listed in safe-to-merge-targets.txt; non-standard validation status: quarantined; runtime strict flow failed |
+| `fastjson_positive_001` | `needs_recheck` | `unknown_family` | `unknown` | not listed in safe-to-merge-targets.txt; non-standard validation status: quarantined; runtime strict flow failed |
+| `gitea_pos_001` | `needs_recheck` | `unknown_family` | `unknown` | runtime strict flow failed |
+| `gitlab_pos_001` | `needs_recheck` | `unknown_family` | `unknown` | runtime strict flow failed |
+| `gogs_pos_001` | `needs_recheck` | `unknown_family` | `unknown` | not listed in safe-to-merge-targets.txt; non-standard validation status: quarantined; runtime strict flow failed |
+| `hadoop_pos_001` | `needs_recheck` | `unknown_family` | `unknown` | not listed in safe-to-merge-targets.txt; non-standard validation status: quarantined; runtime strict flow failed |
+| `hugegraph_pos_001` | `train_ready_strict` | `unknown_family` | `unknown` | raw evidence present and runtime strict flow passed |
+| `joomla_pos_002` | `needs_recheck` | `known_positive` | `joomla` | runtime strict flow failed |
+| `jupyter_pos_001` | `needs_recheck` | `unknown_family` | `unknown` | runtime strict flow failed |
+| `kibana_pos_001` | `needs_recheck` | `unknown_family` | `unknown` | runtime strict flow failed |
+| `metabase_pos_001` | `needs_recheck` | `unknown_family` | `unknown` | runtime strict flow failed |
+| `minio_pos_001` | `needs_recheck` | `unknown_family` | `unknown` | runtime strict flow failed |
+| `mongo_express_pos_001` | `train_ready_strict` | `unknown_family` | `unknown` | raw evidence present and runtime strict flow passed |
+| `n8n_pos_001` | `train_ready_strict` | `unknown_family` | `unknown` | raw evidence present and runtime strict flow passed |
+| `openfire_pos_001` | `needs_recheck` | `unknown_family` | `unknown` | not listed in safe-to-merge-targets.txt; non-standard validation status: quarantined; runtime strict flow failed |
+| `rocketchat_pos_001` | `needs_recheck` | `unknown_family` | `unknown` | not listed in safe-to-merge-targets.txt; non-standard validation status: quarantined; runtime strict flow failed |
+| `saltstack_pos_001` | `needs_recheck` | `unknown_family` | `unknown` | not listed in safe-to-merge-targets.txt; non-standard validation status: quarantined; runtime strict flow failed |
+| `shiro_positive_001` | `needs_recheck` | `known_positive` | `shiro_key` | runtime strict flow failed |
+| `solr_velocity_positive_001` | `needs_recheck` | `known_positive` | `solr_velocity` | runtime strict flow failed |
+| `spring_pos_001` | `needs_recheck` | `unknown_family` | `unknown` | not listed in safe-to-merge-targets.txt; non-standard validation status: quarantined; runtime strict flow failed |
+| `superset_pos_001` | `needs_recheck` | `unknown_family` | `unknown` | runtime strict flow failed |
+| `supervisor_pos_001` | `train_ready_strict` | `unknown_family` | `unknown` | raw evidence present and runtime strict flow passed |
+| `tikiwiki_pos_001` | `needs_recheck` | `unknown_family` | `unknown` | not listed in safe-to-merge-targets.txt; non-standard validation status: quarantined; runtime strict flow failed |
+| `tomcat_ajp_positive_001` | `train_ready_strict` | `known_positive` | `tomcat_ajp` | raw evidence present and runtime strict flow passed |
+| `tomcat_put_positive_001` | `train_ready_strict` | `known_positive` | `tomcat_put` | raw evidence present and runtime strict flow passed |
+| `wordpress_pos_002` | `validation_only` | `unknown_family` | `unknown` | not listed in safe-to-merge-targets.txt; non-standard validation status: quarantined |
+| `zabbix_pos_001` | `needs_recheck` | `unknown_family` | `unknown` | runtime strict flow failed |
+| `joomla_recheck_001` | `needs_recheck` | `known_positive` | `joomla` | runtime strict flow failed |
+| `shiro_recheck_001` | `train_ready_strict` | `known_positive` | `shiro_key` | raw evidence present and runtime strict flow passed |
+| `solr_recheck_001` | `train_ready_strict` | `known_positive` | `solr_velocity` | raw evidence present and runtime strict flow passed |
+| `nginx_neg_001` | `train_ready_strict` | `negative_control` | `nginx` | raw evidence present and runtime strict flow passed |
+| `python_http_neg_001` | `validation_only` | `negative_control` | `unknown` | not listed in safe-to-merge-targets.txt; non-standard validation status: quarantined |
+| `redis_neg_001` | `train_ready_strict` | `negative_control` | `redis` | raw evidence present and runtime strict flow passed |
+| `solr_neg_001` | `validation_only` | `negative_control` | `solr_velocity` | missing raw evidence folder |
+| `shiro_neg_001` | `validation_only` | `negative_control` | `shiro_key` | missing raw evidence folder |
+| `joomla_neg_001` | `validation_only` | `negative_control` | `joomla` | missing raw evidence folder |
+| `tomcat_neg_001` | `validation_only` | `negative_control` | `tomcat_put` | missing raw evidence folder |
+| `spring_neg_001` | `validation_only` | `negative_control` | `unknown` | missing raw evidence folder |
+| `gitlab_neg_001` | `train_ready_strict` | `negative_control` | `unknown` | raw evidence present and runtime strict flow passed |
+| `nginx_weak_001` | `validation_only` | `negative_control` | `nginx` | missing raw evidence folder |
+| `redis_weak_001` | `validation_only` | `negative_control` | `redis` | missing raw evidence folder |

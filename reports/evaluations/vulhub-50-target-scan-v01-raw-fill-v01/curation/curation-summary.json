@@ -1,0 +1,51 @@
+{
+  "total_rows": 51,
+  "split_counts": {
+    "needs_recheck": 7,
+    "train_ready_strict": 30,
+    "validation_only": 14
+  },
+  "category_counts": {
+    "known_positive": 15,
+    "negative_control": 28,
+    "unknown_family": 8
+  },
+  "raw_evidence_count": 34,
+  "raw_evidence_ids": [
+    "aria2_negative_001",
+    "couchdb_weak_001",
+    "drupal_positive_001",
+    "elasticsearch_negative_001",
+    "elasticsearch_positive_001",
+    "elasticsearch_weak_001",
+    "flask_positive_001",
+    "flask_weak_001",
+    "grafana_auth_negative_001",
+    "grafana_weak_001",
+    "jboss_positive_001",
+    "jenkins_negative_001",
+    "jenkins_positive_001",
+    "jenkins_weak_001",
+    "jetty_positive_001",
+    "joomla_positive_001",
+    "laravel_positive_001",
+    "mysql_weak_001",
+    "nexus_positive_001",
+    "nginx_weak_001",
+    "php_cgi_positive_001",
+    "phpmyadmin_negative_001",
+    "redis_weak_001",
+    "shiro_negative_001",
+    "shiro_weak_001",
+    "solr_negative_001",
+    "solr_weak_001",
+    "struts2_positive_001",
+    "thinkphp_negative_001",
+    "thinkphp_positive_001",
+    "tomcat_ajp_negative_001",
+    "tomcat_auth_negative_001",
+    "tomcat_weak_001",
+    "wordpress_positive_001"
+  ],
+  "report_has_missing_images_note": true
+}

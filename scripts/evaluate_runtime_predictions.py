@@ -34,6 +34,14 @@ from predict_prototype import (
 from rank_cve_candidates import DEFAULT_RULES as DEFAULT_CVE_RULES, rank_cves_for_family, read_jsonl as read_enrichment_jsonl
 
 
+STANDARD_VALIDATION_STATUSES = {
+    "validated_positive",
+    "validated_negative",
+    "no_exploit",
+    "weak_no_exploit",
+}
+
+
 def read_jsonl(path: Path) -> list[dict[str, object]]:
     rows: list[dict[str, object]] = []
     for line_no, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
@@ -171,6 +179,87 @@ def top_resolver_cves(prediction: dict[str, object], limit: int) -> list[str]:
     return output
 
 
+def summarize_subset(rows: list[dict[str, object]]) -> dict[str, object]:
+    gate_tp = gate_fp = gate_tn = gate_fn = 0
+    known_total = known_top1 = known_top3 = 0
+    unknown_total = unknown_rejected = 0
+    safety_correct = strict_correct = 0
+
+    for row in rows:
+        expected_exploitable = bool(row["expected_exploitable"])
+        predicted_exploitable = bool(row["predicted_exploitable"])
+        if expected_exploitable and predicted_exploitable:
+            gate_tp += 1
+        elif expected_exploitable and not predicted_exploitable:
+            gate_fn += 1
+        elif not expected_exploitable and predicted_exploitable:
+            gate_fp += 1
+        else:
+            gate_tn += 1
+
+        category = str(row["category"])
+        if category.startswith("known_positive"):
+            known_total += 1
+            known_top1 += 1 if bool(row["ranker_top1_correct"]) else 0
+            known_top3 += 1 if bool(row["ranker_top3_correct"]) else 0
+        elif category.startswith("unknown_family"):
+            unknown_total += 1
+            unknown_rejected += 1 if bool(row["unknown_guard_correct"]) else 0
+
+        safety_correct += 1 if bool(row["safety_correct"]) else 0
+        strict_correct += 1 if bool(row["strict_flow_correct"]) else 0
+
+    total = len(rows)
+    gate_accuracy = (gate_tp + gate_tn) / total if total else 0
+    gate_precision = gate_tp / (gate_tp + gate_fp) if gate_tp + gate_fp else 0
+    gate_recall = gate_tp / (gate_tp + gate_fn) if gate_tp + gate_fn else 0
+    gate_f1 = (
+        2 * gate_precision * gate_recall / (gate_precision + gate_recall)
+        if gate_precision + gate_recall
+        else 0
+    )
+    return {
+        "total_targets": total,
+        "gate_metrics": {
+            "tp": gate_tp,
+            "fp": gate_fp,
+            "tn": gate_tn,
+            "fn": gate_fn,
+            "accuracy": round(gate_accuracy, 4),
+            "precision": round(gate_precision, 4),
+            "recall": round(gate_recall, 4),
+            "f1": round(gate_f1, 4),
+        },
+        "ranker_metrics": {
+            "known_positive_top1_correct": known_top1,
+            "known_positive_top1_total": known_total,
+            "known_positive_top1_accuracy": round(known_top1 / known_total, 4)
+            if known_total
+            else 0,
+            "known_positive_top3_correct": known_top3,
+            "known_positive_top3_total": known_total,
+            "known_positive_top3_accuracy": round(known_top3 / known_total, 4)
+            if known_total
+            else 0,
+        },
+        "unknown_guard_metrics": {
+            "unknown_rejected": unknown_rejected,
+            "unknown_total": unknown_total,
+            "unknown_rejection_rate": round(unknown_rejected / unknown_total, 4)
+            if unknown_total
+            else 0,
+        },
+        "final_flow_metrics": {
+            "safety_correct": safety_correct,
+            "safety_total": total,
+            "safety_accuracy": round(safety_correct / total, 4) if total else 0,
+            "strict_correct": strict_correct,
+            "strict_total": total,
+            "strict_accuracy": round(strict_correct / total, 4) if total else 0,
+        },
+    }
+
+
 def evaluate(
     targets: list[dict[str, object]],
     predictions: list[dict[str, object]],
@@ -192,6 +281,7 @@ def evaluate(
         target = target_by_id[target_id]
         category = str(target["category"])
         expected_family = str(target["expected_family"])
+        validation_status = str(target.get("validation_status") or "")
         is_known_positive = category.startswith("known_positive")
         is_unknown_family = category.startswith("unknown_family")
         is_negative_control = category == "negative_control"
@@ -220,6 +310,7 @@ def evaluate(
 
         unknown_ok = True
         top1_ok = True
+        top3_ok = True
         if is_unknown_family:
             unknown_total += 1
             unknown_ok = final_decision == "unknown_family_triage"
@@ -259,8 +350,11 @@ def evaluate(
             {
                 "target_id": target_id,
                 "category": category,
+                "validation_status": validation_status,
                 "expected_family": expected_family,
                 "expected_cve": expected_cve,
+                "expected_exploitable": expected_exploitable,
+                "predicted_exploitable": predicted_exploitable,
                 "gate_decision": gate_decision_value,
                 "final_decision": final_decision,
                 "predicted_top_family": predicted_family,
@@ -270,6 +364,7 @@ def evaluate(
                 "gate_correct": expected_exploitable == predicted_exploitable,
                 "unknown_guard_correct": unknown_ok,
                 "ranker_top1_correct": top1_ok,
+                "ranker_top3_correct": top3_ok,
                 "safety_correct": safety_ok,
                 "strict_flow_correct": strict_ok,
                 "ranker_confidence": confidence,
@@ -287,8 +382,18 @@ def evaluate(
         if gate_precision + gate_recall
         else 0
     )
+    standard_rows = [
+        row for row in per_target
+        if str(row.get("validation_status") or "") in STANDARD_VALIDATION_STATUSES
+    ]
+    status_counts: dict[str, int] = {}
+    for row in per_target:
+        status = str(row.get("validation_status") or "unknown")
+        status_counts[status] = status_counts.get(status, 0) + 1
+
     return {
         "total_targets": total,
+        "validation_status_counts": dict(sorted(status_counts.items())),
         "gate_metrics": {
             "tp": gate_tp,
             "fp": gate_fp,
@@ -349,6 +454,7 @@ def evaluate(
             "strict_total": total,
             "strict_accuracy": round(strict_correct / total, 4) if total else 0,
         },
+        "standard_label_metrics": summarize_subset(standard_rows),
         "per_target_results": per_target,
     }
 
@@ -360,6 +466,10 @@ def write_report(metrics: dict[str, object], output_path: Path) -> None:
     unknown = metrics["unknown_guard_metrics"]  # type: ignore[index]
     ranker_safety = metrics["ranker_safety_metrics"]  # type: ignore[index]
     final = metrics["final_flow_metrics"]  # type: ignore[index]
+    standard = metrics["standard_label_metrics"]  # type: ignore[index]
+    standard_gate = standard["gate_metrics"]  # type: ignore[index]
+    standard_final = standard["final_flow_metrics"]  # type: ignore[index]
+    standard_unknown = standard["unknown_guard_metrics"]  # type: ignore[index]
     text = f"""# Corrected Runtime Evaluation
 
 ## สรุป
@@ -391,6 +501,31 @@ def write_report(metrics: dict[str, object], output_path: Path) -> None:
 | Safety flow accuracy | {final["safety_accuracy"]} |
 | Strict flow accuracy | {final["strict_accuracy"]} |
 
+## Standard-label Metrics
+
+ส่วนนี้นับเฉพาะ target ที่มี validation status พร้อมใช้งานจริง เช่น `validated_positive`, `validated_negative`, `no_exploit`, `weak_no_exploit`
+
+| Metric | Result |
+| --- | ---: |
+| Standard-label targets | {standard["total_targets"]} |
+| Gate accuracy | {standard_gate["accuracy"]} |
+| Gate TP | {standard_gate["tp"]} |
+| Gate FP | {standard_gate["fp"]} |
+| Gate TN | {standard_gate["tn"]} |
+| Gate FN | {standard_gate["fn"]} |
+| Gate precision | {standard_gate["precision"]} |
+| Gate recall | {standard_gate["recall"]} |
+| Gate F1 | {standard_gate["f1"]} |
+| Unknown rejection rate | {standard_unknown["unknown_rejection_rate"]} |
+| Safety flow accuracy | {standard_final["safety_accuracy"]} |
+| Strict flow accuracy | {standard_final["strict_accuracy"]} |
+
+## Validation Status Counts
+
+```json
+{json.dumps(metrics["validation_status_counts"], ensure_ascii=False, indent=2)}
+```
+
 ## วิธีอ่าน
 
 `Safety flow accuracy` คือระบบตัดสินทางปลอดภัยถูกไหม เช่น negative ต้องหยุด, unknown ต้อง triage, positive ต้องไม่ถูกหยุดผิด
@@ -398,6 +533,8 @@ def write_report(metrics: dict[str, object], output_path: Path) -> None:
 `Strict flow accuracy` คือเข้มกว่า: known-positive ต้องจัด family ถูกด้วย จึงจะนับว่าถูก
 
 `CVE Resolver Top-3` คือหลัง Ranker เลือก family แล้ว CVE เฉลยอยู่ใน 3 อันดับแรกของ resolver ไหม
+
+`Standard-label Metrics` คือคะแนนที่ตัด target `inconclusive` ออกก่อน เพราะ target กลุ่มนั้นยังไม่มีเฉลยพอสำหรับวัด ML แบบยุติธรรม
 
 ดังนั้นถ้า safety สูงแต่ strict ต่ำ แปลว่า flow ยังปลอดภัย แต่ Ranker ยังต้องปรับ feature/ranking ต่อ
 """

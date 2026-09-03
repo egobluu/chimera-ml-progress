@@ -1,0 +1,799 @@
+{
+  "total_targets": 24,
+  "gate_metrics": {
+    "tp": 12,
+    "fp": 0,
+    "tn": 12,
+    "fn": 0,
+    "accuracy": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  "ranker_metrics": {
+    "known_positive_top1_correct": 6,
+    "known_positive_top1_total": 6,
+    "known_positive_top1_accuracy": 1.0,
+    "known_positive_top3_correct": 6,
+    "known_positive_top3_total": 6,
+    "known_positive_top3_accuracy": 1.0
+  },
+  "cve_resolver_metrics": {
+    "known_positive_cve_total": 0,
+    "known_positive_cve_coverage": 0,
+    "known_positive_cve_coverage_rate": 0,
+    "known_positive_cve_top1_correct": 0,
+    "known_positive_cve_top1_accuracy": 0,
+    "known_positive_cve_top3_correct": 0,
+    "known_positive_cve_top3_accuracy": 0,
+    "known_positive_cve_top5_correct": 0,
+    "known_positive_cve_top5_accuracy": 0
+  },
+  "unknown_guard_metrics": {
+    "unknown_rejected": 6,
+    "unknown_total": 6,
+    "unknown_rejection_rate": 1.0
+  },
+  "ranker_safety_metrics": {
+    "low_margin_count": 0,
+    "family_not_ready_count": 6
+  },
+  "final_flow_metrics": {
+    "safety_correct": 24,
+    "safety_total": 24,
+    "safety_accuracy": 1.0,
+    "strict_correct": 24,
+    "strict_total": 24,
+    "strict_accuracy": 1.0
+  },
+  "per_target_results": [
+    {
+      "target_id": "redis_positive_guard_01",
+      "category": "known_positive",
+      "expected_family": "redis",
+      "expected_cve": "",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "redis",
+      "resolver_top_cves": [
+        "CVE-2022-0543"
+      ],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": {
+        "level": "clear_margin",
+        "top_score": 3.35767,
+        "runner_up_score": 0.900257,
+        "margin": 2.457413,
+        "min_ready_margin": 0.25,
+        "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
+      },
+      "family_readiness": {
+        "ready": true,
+        "specific_positive_signals": [
+          "lua_available",
+          "redis_detected",
+          "redis_info_accessible"
+        ],
+        "blocking_negative_signals": [],
+        "missing_specific_positive_features": [],
+        "min_ready_specific_positive_signals": 1,
+        "reason": "มีหลักฐานเฉพาะ family เพียงพอ และไม่พบตัวบล็อกของ family นี้"
+      },
+      "schema_warnings": []
+    },
+    {
+      "target_id": "redis_negative_guard_01",
+      "category": "negative_control",
+      "expected_family": "none",
+      "expected_cve": "",
+      "gate_decision": "low_confidence",
+      "final_decision": "needs_more_evidence",
+      "predicted_top_family": null,
+      "resolver_top_cves": [],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": null,
+      "family_readiness": null,
+      "schema_warnings": [
+        "blocking negative evidence downgraded likely_exploitable to low_confidence"
+      ]
+    },
+    {
+      "target_id": "grafana_positive_guard_01",
+      "category": "known_positive",
+      "expected_family": "grafana",
+      "expected_cve": "",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "grafana",
+      "resolver_top_cves": [
+        "CVE-2021-43798"
+      ],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": {
+        "level": "clear_margin",
+        "top_score": 3.719153,
+        "runner_up_score": -0.964149,
+        "margin": 4.683302,
+        "min_ready_margin": 0.25,
+        "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
+      },
+      "family_readiness": {
+        "ready": true,
+        "specific_positive_signals": [
+          "grafana_detected",
+          "path_traversal_candidate_found",
+          "plugin_path_candidate_found",
+          "public_plugin_path_accessible"
+        ],
+        "blocking_negative_signals": [],
+        "missing_specific_positive_features": [],
+        "min_ready_specific_positive_signals": 1,
+        "reason": "มีหลักฐานเฉพาะ family เพียงพอ และไม่พบตัวบล็อกของ family นี้"
+      },
+      "schema_warnings": []
+    },
+    {
+      "target_id": "grafana_negative_guard_01",
+      "category": "negative_control",
+      "expected_family": "none",
+      "expected_cve": "",
+      "gate_decision": "no_exploit",
+      "final_decision": "do_not_exploit_now",
+      "predicted_top_family": null,
+      "resolver_top_cves": [],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": null,
+      "family_readiness": null,
+      "schema_warnings": []
+    },
+    {
+      "target_id": "solr_positive_guard_01",
+      "category": "known_positive",
+      "expected_family": "solr_velocity",
+      "expected_cve": "",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "solr_velocity",
+      "resolver_top_cves": [
+        "CVE-2019-17558",
+        "CVE-2017-12629"
+      ],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": {
+        "level": "clear_margin",
+        "top_score": 3.719153,
+        "runner_up_score": -0.964149,
+        "margin": 4.683302,
+        "min_ready_margin": 0.25,
+        "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
+      },
+      "family_readiness": {
+        "ready": true,
+        "specific_positive_signals": [
+          "solr_core_found",
+          "solr_detected",
+          "velocity_enabled"
+        ],
+        "blocking_negative_signals": [],
+        "missing_specific_positive_features": [
+          "config_api_accessible"
+        ],
+        "min_ready_specific_positive_signals": 1,
+        "reason": "มีหลักฐานเฉพาะ family เพียงพอ และไม่พบตัวบล็อกของ family นี้"
+      },
+      "schema_warnings": [
+        "normalized alias: template_accessible -> velocity_template_accessible"
+      ]
+    },
+    {
+      "target_id": "solr_negative_guard_01",
+      "category": "negative_control",
+      "expected_family": "none",
+      "expected_cve": "",
+      "gate_decision": "no_exploit",
+      "final_decision": "do_not_exploit_now",
+      "predicted_top_family": null,
+      "resolver_top_cves": [],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": null,
+      "family_readiness": null,
+      "schema_warnings": [
+        "normalized alias: template_accessible -> velocity_template_accessible",
+        "derived velocity_disabled from Solr velocity probe fields"
+      ]
+    },
+    {
+      "target_id": "tomcat_put_positive_guard_01",
+      "category": "known_positive",
+      "expected_family": "tomcat_put",
+      "expected_cve": "",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "tomcat_put",
+      "resolver_top_cves": [
+        "CVE-2017-12615"
+      ],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": {
+        "level": "clear_margin",
+        "top_score": 3.719153,
+        "runner_up_score": -1.68021,
+        "margin": 5.399363,
+        "min_ready_margin": 0.25,
+        "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
+      },
+      "family_readiness": {
+        "ready": true,
+        "specific_positive_signals": [
+          "jsp_upload_candidate",
+          "method_put_allowed"
+        ],
+        "blocking_negative_signals": [],
+        "missing_specific_positive_features": [],
+        "min_ready_specific_positive_signals": 1,
+        "reason": "มีหลักฐานเฉพาะ family เพียงพอ และไม่พบตัวบล็อกของ family นี้"
+      },
+      "schema_warnings": []
+    },
+    {
+      "target_id": "tomcat_put_negative_guard_01",
+      "category": "negative_control",
+      "expected_family": "none",
+      "expected_cve": "",
+      "gate_decision": "no_exploit",
+      "final_decision": "do_not_exploit_now",
+      "predicted_top_family": null,
+      "resolver_top_cves": [],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": null,
+      "family_readiness": null,
+      "schema_warnings": []
+    },
+    {
+      "target_id": "tomcat_ajp_positive_guard_01",
+      "category": "known_positive",
+      "expected_family": "tomcat_ajp",
+      "expected_cve": "",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "tomcat_ajp",
+      "resolver_top_cves": [
+        "CVE-2020-1938"
+      ],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": {
+        "level": "clear_margin",
+        "top_score": 1.997457,
+        "runner_up_score": -1.629682,
+        "margin": 3.627139,
+        "min_ready_margin": 0.25,
+        "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
+      },
+      "family_readiness": {
+        "ready": true,
+        "specific_positive_signals": [
+          "ajp_port_open"
+        ],
+        "blocking_negative_signals": [],
+        "missing_specific_positive_features": [],
+        "min_ready_specific_positive_signals": 1,
+        "reason": "มีหลักฐานเฉพาะ family เพียงพอ และไม่พบตัวบล็อกของ family นี้"
+      },
+      "schema_warnings": []
+    },
+    {
+      "target_id": "tomcat_ajp_negative_guard_01",
+      "category": "negative_control",
+      "expected_family": "none",
+      "expected_cve": "",
+      "gate_decision": "no_exploit",
+      "final_decision": "do_not_exploit_now",
+      "predicted_top_family": null,
+      "resolver_top_cves": [],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": null,
+      "family_readiness": null,
+      "schema_warnings": []
+    },
+    {
+      "target_id": "couchdb_positive_guard_01",
+      "category": "known_positive",
+      "expected_family": "couchdb_auth",
+      "expected_cve": "",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "ready_for_safe_verification",
+      "predicted_top_family": "couchdb_auth",
+      "resolver_top_cves": [
+        "CVE-2017-12635"
+      ],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": {
+        "level": "clear_margin",
+        "top_score": 4.003789,
+        "runner_up_score": -0.964149,
+        "margin": 4.967938,
+        "min_ready_margin": 0.25,
+        "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
+      },
+      "family_readiness": {
+        "ready": true,
+        "specific_positive_signals": [
+          "admin_party_enabled",
+          "config_accessible",
+          "couchdb_detected",
+          "users_db_accessible"
+        ],
+        "blocking_negative_signals": [],
+        "missing_specific_positive_features": [],
+        "min_ready_specific_positive_signals": 1,
+        "reason": "มีหลักฐานเฉพาะ family เพียงพอ และไม่พบตัวบล็อกของ family นี้"
+      },
+      "schema_warnings": [
+        "normalized alias: admin_party -> admin_party_enabled"
+      ]
+    },
+    {
+      "target_id": "couchdb_negative_guard_01",
+      "category": "negative_control",
+      "expected_family": "none",
+      "expected_cve": "",
+      "gate_decision": "no_exploit",
+      "final_decision": "do_not_exploit_now",
+      "predicted_top_family": null,
+      "resolver_top_cves": [],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": null,
+      "family_readiness": null,
+      "schema_warnings": [
+        "normalized alias: admin_party -> admin_party_enabled"
+      ]
+    },
+    {
+      "target_id": "drupal_guard_01",
+      "category": "unknown_family",
+      "expected_family": "unknown",
+      "expected_cve": "",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "unknown_family_triage",
+      "predicted_top_family": "shiro_key",
+      "resolver_top_cves": [],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": {
+        "level": "clear_margin",
+        "top_score": -0.964149,
+        "runner_up_score": -1.55373,
+        "margin": 0.589581,
+        "min_ready_margin": 0.25,
+        "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
+      },
+      "family_readiness": {
+        "ready": false,
+        "specific_positive_signals": [],
+        "blocking_negative_signals": [],
+        "missing_specific_positive_features": [
+          "default_key_likely",
+          "rememberme_deleteMe_seen"
+        ],
+        "min_ready_specific_positive_signals": 1,
+        "reason": "scanner ระบุว่า known-family signal ยังไม่พอ จึงไม่ควรถือว่าพร้อมตรวจต่ออัตโนมัติ"
+      },
+      "schema_warnings": [
+        "derived unknown_product_detected from unknown product fingerprint",
+        "unknown_product_detected present; known-family ranking requires extra guard",
+        "unknown_product_detected forced unknown_family_triage"
+      ]
+    },
+    {
+      "target_id": "laravel_guard_01",
+      "category": "unknown_family",
+      "expected_family": "unknown",
+      "expected_cve": "",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "unknown_family_triage",
+      "predicted_top_family": "shiro_key",
+      "resolver_top_cves": [],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": {
+        "level": "clear_margin",
+        "top_score": -0.964149,
+        "runner_up_score": -1.55373,
+        "margin": 0.589581,
+        "min_ready_margin": 0.25,
+        "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
+      },
+      "family_readiness": {
+        "ready": false,
+        "specific_positive_signals": [],
+        "blocking_negative_signals": [],
+        "missing_specific_positive_features": [
+          "default_key_likely",
+          "rememberme_deleteMe_seen"
+        ],
+        "min_ready_specific_positive_signals": 1,
+        "reason": "scanner ระบุว่า known-family signal ยังไม่พอ จึงไม่ควรถือว่าพร้อมตรวจต่ออัตโนมัติ"
+      },
+      "schema_warnings": [
+        "derived unknown_product_detected from unknown product fingerprint",
+        "unknown_product_detected present; known-family ranking requires extra guard",
+        "unknown_product_detected forced unknown_family_triage"
+      ]
+    },
+    {
+      "target_id": "jetty_guard_01",
+      "category": "unknown_family",
+      "expected_family": "unknown",
+      "expected_cve": "",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "unknown_family_triage",
+      "predicted_top_family": "shiro_key",
+      "resolver_top_cves": [],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": {
+        "level": "clear_margin",
+        "top_score": -0.964149,
+        "runner_up_score": -1.55373,
+        "margin": 0.589581,
+        "min_ready_margin": 0.25,
+        "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
+      },
+      "family_readiness": {
+        "ready": false,
+        "specific_positive_signals": [],
+        "blocking_negative_signals": [],
+        "missing_specific_positive_features": [
+          "default_key_likely",
+          "rememberme_deleteMe_seen"
+        ],
+        "min_ready_specific_positive_signals": 1,
+        "reason": "scanner ระบุว่า known-family signal ยังไม่พอ จึงไม่ควรถือว่าพร้อมตรวจต่ออัตโนมัติ"
+      },
+      "schema_warnings": [
+        "derived unknown_product_detected from unknown product fingerprint",
+        "unknown_product_detected present; known-family ranking requires extra guard",
+        "unknown_product_detected forced unknown_family_triage"
+      ]
+    },
+    {
+      "target_id": "wordpress_guard_01",
+      "category": "unknown_family",
+      "expected_family": "unknown",
+      "expected_cve": "",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "unknown_family_triage",
+      "predicted_top_family": "shiro_key",
+      "resolver_top_cves": [],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": {
+        "level": "clear_margin",
+        "top_score": -0.964149,
+        "runner_up_score": -1.55373,
+        "margin": 0.589581,
+        "min_ready_margin": 0.25,
+        "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
+      },
+      "family_readiness": {
+        "ready": false,
+        "specific_positive_signals": [],
+        "blocking_negative_signals": [],
+        "missing_specific_positive_features": [
+          "default_key_likely",
+          "rememberme_deleteMe_seen"
+        ],
+        "min_ready_specific_positive_signals": 1,
+        "reason": "scanner ระบุว่า known-family signal ยังไม่พอ จึงไม่ควรถือว่าพร้อมตรวจต่ออัตโนมัติ"
+      },
+      "schema_warnings": [
+        "derived unknown_product_detected from unknown product fingerprint",
+        "unknown_product_detected present; known-family ranking requires extra guard",
+        "unknown_product_detected forced unknown_family_triage"
+      ]
+    },
+    {
+      "target_id": "php_cgi_guard_01",
+      "category": "unknown_family",
+      "expected_family": "unknown",
+      "expected_cve": "",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "unknown_family_triage",
+      "predicted_top_family": "shiro_key",
+      "resolver_top_cves": [],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": {
+        "level": "clear_margin",
+        "top_score": -0.964149,
+        "runner_up_score": -1.55373,
+        "margin": 0.589581,
+        "min_ready_margin": 0.25,
+        "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
+      },
+      "family_readiness": {
+        "ready": false,
+        "specific_positive_signals": [],
+        "blocking_negative_signals": [],
+        "missing_specific_positive_features": [
+          "default_key_likely",
+          "rememberme_deleteMe_seen"
+        ],
+        "min_ready_specific_positive_signals": 1,
+        "reason": "scanner ระบุว่า known-family signal ยังไม่พอ จึงไม่ควรถือว่าพร้อมตรวจต่ออัตโนมัติ"
+      },
+      "schema_warnings": [
+        "derived unknown_product_detected from unknown product fingerprint",
+        "unknown_product_detected present; known-family ranking requires extra guard",
+        "unknown_product_detected forced unknown_family_triage"
+      ]
+    },
+    {
+      "target_id": "jboss_guard_01",
+      "category": "unknown_family",
+      "expected_family": "unknown",
+      "expected_cve": "",
+      "gate_decision": "likely_exploitable",
+      "final_decision": "unknown_family_triage",
+      "predicted_top_family": "shiro_key",
+      "resolver_top_cves": [],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": {
+        "level": "clear_margin",
+        "top_score": -0.964149,
+        "runner_up_score": -1.55373,
+        "margin": 0.589581,
+        "min_ready_margin": 0.25,
+        "reason": "อันดับหนึ่งชนะอันดับสองชัดเจน"
+      },
+      "family_readiness": {
+        "ready": false,
+        "specific_positive_signals": [],
+        "blocking_negative_signals": [],
+        "missing_specific_positive_features": [
+          "default_key_likely",
+          "rememberme_deleteMe_seen"
+        ],
+        "min_ready_specific_positive_signals": 1,
+        "reason": "scanner ระบุว่า known-family signal ยังไม่พอ จึงไม่ควรถือว่าพร้อมตรวจต่ออัตโนมัติ"
+      },
+      "schema_warnings": [
+        "derived unknown_product_detected from unknown product fingerprint",
+        "unknown_product_detected present; known-family ranking requires extra guard",
+        "unknown_product_detected forced unknown_family_triage"
+      ]
+    },
+    {
+      "target_id": "redis_weak_guard_01",
+      "category": "negative_control",
+      "expected_family": "none",
+      "expected_cve": "",
+      "gate_decision": "low_confidence",
+      "final_decision": "needs_more_evidence",
+      "predicted_top_family": null,
+      "resolver_top_cves": [],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": null,
+      "family_readiness": null,
+      "schema_warnings": [
+        "blocking negative evidence downgraded likely_exploitable to low_confidence"
+      ]
+    },
+    {
+      "target_id": "grafana_weak_guard_01",
+      "category": "negative_control",
+      "expected_family": "none",
+      "expected_cve": "",
+      "gate_decision": "low_confidence",
+      "final_decision": "needs_more_evidence",
+      "predicted_top_family": null,
+      "resolver_top_cves": [],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": null,
+      "family_readiness": null,
+      "schema_warnings": [
+        "blocking negative evidence downgraded likely_exploitable to low_confidence"
+      ]
+    },
+    {
+      "target_id": "solr_weak_guard_01",
+      "category": "negative_control",
+      "expected_family": "none",
+      "expected_cve": "",
+      "gate_decision": "no_exploit",
+      "final_decision": "do_not_exploit_now",
+      "predicted_top_family": null,
+      "resolver_top_cves": [],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": null,
+      "family_readiness": null,
+      "schema_warnings": [
+        "normalized alias: template_accessible -> velocity_template_accessible",
+        "derived velocity_disabled from Solr velocity probe fields"
+      ]
+    },
+    {
+      "target_id": "tomcat_weak_guard_01",
+      "category": "negative_control",
+      "expected_family": "none",
+      "expected_cve": "",
+      "gate_decision": "no_exploit",
+      "final_decision": "do_not_exploit_now",
+      "predicted_top_family": null,
+      "resolver_top_cves": [],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": null,
+      "family_readiness": null,
+      "schema_warnings": []
+    },
+    {
+      "target_id": "couchdb_weak_guard_01",
+      "category": "negative_control",
+      "expected_family": "none",
+      "expected_cve": "",
+      "gate_decision": "no_exploit",
+      "final_decision": "do_not_exploit_now",
+      "predicted_top_family": null,
+      "resolver_top_cves": [],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": null,
+      "family_readiness": null,
+      "schema_warnings": [
+        "normalized alias: admin_party -> admin_party_enabled"
+      ]
+    },
+    {
+      "target_id": "nginx_weak_guard_01",
+      "category": "negative_control",
+      "expected_family": "none",
+      "expected_cve": "",
+      "gate_decision": "no_exploit",
+      "final_decision": "do_not_exploit_now",
+      "predicted_top_family": null,
+      "resolver_top_cves": [],
+      "resolver_top1_correct": false,
+      "resolver_top3_correct": false,
+      "gate_correct": true,
+      "unknown_guard_correct": true,
+      "ranker_top1_correct": true,
+      "safety_correct": true,
+      "strict_flow_correct": true,
+      "ranker_confidence": null,
+      "family_readiness": null,
+      "schema_warnings": []
+    }
+  ]
+}

@@ -1,0 +1,214 @@
+{
+  "package": "pilot-ready-ml-package-v01",
+  "created_date": "2026-09-03",
+  "purpose_th": "รวม dataset, features, curated split, training CSV, train/test split, model files, และ evaluation สำหรับ present Chimera ML pilot-ready status",
+  "source_dataset_path_windows": "C:/Users/rapii/Desktop/kali-share/dataset/vulhub-recheck-pilot-ready-2026-09-03-v01",
+  "source_dataset_path_kali": "/media/sf_kali-share/dataset/vulhub-recheck-pilot-ready-2026-09-03-v01/",
+  "current_candidate_model": "candidate-pilot-ready-recheck-strict12-v01",
+  "baseline_note_th": "candidate นี้ผ่าน regression 5/5 แต่ยังไม่ promote แทน strict12 เดิม เพราะ precision/F1 ยังไม่ชนะ baseline เดิม",
+  "directories": {
+    "source_dataset": "ไฟล์ dataset/features/validation จาก scanner batch ใหม่หลัง import",
+    "curated": "ผล curate แยก train_ready_strict, validation_only, needs_recheck",
+    "training": "CSV ที่ใช้ train candidate model และ merge summary",
+    "train_test_split": "train.csv/test.csv สำหรับ present แบ่งแบบ stratified 80/20",
+    "models": "ไฟล์ model runtime: gate, family_ranker, manifest",
+    "evaluation": "ผล regression/evaluation ที่ใช้ประกอบ decision"
+  },
+  "files": [
+    {
+      "path": "curated/curated-targets.jsonl",
+      "bytes": 27681,
+      "lines": 45
+    },
+    {
+      "path": "curated/CURATION-REPORT-TH.md",
+      "bytes": 7323,
+      "lines": 79
+    },
+    {
+      "path": "curated/curation-summary.json",
+      "bytes": 1338,
+      "lines": 56
+    },
+    {
+      "path": "curated/needs_recheck-features.jsonl",
+      "bytes": 40216,
+      "lines": 24
+    },
+    {
+      "path": "curated/needs_recheck-runtime-targets.jsonl",
+      "bytes": 5157,
+      "lines": 24
+    },
+    {
+      "path": "curated/needs_recheck-targets.txt",
+      "bytes": 430,
+      "lines": 24
+    },
+    {
+      "path": "curated/needs_recheck.jsonl",
+      "bytes": 14859,
+      "lines": 24
+    },
+    {
+      "path": "curated/train_ready_strict-features.jsonl",
+      "bytes": 14096,
+      "lines": 12
+    },
+    {
+      "path": "curated/train_ready_strict-runtime-targets.jsonl",
+      "bytes": 2697,
+      "lines": 12
+    },
+    {
+      "path": "curated/train_ready_strict-targets.txt",
+      "bytes": 230,
+      "lines": 12
+    },
+    {
+      "path": "curated/train_ready_strict.jsonl",
+      "bytes": 7347,
+      "lines": 12
+    },
+    {
+      "path": "curated/validation_only-features.jsonl",
+      "bytes": 4809,
+      "lines": 9
+    },
+    {
+      "path": "curated/validation_only-runtime-targets.jsonl",
+      "bytes": 1968,
+      "lines": 9
+    },
+    {
+      "path": "curated/validation_only-targets.txt",
+      "bytes": 149,
+      "lines": 9
+    },
+    {
+      "path": "curated/validation_only.jsonl",
+      "bytes": 5475,
+      "lines": 9
+    },
+    {
+      "path": "evaluation/CORRECTED-RUNTIME-EVALUATION-TH.md",
+      "bytes": 2900,
+      "lines": 72
+    },
+    {
+      "path": "evaluation/corrected-runtime-evaluation.json",
+      "bytes": 55910,
+      "lines": 1500
+    },
+    {
+      "path": "evaluation/runtime-regression-summary.json",
+      "bytes": 3739,
+      "lines": 122
+    },
+    {
+      "path": "models/family_ranker.json",
+      "bytes": 114042,
+      "lines": 1
+    },
+    {
+      "path": "models/gate_precondition_only.json",
+      "bytes": 68083,
+      "lines": 1
+    },
+    {
+      "path": "models/prototype_manifest.json",
+      "bytes": 3148,
+      "lines": 94
+    },
+    {
+      "path": "source_dataset/cve-enrichment.jsonl",
+      "bytes": 1348,
+      "lines": 6
+    },
+    {
+      "path": "source_dataset/features.enriched.jsonl",
+      "bytes": 59121,
+      "lines": 45
+    },
+    {
+      "path": "source_dataset/features.jsonl",
+      "bytes": 59121,
+      "lines": 45
+    },
+    {
+      "path": "source_dataset/IMPORT-AUDIT-TH.md",
+      "bytes": 3425,
+      "lines": 89
+    },
+    {
+      "path": "source_dataset/quarantined-targets.txt",
+      "bytes": 222,
+      "lines": 13
+    },
+    {
+      "path": "source_dataset/RECHECK-REPORT-TH.md",
+      "bytes": 7779,
+      "lines": 155
+    },
+    {
+      "path": "source_dataset/safe-to-merge-targets.txt",
+      "bytes": 542,
+      "lines": 32
+    },
+    {
+      "path": "source_dataset/SUMMARY-TH.md",
+      "bytes": 8227,
+      "lines": 184
+    },
+    {
+      "path": "source_dataset/targets.jsonl",
+      "bytes": 8503,
+      "lines": 45
+    },
+    {
+      "path": "source_dataset/validation-results.jsonl",
+      "bytes": 13339,
+      "lines": 45
+    },
+    {
+      "path": "train_test_split/split-summary.json",
+      "bytes": 839,
+      "lines": 24
+    },
+    {
+      "path": "train_test_split/test-targets.txt",
+      "bytes": 567,
+      "lines": 25
+    },
+    {
+      "path": "train_test_split/test.csv",
+      "bytes": 9195,
+      "lines": 26
+    },
+    {
+      "path": "train_test_split/train-targets.txt",
+      "bytes": 2236,
+      "lines": 98
+    },
+    {
+      "path": "train_test_split/train.csv",
+      "bytes": 28963,
+      "lines": 99
+    },
+    {
+      "path": "training/candidate-dataset-merge-summary.json",
+      "bytes": 575,
+      "lines": 13
+    },
+    {
+      "path": "training/candidate-dataset-merge-summary.md",
+      "bytes": 844,
+      "lines": 29
+    },
+    {
+      "path": "training/candidate-training-dataset.csv",
+      "bytes": 35732,
+      "lines": 124
+    }
+  ]
+}

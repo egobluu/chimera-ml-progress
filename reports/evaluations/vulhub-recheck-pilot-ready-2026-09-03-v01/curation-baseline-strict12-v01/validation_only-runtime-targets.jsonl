@@ -1,0 +1,9 @@
+{"category": "unknown_family", "cve": "", "expected_family": "unknown", "source_expected_family": "wordpress_rce", "source_image": "", "target_id": "wordpress_pos_002", "validation_status": "quarantined"}
+{"category": "negative_control", "cve": "", "expected_family": "unknown", "source_expected_family": "unknown", "source_image": "phase2-negative", "target_id": "python_http_neg_001", "validation_status": "quarantined"}
+{"category": "negative_control", "cve": "", "expected_family": "solr_velocity", "source_expected_family": "solr_velocity", "source_image": "pilot-negative", "target_id": "solr_neg_001", "validation_status": "validated_negative"}
+{"category": "negative_control", "cve": "", "expected_family": "shiro_key", "source_expected_family": "shiro_key", "source_image": "pilot-negative", "target_id": "shiro_neg_001", "validation_status": "validated_negative"}
+{"category": "negative_control", "cve": "", "expected_family": "joomla", "source_expected_family": "joomla", "source_image": "pilot-negative", "target_id": "joomla_neg_001", "validation_status": "validated_negative"}
+{"category": "negative_control", "cve": "", "expected_family": "tomcat_put", "source_expected_family": "tomcat_put", "source_image": "pilot-negative", "target_id": "tomcat_neg_001", "validation_status": "validated_negative"}
+{"category": "negative_control", "cve": "", "expected_family": "unknown", "source_expected_family": "spring_actuator", "source_image": "pilot-negative", "target_id": "spring_neg_001", "validation_status": "validated_negative"}
+{"category": "negative_control", "cve": "", "expected_family": "nginx", "source_expected_family": "nginx", "source_image": "pilot-weak", "target_id": "nginx_weak_001", "validation_status": "weak_no_exploit"}
+{"category": "negative_control", "cve": "", "expected_family": "redis", "source_expected_family": "redis", "source_image": "pilot-weak", "target_id": "redis_weak_001", "validation_status": "weak_no_exploit"}

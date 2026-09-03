@@ -1,0 +1,13 @@
+{
+  "base_dataset": "reports\\evaluations\\ranker-schema-backfill-redis-grafana-v01\\target-exploitability-family-ranking-backfill-plus-redis-grafana.csv",
+  "added_features": "reports\\evaluations\\vulhub50-combined-trainready-v01\\combined-train-ready-features.jsonl",
+  "added_targets": "reports\\evaluations\\vulhub50-combined-trainready-v01\\combined-train-ready-targets.jsonl",
+  "base_rows": 67,
+  "added_rows": 44,
+  "output_rows": 111,
+  "columns": 124,
+  "label_counts": {
+    "0": 66,
+    "1": 45
+  }
+}

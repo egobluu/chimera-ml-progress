@@ -1,0 +1,9 @@
+wordpress_pos_002
+python_http_neg_001
+solr_neg_001
+shiro_neg_001
+joomla_neg_001
+tomcat_neg_001
+spring_neg_001
+nginx_weak_001
+redis_weak_001
